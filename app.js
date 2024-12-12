@@ -4,12 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextMiniGrid = document.querySelector('.next-mini-grid');
     const navbar = document.querySelector('.navbar');
     const gameOverDisplay = document.querySelector('#gameOverText')
-    let squares = Array.from(document.querySelectorAll('.grid div'));
     const scoreDisplay = document.querySelector('#score'); // Displays score
     const chainDisplay = document.querySelector('#chainLength'); // Displays chain length
     const upNext = document.querySelector('#upNext'); // Displays the up next text
     const startBtn = document.querySelector('#start-button') // Start and pause button
     const endDisplay = document.querySelector('#endDisplay'); // Displays the end state
+    const dropdownBtn = document.querySelector('.dropdown');
+    const aestheticCustom = document.querySelector('#aesthetic-custom');
+    const container = document.querySelector('.container');
+    let squares = Array.from(document.querySelectorAll('.grid div'));
     let width = 6; // Width of each grid space
     let height = 14;
     let timerId = 0; // Interval in which puyos fall
@@ -28,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let puyosToPop = 4; // Amount of puyos needed to connect in order to pop
     let amountOfColors = 4; // Amount of different colors displayed
     let fallSpeed = 1000; // How much time passes before puyos are moved down
+    let isRunning = false;
 
     // Prevents dropdown menu from closing when clicking nested dropend
     document.querySelectorAll('.dropend .dropdown-toggle').forEach(button => {
@@ -932,6 +936,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function startBtnPause() {
         if (!isUnpauseEnabled) return;
         if (isGameOver) return;
+
+        // Removes customization when game starts
+        dropdownBtn.classList.add("hidden");
+        aestheticCustom.classList.add("hidden");
+        container.style.marginLeft = "77.5px"
+        
         if (timerId) {
             startBtn.innerHTML = '<i class="fa-solid fa-play"></i>' + '  Play';
             clearInterval(timerId);

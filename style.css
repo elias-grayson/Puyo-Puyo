@@ -286,6 +286,7 @@ html body {
     margin-top: 5px;
 }
 
+/* Tells the player to refresh the page if they want to replay */
 #gameOverText {
     font-size: 30px;
     background: linear-gradient(to top, lightgray, white);
@@ -296,6 +297,11 @@ html body {
     justify-content: center;
     align-items: center;
     z-index: 3;
+}
+
+/* Hides elements when added to a classList*/
+.hidden {
+    display: none;
 }
 
 /* Aplies to score and end display  */
