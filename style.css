@@ -1,8 +1,10 @@
+/* Adds a gradient to the background of the page*/
 html body {
     background: linear-gradient(to top, gray, white);
     height: 120vh;
 }
 
+/* Navbar at the top */
 .navbar {
     font-family: "Font Awesome 6 Free"; 
     background: linear-gradient(to top, midnightblue, dodgerblue);
@@ -10,10 +12,12 @@ html body {
     box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.5);
 }
 
+/* Title text */
 #title {
     color: white;
 }
 
+/* Controls */
 #controlDisplay { 
     margin-top: 200px;
     margin-left: -150px;
@@ -22,16 +26,19 @@ html body {
     flex-direction: column;;
 }
 
+/* Every dropdown display*/
 .dropdown {
     z-index: 1;
 }
 
+/* Contains all the dropdowns, the grid, upnext displays, and the controls*/
 .container {
     display: flex;
     box-sizing: border-box;
     justify-content: center;
 }
 
+/* Contains the puyo board */
 .grid {
     font-family: "Font Awesome 6 Free"; 
     background: radial-gradient(#64a2ff, rgb(54, 54, 148));
@@ -52,6 +59,7 @@ html body {
     z-index: 0;
 }
 
+/* Allows the emoji to display on the board */
 .grid::before {
     display: block;
     content: "\f005";
@@ -64,6 +72,7 @@ html body {
     opacity: 30%;
 }
 
+/* Each individual grid space */
 .grid div {
     position: relative;
     display: flex;
@@ -75,10 +84,12 @@ html body {
     box-sizing: border-box;
 }
 
+/* Each grid div visible on the board */
 #gridDiv {
     box-sizing: border-box;
 }
 
+/* Allows the grid spaces to have a border around them */
 #gridDiv::before {
     content: '';
     position: absolute;
@@ -87,18 +98,19 @@ html body {
     right: 0;
     bottom: 0;
     border: 1px solid black;   
-    z-index: 0; 
     opacity: 30%;
     box-sizing: border-box;
     z-index: 0;
 }
 
+/* Grid spaces below and above the board */
 .belowGrid, .aboveGrid {
     border: none;
     content: '';
     font-family: unset;
 }
 
+/* First up next grid display */
 .mini-grid {
     border-radius: 10px;
     margin-left: 36px;
@@ -108,16 +120,17 @@ html body {
     flex-wrap: wrap;
     background-color: blue;
     border: 10px groove black;
-    border-radius: 10px;
     box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.3);
     background: radial-gradient(#64a2ff, rgb(54, 54, 148));
 }
 
+/* First up next grid spaces*/
 .mini-grid div {
     height: 48px;
     width: 48px;
 }
 
+/* Second up next grid display */
 .next-mini-grid {
     border-radius: 10px;
     margin-left: 0px;
@@ -128,16 +141,17 @@ html body {
     flex-wrap: wrap;
     background-color: blue;
     border: 10px groove black;
-    border-radius: 10px;
     box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.3);
     background: radial-gradient(#64a2ff, rgb(54, 54, 148));
 }
 
+/* Second up next grid spaces */
 .next-mini-grid div {
     height: 48px;
     width: 48px;
 }
 
+/* Applies to only dropdown menus, not any other drop types */
 #dropDownMenu {
     position: relative;
     background-color: #6c757d;
@@ -147,6 +161,7 @@ html body {
     border-top: 5px dotted black; 
 }
 
+/* Applies only to dropend menus */
 #dropEndMenu {
     position: relative;
     margin-left: auto;
@@ -157,6 +172,7 @@ html body {
     border-top: 5px solid black; 
 }
 
+/* Applies only to dropfront menus */
 #dropFrontMenu {
     position: relative;
     background-color: #6c757d;
@@ -166,43 +182,53 @@ html body {
     border-top: 5px solid black; 
 }
 
+/* Applies only to dropfront buttons */
 .dropFrontButton {
     text-align: left;
 }
 
+/* Applies to dropend buttons */
 #dropendButton {
     text-align: right;
 }
 
+/* Applies to dropdown buttons */
 #dropdownButton {
     text-align: left;
 }
 
+/* Applies to all buttons when hovering over them */
 .btn:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Applies to all text in all drop menus */
 #dropdownText {
-    color: white; /* Set your desired text color */
+    color: white;
   }
 
+  /* Applies to gameplay customization button */
 #gameplay-custom {
     margin-right: 50px;
     margin-bottom: 20px;
 }
 
+/* Applies to buttons that control grid width */ 
 .widthButton {
     border-radius: 20%;
 }
 
+/* Applies to every width button */
 .widthButton:hover {
     opacity: 70%;
 }
 
+/* Applies to aesthetic customization button */
 #aesthetic-custom {
     margin-left: 20px;
 }
 
+/* Applies to emojis button */
 #showFont {
     border-radius: 10px;
     background-color: #6c757d;
@@ -212,10 +238,12 @@ html body {
     padding-right: 20px;
 }
 
+/* Applies to emojis button when hovering over */
 #showFont:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Applies to Elon Musk button */
 #showImage {
     border-radius: 10px;
     background-color: #6c757d;
@@ -224,10 +252,12 @@ html body {
     padding-right: 40px;
 }
 
+/* Applies to Elon Musk button when hovering over */
 #showImage:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Applies to score display */
 #scoreDisplay {
     font-family: "Font Awesome 6 Free";
     display: flex;
@@ -236,6 +266,7 @@ html body {
     justify-content: center;
 }
 
+/* Applies to chain display */
 #chainDisplay {
     font-family: "Font Awesome 6 Free";
     display: flex;
@@ -243,6 +274,7 @@ html body {
     justify-content: center;
 }
 
+/* Applies to the game over display */
 #endDisplay {
     font-family: "Font Awesome 6 Free";
     display: flex;
@@ -254,12 +286,14 @@ html body {
     margin-top: 5px;
 }
 
+/* Aplies to score and end display  */
 .parent-container {
     display: flex;
     justify-content: center;
     margin-right: 240px;
 }
 
+/* Applies to start button */
 #startDisplay {
     border-radius: 30;
     position: relative;
@@ -268,6 +302,7 @@ html body {
     justify-content: center;
 }
 
+/* Applies to start button */
 #start-button {
     width: 288px;
     min-width: 90px;
@@ -278,10 +313,12 @@ html body {
     z-index: 1;
 }
 
+/* Applies to hovering over stat button */
 #start-button:hover {
     opacity: 70%;
 }
 
+/* Applies to up next display */
 #upNext {
     position: absolute;
     font-family: "Font Awesome 6 Free";
@@ -289,21 +326,25 @@ html body {
     text-decoration: underline;
 }
 
+/* Applies to the green background choice */
 #greenBackground {
     padding-left: 40px;
     padding-right: 40px;
 }
 
+/* Applies to red backgrond choice */
 #redBackground {
     padding-left: 50px;
     padding-right: 50px;
 }
 
+/* Applies to every puyo */
 .puyoBlob {
     border-radius: 50%; 
     z-index: 1;
 }
 
+/* Applies to all of the puyos */
 .redPuyo, .greenPuyo, .bluePuyo, .purplePuyo, .yellowPuyo, .tealPuyo, .pinkPuyo {
     font-family: "Font Awesome 6 Free"; 
     font-weight: 100;
@@ -313,6 +354,7 @@ html body {
     z-index: 1;
 }
 
+/* Allows the puyos to have a font */
 .redPuyo::before, 
 .greenPuyo::before, 
 .bluePuyo::before, 
@@ -322,8 +364,6 @@ html body {
 .pinkPuyo::before {
     content: '';
     display: block;
-    width: 100%;
-    height: 100%;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center top;
@@ -336,6 +376,7 @@ html body {
     z-index: 1;
 }
 
+/* Fonts for all 7 puyos */
 .redPuyo::before {
     content: "\f556"; /* Unicode for 'face-rolling-eyes' icon */
 }
@@ -364,8 +405,8 @@ html body {
     content: "\f58b"; /* Unicode for 'face-grin-tongue-wink' icon */
 }
 
+/* Images of Elon for all colored puyos */
 .redPuyo.fontState::before {
-    border-radius: 50%;
     background-image: url('images/redElon.jpg');
     background-color: '';
     box-shadow: 0 0 0 1px red; /* Circular background */
@@ -375,7 +416,6 @@ html body {
 }
 
 .greenPuyo.fontState::before {
-    border-radius: 50%;
     background-color: '';
     box-shadow: 0 0 0 1px forestgreen; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
@@ -385,7 +425,6 @@ html body {
 }
 
 .bluePuyo.fontState::before {
-    border-radius: 50%;
     background-color: '';
     box-shadow: 0 0 0 1px dodgerblue; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
@@ -395,7 +434,6 @@ html body {
 }
 
 .yellowPuyo.fontState::before {
-    border-radius: 50%;
     background-color: '';
     box-shadow: 0 0 0 1px yellow; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
@@ -405,7 +443,6 @@ html body {
 }
 
 .purplePuyo.fontState::before {
-    border-radius: 50%;
     background-color: '';
     box-shadow: 0 0 0 1px blueviolet; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
@@ -415,7 +452,6 @@ html body {
 }
 
 .tealPuyo.fontState::before {
-    border-radius: 50%;
     background-color: '';
     box-shadow: 0 0 0 1px teal; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
@@ -425,7 +461,6 @@ html body {
 }
 
 .pinkPuyo.fontState::before {
-    border-radius: 50%;
     background-color: '';
     box-shadow: 0 0 0 1px hotpink; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
