@@ -286,6 +286,18 @@ html body {
     margin-top: 5px;
 }
 
+#gameOverText {
+    font-size: 30px;
+    background: linear-gradient(to top, lightgray, white);
+    font-family: "Font Awesome 6 Free";
+    position: absolute;
+    margin-right: 150px;
+    margin-top: 200px;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+}
+
 /* Aplies to score and end display  */
 .parent-container {
     display: flex;

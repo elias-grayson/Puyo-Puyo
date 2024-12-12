@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.querySelector('.grid')
-    const miniGrid = document.querySelector('.mini-grid')
-    const nextMiniGrid = document.querySelector('.next-mini-grid')
-    const navbar = document.querySelector('.navbar')
+    const grid = document.querySelector('.grid');
+    const miniGrid = document.querySelector('.mini-grid');
+    const nextMiniGrid = document.querySelector('.next-mini-grid');
+    const navbar = document.querySelector('.navbar');
+    const gameOverDisplay = document.querySelector('#gameOverText')
     let squares = Array.from(document.querySelectorAll('.grid div'));
     const scoreDisplay = document.querySelector('#score'); // Displays score
     const chainDisplay = document.querySelector('#chainLength'); // Displays chain length
@@ -1057,6 +1058,12 @@ document.addEventListener('DOMContentLoaded', () => {
             isGameOver = true;
             clearInterval(timerId);
             isInputEnabled = false
+            setTimeout(() => {
+                gameOverDisplay.innerHTML = "To restart, refresh the page";
+                gameOverDisplay.style.padding = '20px';
+                gameOverDisplay.style.border= "solid 3px black";
+                gameOverDisplay.style.borderRadius = '30px';
+            }, 2000);
         }
     }
 })
