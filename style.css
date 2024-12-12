@@ -1,0 +1,427 @@
+html body {
+    background: linear-gradient(to top, gray, white);
+    height: 100vh;
+    /* #0d6efd */
+}
+
+.navbar {
+    font-family: "Font Awesome 6 Free"; 
+    background: linear-gradient(to top, midnightblue, dodgerblue);
+    border-bottom: 5px solid lightgray;
+    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.5);
+}
+
+#title {
+    color: white;
+}
+
+.dropdown {
+    z-index: 1;
+}
+
+.container {
+    display: flex;
+    box-sizing: border-box;
+    justify-content: center;
+}
+
+.grid {
+    font-family: "Font Awesome 6 Free"; 
+    background: radial-gradient(#64a2ff, rgb(54, 54, 148));
+    position: relative;
+    min-width: 308px;
+    min-height: 596px;
+    width: 308px;
+    height: 596px;
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 10px groove black;
+    border-left: 10px groove black;
+    border-right: 10px ridge black;
+    border-bottom: 10px ridge black;
+    border-radius: 10px;
+    box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    z-index: 0;
+}
+
+.grid::before {
+    display: block;
+    content: "\f005";
+    color: white;
+    font-size: 100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;           
+    transform: translate(-50%, -50%); 
+    opacity: 30%;
+}
+
+.grid div {
+    position: relative;
+    display: flex;
+    top: -48px;
+    height: 48px;
+    width: 48px; 
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+#gridDiv {
+    box-sizing: border-box;
+}
+
+#gridDiv::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid black;   
+    z-index: 0; 
+    opacity: 30%;
+    box-sizing: border-box;
+    z-index: 0;
+}
+
+.belowGrid, .aboveGrid {
+    border: none;
+    content: '';
+    font-family: unset;
+}
+
+.mini-grid {
+    border-radius: 10px;
+    margin-left: 36px;
+    width: 68px;
+    height: 116px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: blue;
+    border: 10px groove black;
+    border-radius: 10px;
+    box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.3);
+    background: radial-gradient(#64a2ff, rgb(54, 54, 148));
+}
+
+.mini-grid div {
+    height: 48px;
+    width: 48px;
+}
+
+.next-mini-grid {
+    border-radius: 10px;
+    margin-left: 0px;
+    margin-top: 70px;
+    width: 68px;
+    height: 116px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: blue;
+    border: 10px groove black;
+    border-radius: 10px;
+    box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.3);
+    background: radial-gradient(#64a2ff, rgb(54, 54, 148));
+}
+
+.next-mini-grid div {
+    height: 48px;
+    width: 48px;
+}
+
+#dropDownMenu {
+    position: relative;
+    background-color: #6c757d;
+    border-left: 5px solid black;
+    border-right: 5px solid black;
+    border-bottom: 5px solid black;
+    border-top: 5px dotted black; 
+}
+
+#dropEndMenu {
+    position: relative;
+    margin-left: auto;
+    background-color: #6c757d;
+    border-left: 5px dotted black;
+    border-right: 5px solid black;
+    border-bottom: 5px solid black;
+    border-top: 5px solid black; 
+}
+
+#dropFrontMenu {
+    position: relative;
+    background-color: #6c757d;
+    border-left: 5px solid black;
+    border-right: 5px dotted black;
+    border-bottom: 5px solid black;
+    border-top: 5px solid black; 
+}
+
+.dropFrontButton {
+    text-align: left;
+}
+
+#dropendButton {
+    text-align: right;
+}
+
+#dropdownButton {
+    text-align: left;
+}
+
+.btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#dropdownText {
+    color: white; /* Set your desired text color */
+  }
+
+#gameplay-custom {
+    margin-right: 50px;
+    margin-bottom: 20px;
+}
+
+.widthButton {
+    border-radius: 20%;
+}
+
+.widthButton:hover {
+    opacity: 70%;
+}
+
+#aesthetic-custom {
+    margin-left: 20px;
+}
+
+#showFont {
+    border-radius: 10px;
+    background-color: #6c757d;
+    border: none;
+    margin-bottom: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#showFont:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#showImage {
+    border-radius: 10px;
+    background-color: #6c757d;
+    border: none;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+#showImage:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#scoreDisplay {
+    font-family: "Font Awesome 6 Free";
+    display: flex;
+    margin-right: 0px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+#chainDisplay {
+    font-family: "Font Awesome 6 Free";
+    display: flex;
+    margin-top: 200px;
+    justify-content: center;
+}
+
+#endDisplay {
+    font-family: "Font Awesome 6 Free";
+    display: flex;
+    position: top;
+    justify-content: center;
+    color: maroon;
+    font-size: 28px;
+    margin-left: 30px;
+    margin-top: 5px;
+}
+
+.parent-container {
+    display: flex;
+    justify-content: center;
+    margin-right: 240px;
+}
+
+#startDisplay {
+    border-radius: 30;
+    position: relative;
+    display: flex;
+    margin-left: 30px;
+    justify-content: center;
+}
+
+#start-button {
+    width: 288px;
+    border-radius: 10px;
+    margin-right: 165px;
+    background-color: blanchedalmond;
+    color: black;
+    z-index: 1;
+}
+
+#start-button:hover {
+    opacity: 70%;
+}
+
+#upNext {
+    position: absolute;
+    font-family: "Font Awesome 6 Free";
+    margin-left: 320px;
+    text-decoration: underline;
+}
+
+#greenBackground {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+#redBackground {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.puyoBlob {
+    border-radius: 50%; 
+    z-index: 1;
+}
+
+.redPuyo, .greenPuyo, .bluePuyo, .purplePuyo, .yellowPuyo, .tealPuyo, .pinkPuyo {
+    font-family: "Font Awesome 6 Free"; 
+    font-weight: 100;
+    font-size: 48px;
+    text-align: center;
+    line-height: 1;
+    z-index: 1;
+}
+
+.redPuyo::before, 
+.greenPuyo::before, 
+.bluePuyo::before, 
+.purplePuyo::before, 
+.yellowPuyo::before, 
+.tealPuyo::before, 
+.pinkPuyo::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-image: none;
+    background-color: '';
+    filter: none;
+    z-index: 1;
+}
+
+.redPuyo::before {
+    content: "\f556"; /* Unicode for 'face-rolling-eyes' icon */
+}
+
+.greenPuyo::before {
+    content: "\f5a5"; /* Unicode for 'face-rolling-eyes' icon */
+}
+
+.bluePuyo::before {
+    content: "\f5c8"; /* Unicode for 'face-rolling-eyes' icon */
+}
+
+.yellowPuyo::before {
+    content: "\f59a"; /* Unicode for 'face-rolling-eyes' icon */
+}
+
+.purplePuyo::before {
+    content: "\f597"; /* Unicode for 'face-rolling-eyes' icon */
+}
+
+.tealPuyo::before {
+    content: "\f5b3"; /* Unicode for 'face-sad-cry' icon */
+}
+
+.pinkPuyo::before {
+    content: "\f58b"; /* Unicode for 'face-grin-tongue-wink' icon */
+}
+
+.redPuyo.fontState::before {
+    border-radius: 50%;
+    background-image: url('images/redElon.jpg');
+    background-color: '';
+    box-shadow: 0 0 0 1px red; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    filter: sepia(10) saturate(10) hue-rotate(-40deg) brightness(0.9);
+    content: '';
+}
+
+.greenPuyo.fontState::before {
+    border-radius: 50%;
+    background-color: '';
+    box-shadow: 0 0 0 1px forestgreen; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('images/greenElon.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(-300deg) brightness(0.9);
+    content: '';
+}
+
+.bluePuyo.fontState::before {
+    border-radius: 50%;
+    background-color: '';
+    box-shadow: 0 0 0 1px dodgerblue; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('images/blueElon.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(-170deg) brightness(0.8);
+    content: '';
+}
+
+.yellowPuyo.fontState::before {
+    border-radius: 50%;
+    background-color: '';
+    box-shadow: 0 0 0 1px yellow; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('/images/newYellowElon.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(20deg) brightness(1.2);
+    content: '';
+}
+
+.purplePuyo.fontState::before {
+    border-radius: 50%;
+    background-color: '';
+    box-shadow: 0 0 0 1px blueviolet; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('images/purpleElon.jpg');
+    filter: sepia(10) saturate(20) hue-rotate(-140deg) brightness(0.9);
+    content: '';
+}
+
+.tealPuyo.fontState::before {
+    border-radius: 50%;
+    background-color: '';
+    box-shadow: 0 0 0 1px teal; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('/images/newTealElon.jpg');
+    filter: sepia(10) saturate(5) hue-rotate(-230deg) brightness(0.8);
+    content: '';
+}
+
+.pinkPuyo.fontState::before {
+    border-radius: 50%;
+    background-color: '';
+    box-shadow: 0 0 0 1px hotpink; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('/images/newPinkElon.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(-70deg) brightness(0.9);
+    content: '';
+}
