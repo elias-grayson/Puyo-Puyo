@@ -1,4 +1,4 @@
-This project took me around 2 weeks to make and it is the single proudest thing I have ever made
+This project took me around 3 weeks to make and it is the single proudest thing I have ever made
 
 The controls are:
 
