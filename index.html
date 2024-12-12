@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang ="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="app.js" charset="utf-8"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Bootstrap Bundle -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!--Jquery-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="style.css"></link>
+        <title>Elias' Puyo Puyo Project</title>
+    </head>
+    <body>
+        
+        <!--Navigation bar for the title of the page-->
+        <nav class="navbar navbar-light">
+            <div class="container-fluid">
+                <a class="navbar-brand mx-auto" id="title" href="#">Elias' Puyo Puyo Project</a>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarID">
+                </div>
+            </div>
+        </nav>
+
+        <div class="parent-container" style="overflow: hidden;">
+            <!--Score Display-->
+            <div id="scoreDisplay" style="float: left;">
+                <h3>Score: <span id="score">0</span></h3>
+            </div>
+
+            <!--End Display that shows when the player loses-->
+            <div id="endDisplay" style="float: left;">
+                <h3 id="end"><span></span></h3>
+            </div>
+        </div>
+
+        <!--Start/Pause button display-->
+        <div id="startDisplay">
+            <button id="start-button" class="">Start</button>
+        
+
+            <!--Display for the up next puyos-->
+            <h3 id="upNext"></h3>
+        </div>
+
+        <div class="container">
+
+            <!--Gameplay Dropdown-->
+            <div class="dropdown" data-bs-close="outside" id="gameplay-custom">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Gameplay Customization
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropDownMenu">
+
+                    <!--Fall speed customization-->
+                    <li class="dropend" id="dropendButton">
+                        <button 
+                            class="btn dropdown-toggle" 
+                            type="button" 
+                            id="nestedDropdown" 
+                            data-bs-toggle="dropdown" 
+                            style="color: white"
+                            aria-expanded="false">
+                            Fall speed
+                        </button>
+                        <ul class="dropdown-menu text-center" aria-labelledby="nestedDropdown" id="dropEndMenu">
+                            <li>
+                                <input 
+                                type="range" 
+                                class="form-range text-center" 
+                                id="fallSpeedInput"
+                                style="color: white" 
+                                min="100" 
+                                max="3000" 
+                                step="100" 
+                                value="800">
+                                <span id="fallSpeedValue" style="color: white">1 second (default)</span>
+                            </li>
+                        </ul>
+
+                    <!--Puyos to pop customization-->
+                    <li class="dropstart dropFrontButton">
+                        <button 
+                        class="btn dropdown-toggle" 
+                        type="button" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false" 
+                        style="color: white"
+                        id="nestedDropdown">
+                            Puyos to clear
+                        </button>
+                        <ul class="dropdown-menu text-center" id="dropFrontMenu">
+                                <input 
+                                type="range" 
+                                class="slider" 
+                                id="puyoPopInput" 
+                                style="color: white"
+                                value="4" 
+                                min="2" 
+                                max="10" 
+                                step="1">
+                                <span id="puyoPopValue" style="color: white">4 puyos (default)</span>
+                        </ul>
+                    </li>
+
+                    <!--Customization for how many different colored puyos appear-->
+                    <li class="dropend" id="dropendButton">
+                        <button 
+                        class="btn dropdown-toggle" 
+                        type="button" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false"
+                        style="color: white" 
+                        id="nestedDropdown">
+                            Amount of colors
+                        </button>
+                        <ul class="dropdown-menu text-center" id="dropEndMenu">
+                                <input 
+                                type="range" 
+                                class="form-range" 
+                                id="amtPuyoInput" 
+                                style="color: white"
+                                value="4" 
+                                min="1" 
+                                max="7" 
+                                step="1"></li></li>
+                                <span id="amtPuyoValue" style="color: white">4 colors (default)</span>
+                        </ul>
+                    </li>
+
+                    <!--Customization for how many different colored puyos appear-->
+                    <li class="dropdown">
+                        <button 
+                        class="btn dropdown-toggle" 
+                        type="button" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false" 
+                        style="color: white"
+                        id="nestedDropdown">
+                            Board width
+                        </button>
+                        <ul class="dropdown-menu text-center" id="dropDownMenu">
+                            <div id="gameButtonContainer" style="color: white">
+                                <button class="widthButton" data-width="1">1</button>
+                                <button class="widthButton" data-width="2">2</button>
+                                <button class="widthButton" data-width="3">3</button>
+                                <button class="widthButton" data-width="4">4</button>
+                                <button class="widthButton" data-width="5">5</button>
+                                <button class="widthButton" data-width="6">6</button>
+                                <button class="widthButton" data-width="7">7</button>
+                                <button class="widthButton" data-width="8">8</button>
+                                <button class="widthButton" data-width="9">9</button>
+                                <button class="widthButton" data-width="10">10</button>
+                                <span id="gridSpaces" style="color: white">6 grid spaces (default)</span>
+                            </div>
+                        </ul>
+                    </li>
+                </ul>
+                <!--Chain display becomes visible once at least 1 group of puyos are cleared-->
+                <div id="chainDisplay">
+                    <h3 id="chainLength"><span></span></h3>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="aboveGrid"></div>
+                <div class="aboveGrid"></div>
+                <div class="aboveGrid"></div>
+                <div class="aboveGrid"></div>
+                <div class="aboveGrid"></div>
+                <div class="aboveGrid"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div id="gridDiv"></div>
+                <div class="taken belowGrid"></div>
+                <div class="taken belowGrid"></div>
+                <div class="taken belowGrid"></div>
+                <div class="taken belowGrid"></div>
+                <div class="taken belowGrid"></div>
+                <div class="taken belowGrid"></div>
+            </div>
+
+            <div class="mini-grid">
+                <div></div>
+                <div></div>
+            </div>
+
+            <div class="next-mini-grid">
+                <div></div>
+                <div></div>
+            </div>
+
+            <!--Controls Display-->
+            <div id="controlDisplay">
+                <div>
+                    <h3 style="text-decoration: underline;">Movement:</h3>
+                </div>
+                <div style="margin-top: 10px;">
+                    <h5>Left: A</h5>
+                    <h5>Right: D</h5>
+                    <h5>Down: S</h5>
+                </div>
+                <div style="margin-top: 20px; text-decoration: underline;">
+                    <h3>Rotation:</h3>
+                </div>
+                    <div style="margin-top: 20px;">
+                    <h5>Counterclockwise: Left-arrow</h5>
+                    <h5>Clockwise: Right-arrow</h5>
+                </div>
+                <div style="margin-top: 20px; text-decoration: underline;">
+                    <h3>Pause/Play: escape</h3>
+                </div>
+            </div>
+
+            <!--Aesthetic Dropdown-->
+            <div class="dropdown" id="aesthetic-custom">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Aesthetic Customization
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropDownMenu">
+
+                    <!--Puyo Font Customization-->
+                    <li class="dropend" id="dropendButton">
+                        <button class="btn dropdown-toggle dropdownText" 
+                        type="button" 
+                        id="fontNestedDropdown" 
+                        data-bs-toggle="dropdown" 
+                        style="color: white"
+                        aria-expanded="false">
+                            Puyo Font
+                        </button>
+                        <ul class="dropdown-menu text-center" aria-labelledby="nestedDropdown" id="dropEndMenu">
+                                <div id="aestheticButtonContainer">
+                                    <button class="fontButton" id="showFont" style="color: white">emojis (default)</button>
+                                    <button class="fontButton dropdownText" id="showImage" style="color: white">Elon Musk</button>
+                                </div>
+                        </ul>
+                    </li>
+
+                    <!--Board Background Customization-->
+                    <li class="dropdown">
+                        <button class="btn dropdown-toggle" 
+                        type="button" 
+                        data-bs-toggle="dropdown"
+                        style="color: white" 
+                        aria-expanded="false">
+                            Board Background
+                        </button>
+                        <ul class="dropdown-menu text-center backGroundBtn" id="dropDownMenu">
+                            <li><button class="btn" id="blueBackground" style="color: white" href="#">Blue (Default)</button></li>
+                            <li><button class="btn" id="greenBackground" style="color: white" href="#">Green</button></li>
+                            <li><button class="btn" id="redBackground" style="color: white" href="#">Red</button></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            </div>
+            </div>
+        </div>
+    </body>
+</html>
