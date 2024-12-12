@@ -306,6 +306,7 @@ html body {
 #start-button {
     width: 288px;
     min-width: 90px;
+    max-width: 288px;
     border-radius: 10px;
     margin-right: 165px;
     background-color: blanchedalmond;

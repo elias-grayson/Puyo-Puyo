@@ -91,8 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         newChosenWidth = chosenWidth;
 
         upNext.style.marginLeft = chosenWidth * 48 + 32 + "px";
-        if (chosenWidth <= 6)
-            startBtn.style.width = chosenWidth * 96 / 2 + 'px';
+        startBtn.style.width = chosenWidth * 96 / 2 + 'px';
 
         if (chosenWidth == 1) {
             $("#gridSpaces").text(chosenWidth + " grid space");
