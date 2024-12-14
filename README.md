@@ -1,17 +1,6 @@
-This project took me around 3 weeks to make and it is the single proudest thing I have ever made
+This project took me around 3 weeks to initially finish and it is the single proudest thing I have ever made
 
-The controls are:
-
-Movement:
-    A: left
-    D: right
-    S: down
-
-Rotation:
-    Left arrow key: Counter Clockwise
-    Right arrow key: Clockwise
-
-You can also pause the game with the escape key
+This is an almost fully functionable puyo puyo game with a lot of customization options to cater the experience to whatever you'd like!
 
 Image Credits:
 greenElon: Joe Rogan Experience #2223: Joe Rogan
