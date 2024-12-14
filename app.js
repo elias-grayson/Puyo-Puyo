@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // All of these consts are for grabbing dom elements
+    // DOM elements
     const grid = document.querySelector('.grid');
     const miniGrid = document.querySelector('.mini-grid');
     const nextMiniGrid = document.querySelector('.next-mini-grid');
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let puyosToPop = 4; // Amount of puyos needed to connect in order to pop
     let amountOfColors = 4; // Amount of different colors displayed
     let fallSpeed = 1000; // How much time passes before puyos are moved down
-    let controlMargin = 390;
+    let controlMargin = 390; // How big the left margin is for the controls display
 
     // Prevents dropdown menu from closing when clicking nested dropend
     document.querySelectorAll('.dropend .dropdown-toggle').forEach(button => {
@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.style.width = chosenWidth * 96 / 2 + 'px';
         controlMargin -= (widthDif*48);
         controlDisplay.style.marginLeft = controlMargin + "px";
+        chainDisplay.style.marginRight = (-widthDif*48) + "px";
 
         if (chosenWidth == 1) {
             $("#gridSpaces").text(chosenWidth + " grid space");
@@ -582,19 +583,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Key bindings object
     let keyBindings = {
-        "a": rotateLeft,
-        "A": rotateLeft,
-        "z": rotateLeft,
-        "Z": rotateLeft,
-        "d": rotateRight,
-        "D": rotateRight,
+        "a": moveLeft,
+        "A": moveLeft,
+        "ArrowRight": rotateRight,
+        "ArrowLeft": rotateLeft,
+        "ArrowUp": rotateRight,
+        "ArrowDown": rotateLeft,
+        "d": moveRight,
+        "D": moveRight,
         "s": moveDownCurrent,
         "S": moveDownCurrent,
-        "ArrowRight": moveRight,
-        "ArrowLeft": moveLeft,
-        "ArrowUp": rotateRight,
-        "ArrowDown": moveDownCurrent,
-        " ": hardDrop,
+        "w": hardDrop,
+        "W": hardDrop,
     };
 
     // Assigns functions to keyCodes
