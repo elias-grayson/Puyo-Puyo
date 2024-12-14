@@ -583,19 +583,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Key bindings object
     let keyBindings = {
-        "a": rotateLeft,
-        "A": rotateLeft,
-        "z": rotateLeft,
-        "Z": rotateLeft,
-        "d": rotateRight,
-        "D": rotateRight,
+        "a": moveLeft,
+        "A": moveLeft,
+        "ArrowRight": rotateRight,
+        "ArrowLeft": rotateLeft,
+        "ArrowUp": rotateRight,
+        "ArrowDown": rotateLeft,
+        "d": moveRight,
+        "D": moveRight,
         "s": moveDownCurrent,
         "S": moveDownCurrent,
-        "ArrowRight": moveRight,
-        "ArrowLeft": moveLeft,
-        "ArrowUp": rotateRight,
-        "ArrowDown": moveDownCurrent,
-        " ": hardDrop,
+        "w": hardDrop,
+        "W": hardDrop,
     };
 
     // Assigns functions to keyCodes
@@ -1124,10 +1123,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function allClear() {
         if (squares.every(square => !square.classList.contains('puyoBlob') || 
         square.classList.contains('currentPosition'))) {
-            scoreDisplay.innerHTML = 'All Clear!';
-            score += 5000;
-        } else {
+            chainDisplay.innerHTML = 'All Clear!';
             scoreDisplay.innerHTML = score;
+            score += 5000;
         }
     }
 
