@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let amountOfColors = 4; // Amount of different colors displayed
     let fallSpeed = 1000; // How much time passes before puyos are moved down
     let controlMargin = 390; // How big the left margin is for the controls display
+    let showImageClicked = false;
 
     // Prevents dropdown menu from closing when clicking nested dropend
     document.querySelectorAll('.dropend .dropdown-toggle').forEach(button => {
@@ -99,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         randomSecondary = Math.floor(Math.random()*amountOfColors);
     })
 
+    // Allows the grid width to be changed
     $("#gameButtonContainer").on("click", ".widthButton", function (event) {
         event.stopPropagation();
         chosenWidth = $(this).data("width"); // Get the width from the button's data attribute
@@ -270,9 +272,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const $newDiv = $("<div>")
                     console.log("Amount of divs: " + amtOfDivs.length)
                     if (amtOfDivs.length < (secondNextOldSquares.length - width*height)) {
-                        // console.log("Divs to be filled: " + (chosenWidth*height - (secondNextOldSquares.length + newGridDif)))
-                        // console.log("amount of divs: " + amtOfDivs.length);
-                        // console.log("squares length: " + squares.length);
                         $newDiv.attr('id', 'gridDiv')
                         index.parentNode.appendChild($newDiv[0])
                         amtOfDivs.push($newDiv[0])
@@ -308,6 +307,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 i++;
             }
         }
+        if (showImageClicked) {
+            document.querySelectorAll('.grid div').forEach((puyo) => {
+                puyo.classList.add('fontState');
+                document.querySelectorAll('.puyoBlob').forEach((puyo) => {
+                    puyo.style.border = "1px solid rgba(0, 0, 0, 0.3)";
+                    puyo.style.borderRadius = '0%';
+                    puyo.style.backgroundColor = '';
+                    puyo.classList.add('fontState');
+                });
+            });
+        } else {
+            document.querySelectorAll('.grid div').forEach((puyo) => {
+                puyo.classList.remove('fontState'); 
+                puyo.style.backgroundColor = '';
+            });
+            document.querySelectorAll('.puyoBlob').forEach((puyo) => {
+                puyo.style.border = "1px solid rgba(0, 0, 0, 0.3)";
+                puyo.classList.remove('fontState');
+            });
+        }
         width = chosenWidth
         // Update puyo and other variables
         puyo = [
@@ -341,6 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
             puyo.style.border = "1px solid rgba(0, 0, 0, 0.3)";
             puyo.classList.remove('fontState');
         });
+        showImageClicked = false;
     });
     
     // Replaces the default font with images
@@ -349,7 +369,6 @@ document.addEventListener('DOMContentLoaded', () => {
         displayShape();
         document.querySelectorAll('.grid div').forEach((puyo) => {
             puyo.classList.add('fontState');
-            // puyo.style.borderRadius = '0%';
             document.querySelectorAll('.puyoBlob').forEach((puyo) => {
                 puyo.style.border = "1px solid rgba(0, 0, 0, 0.3)";
                 puyo.style.borderRadius = '0%';
@@ -357,6 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 puyo.classList.add('fontState');
             });
         });
+        showImageClicked = true;
     });
 
     // Changes the background to green when clicked
@@ -611,7 +631,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (keyBindings[e.key]) {
             keyBindings[e.key]();
         }
-        console.log(`event.code: ${e.code}, event.key: "${e.key}"`);
     }
 
     function releaseKey(e) {
@@ -621,7 +640,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Move down function
     function moveDownCurrent() {
-        console.log("Move down current called")
         if (!isUnpauseEnabled) return;
         multiplierTimeout();
         undraw(currentPosition);  // Remove puyos from the current position
