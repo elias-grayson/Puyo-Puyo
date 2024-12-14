@@ -26,7 +26,6 @@
                 </div>
             </div>
         </nav>
-
         <div class="parent-container" style="overflow: hidden;">
             <!--Score Display-->
             <div id="scoreDisplay" style="float: left;">
@@ -41,7 +40,7 @@
 
         <!--Start/Pause button display-->
         <div id="startDisplay">
-            <button id="start-button" class="">Start</button>
+            <button id="start-button">Start</button>
         
 
             <!--Display for the up next puyos-->
@@ -64,7 +63,7 @@
                             type="button" 
                             id="nestedDropdown" 
                             data-bs-toggle="dropdown" 
-                            style="color: white"
+                            style="color: white; padding-left: 50px;"
                             aria-expanded="false">
                             Fall speed
                         </button>
@@ -133,6 +132,24 @@
                         </ul>
                     </li>
 
+                    <!--Control customization-->
+                    <li class="dropstart" id="dropFrontButton">
+                        <button class="btn dropdown-toggle dropdownText" 
+                        type="button" 
+                        data-bs-toggle="dropdown" 
+                        style="color: white; padding-right: 70px;"
+                        id="nestedDropdown"
+                        aria-expanded="false">
+                            Controls
+                        </button>
+                        <ul class="dropdown-menu text-center" aria-labelledby="nestedDropdown" id="dropFrontMenu">
+                            <div id="controlContainer">
+                                <button class=" btn dropDownText" id="defaultControls" style="color: white">Default</button>
+                                <button class=" btn dropdownText" id="flippedControls" style="color: white">Alternate</button>
+                            </div>
+                        </ul>
+                    </li>
+
                     <!--Customization for how many different colored puyos appear-->
                     <li class="dropdown">
                         <button 
@@ -140,7 +157,7 @@
                         type="button" 
                         data-bs-toggle="dropdown" 
                         aria-expanded="false" 
-                        style="color: white"
+                        style="color: white; padding-right: 40px;"
                         id="nestedDropdown">
                             Board width
                         </button>
@@ -161,12 +178,14 @@
                         </ul>
                     </li>
                 </ul>
-                <!--Chain display becomes visible once at least 1 group of puyos are cleared-->
-                <div id="chainDisplay">
-                    <h3 id="chainLength"><span></span></h3>
-                </div>
             </div>
 
+            <!--Chain display becomes visible once at least 1 group of puyos are cleared-->
+            <div id="chainDisplay">
+                <h3 id="chainLength"></h3>
+            </div>
+
+            <!--Displays "Game Over" when game over state is reached-->
             <div id="gameOverText">
                 <h3></h3>
             </div>
@@ -274,19 +293,20 @@
                     <h3 style="text-decoration: underline;">Movement:</h3>
                 </div>
                 <div style="margin-top: 10px;">
-                    <h5>Left: A</h5>
-                    <h5>Right: D</h5>
-                    <h5>Down: S</h5>
+                    <h5 id="left">Left: Left-arrow</h5>
+                    <h5 id="right">Right: Right-arrow</h5>
+                    <h5 id="down">Down: Down-arrow, S</h5>
                 </div>
                 <div style="margin-top: 20px; text-decoration: underline;">
                     <h3>Rotation:</h3>
                 </div>
                     <div style="margin-top: 20px;">
-                    <h5>Counterclockwise: Left-arrow</h5>
-                    <h5>Clockwise: Right-arrow</h5>
+                        <h5 id="clockwise">Clockwise: Up-arrow, D</h5>
+                    <h5 id="counterclockwise">Counterclockwise: Z, A</h5>
                 </div>
                 <div style="margin-top: 20px; text-decoration: underline;">
-                    <h3>Pause/Play: escape</h3>
+                    <h5 id="pause">Pause/Play: Escape</h5>
+                    <h5 id="hardDrop">Hard drop: Space</h5>
                 </div>
             </div>
 
@@ -303,7 +323,7 @@
                         type="button" 
                         id="fontNestedDropdown" 
                         data-bs-toggle="dropdown" 
-                        style="color: white"
+                        style="color: white; padding-left: 70px;"
                         aria-expanded="false">
                             Puyo Font
                         </button>

@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // All of these consts are for grabbing dom elements
     const grid = document.querySelector('.grid');
     const miniGrid = document.querySelector('.mini-grid');
     const nextMiniGrid = document.querySelector('.next-mini-grid');
@@ -9,12 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const upNext = document.querySelector('#upNext'); // Displays the up next text
     const startBtn = document.querySelector('#start-button') // Start and pause button
     const endDisplay = document.querySelector('#endDisplay'); // Displays the end state
-    const dropdownBtn = document.querySelector('.dropdown');
-    const aestheticCustom = document.querySelector('#aesthetic-custom');
-    const container = document.querySelector('.container');
+    const dropdownBtn = document.querySelector('.dropdown'); // All dropdown menus
+    const aestheticCustom = document.querySelector('#aesthetic-custom'); // Customize aesthetics button
+    const controlDisplay = document.querySelector('#controlDisplay');
+    const leftControl = document.querySelector('#left');
+    const rightControl = document.querySelector('#right');
+    const downControl = document.querySelector('#down');
+    const ccwControl = document.querySelector('#counterclockwise');
+    const cwControl = document.querySelector('#clockwise');
+    const hardDropControl = document.querySelector('#hardDrop');
     let squares = Array.from(document.querySelectorAll('.grid div'));
+
     let width = 6; // Width of each grid space
-    let height = 14;
+    let height = 14; // Height of the grid
     let timerId = 0; // Interval in which puyos fall
     let score = 0; // Score
     let isInputEnabled = false; // Controls whether input is enabled
@@ -31,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let puyosToPop = 4; // Amount of puyos needed to connect in order to pop
     let amountOfColors = 4; // Amount of different colors displayed
     let fallSpeed = 1000; // How much time passes before puyos are moved down
-    let isRunning = false;
+    let controlMargin = 390;
 
     // Prevents dropdown menu from closing when clicking nested dropend
     document.querySelectorAll('.dropend .dropdown-toggle').forEach(button => {
@@ -94,9 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
         event.stopPropagation();
         chosenWidth = $(this).data("width"); // Get the width from the button's data attribute
         newChosenWidth = chosenWidth;
+        let widthDif = width - chosenWidth; // Difference between old and new width
 
-        upNext.style.marginLeft = chosenWidth * 48 + 32 + "px";
+        upNext.style.marginLeft = chosenWidth * 48 + 200 + "px";
         startBtn.style.width = chosenWidth * 96 / 2 + 'px';
+        controlMargin -= (widthDif*48);
+        controlDisplay.style.marginLeft = controlMargin + "px";
 
         if (chosenWidth == 1) {
             $("#gridSpaces").text(chosenWidth + " grid space");
@@ -130,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     
-        let widthDif = width - chosenWidth; // Difference between old and new width
         let newWidthDif = widthDif; // For iterating through taken
     
         // Continue if the chosen grid size is less than the default
@@ -377,6 +388,67 @@ document.addEventListener('DOMContentLoaded', () => {
         nextMiniGrid.style.background = "radial-gradient(#64a2ff, rgb(54, 54, 148))"
         navbar.style.background = "linear-gradient(to top, midnightblue, dodgerblue)"
     })
+
+    // Changes the controls to a flipped scheme
+    $("#controlContainer").on("click", "#defaultControls", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        keyBindings = {
+            "a": rotateLeft,
+            "A": rotateLeft,
+            "z": rotateLeft,
+            "Z": rotateLeft,
+            "d": rotateRight,
+            "D": rotateRight,
+            "s": moveDownCurrent,
+            "S": moveDownCurrent,
+            "ArrowRight": moveRight,
+            "ArrowLeft": moveLeft,
+            "ArrowUp": rotateRight,
+            "ArrowDown": moveDownCurrent,
+            " ": hardDrop,
+        };
+        leftControl.innerHTML = "Left: Left-arrow";
+        rightControl.innerHTML = "Right: Right-arrow";
+        downControl.innerHTML = "Down: Down-arrow, S";
+        ccwControl.innerHTML = "Counterclockwise: Z, A";
+        cwControl.innerHTML = "Clockwise: Up-arrow, D";
+        hardDropControl.innerHTML = "Hard drop: Space";
+        controlMargin = 390
+        controlDisplay.style.marginLeft = "390px"
+    })
+
+    // Changes the controls back to default
+    $("#controlContainer").on("click", "#flippedControls", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Key bindings
+        keyBindings = {
+            "a": moveLeft,
+            "A": moveLeft,
+            "ArrowRight": rotateRight,
+            "ArrowLeft": rotateLeft,
+            "ArrowUp": rotateRight,
+            "ArrowDown": rotateLeft,
+            "d": moveRight,
+            "D": moveRight,
+            "s": moveDownCurrent,
+            "S": moveDownCurrent,
+            "w": hardDrop,
+            "W": hardDrop,
+        };
+        leftControl.innerHTML = "Left: A";
+        rightControl.innerHTML = "Right: D";
+        downControl.innerHTML = "Down: S";
+        ccwControl.innerHTML = "Counterclockwise: Left-Arrow";
+        cwControl.innerHTML = "Clockwise: Right-arrow";
+        hardDropControl.innerHTML = "Hard drop: W";
+        controlMargin = 447.5;
+        controlDisplay.style.marginLeft = "447.5px";
+
+    })
+
     // All colors of puyos
     const colors = [
         'red',
@@ -423,21 +495,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Adds font to the puyos
     function addFont(puyos, puyoPosition, array) {
         const colorClass = getColorClass(colors[random]);
-    if (colorClass) {
-        array[puyos + puyoPosition].classList.remove('fontState', colorClass);
-        array[puyos + puyoPosition].style.border = "1px solid rgba(0, 0, 0, 0.3)";
-        array[puyos + puyoPosition].style.borderRadius = '0%';
-        array[puyos + puyoPosition].style.backgroundColor = '';
-    } else if (!colorClass) {
-        
-    }
-        const computedColor = window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor;
-    
-        // If the computed color matches one in the map, add font
-        if (colorClassMap[computedColor]) {
-            array[puyos + puyoPosition].removeAttribute('id');
-            array[puyos + puyoPosition].classList.add(colorClassMap[computedColor]);
+        if (colorClass) {
+            array[puyos + puyoPosition].classList.remove('fontState', colorClass);
+            array[puyos + puyoPosition].style.border = "1px solid rgba(0, 0, 0, 0.3)";
+            array[puyos + puyoPosition].style.borderRadius = '0%';
+            array[puyos + puyoPosition].style.backgroundColor = '';
+        } else if (!colorClass) {
+            
         }
+            const computedColor = window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor;
+        
+            // If the computed color matches one in the map, add font
+            if (colorClassMap[computedColor]) {
+                array[puyos + puyoPosition].removeAttribute('id');
+                array[puyos + puyoPosition].classList.add(colorClassMap[computedColor]);
+            }
     }
 
     // Removes font from puyos
@@ -508,30 +580,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set to track keys currently held down
     const activeKeys = new Set();
 
+    // Key bindings object
+    let keyBindings = {
+        "a": rotateLeft,
+        "A": rotateLeft,
+        "z": rotateLeft,
+        "Z": rotateLeft,
+        "d": rotateRight,
+        "D": rotateRight,
+        "s": moveDownCurrent,
+        "S": moveDownCurrent,
+        "ArrowRight": moveRight,
+        "ArrowLeft": moveLeft,
+        "ArrowUp": rotateRight,
+        "ArrowDown": moveDownCurrent,
+        " ": hardDrop,
+    };
+
     // Assigns functions to keyCodes
     function control(e) {
-
         if (!isInputEnabled) return; // Ignore if input is disabled
-
-        // Prevents repeated actions for specific keys
+    
+        // Prevent repeated actions for specific keys
         if (["ArrowRight", "ArrowLeft"].includes(e.key)) {
             if (activeKeys.has(e.key)) return;
             activeKeys.add(e.key);
         }
-        if (e.key === "a" || e.key === "A") { // Moves puyos left when a key is pressed
-            moveLeft();
-        } 
-        if (e.key === "ArrowRight") { //Rotates puyos clockwise when arrowright is pressed
-            rotateRight();
-        } else if (e.key === "ArrowLeft") { // Rotates Puyos counterclockwise when arrowleft is pressed
-            rotateLeft();
-        } 
-        if (e.key === "d" || e.key === "D") { // Moves puyos right when d key is pressed
-            moveRight();
+    
+        // Call the corresponding function from the keyBindings object
+        if (keyBindings[e.key]) {
+            keyBindings[e.key]();
         }
-        if (e.key === "s" || e.key === "S") { // Moves puyos down when s key is pressed
-            moveDownCurrent();
-        }
+        console.log(`event.code: ${e.code}, event.key: "${e.key}"`);
     }
 
     function releaseKey(e) {
@@ -541,12 +621,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Move down function
     function moveDownCurrent() {
+        console.log("Move down current called")
         if (!isUnpauseEnabled) return;
         multiplierTimeout();
         undraw(currentPosition);  // Remove puyos from the current position
-        if (!((currentPosition + width*2) >= squares.length)) {
         currentPosition += width;
-        }
         draw(currentPosition);
     }
 
@@ -582,6 +661,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 resolve();  // Resolves the promise once the move is completed
             }, 100);  // Delay for each puyo move
         });
+    }
+
+    // Allows the puyos to be snapped to the bottom instantly
+    function hardDrop() {
+        undraw(currentPosition);  // Remove puyos from the current position
+            while (!squares[currentPosition + width].classList.contains('taken')) {
+                moveDownCurrent();
+            }
     }
 
     // Doesn't allow CCW rotation to cause puyos to overflow to other side
@@ -892,6 +979,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.innerHTML = '<i class="fa-solid fa-pause"></i>' + '  Pause';
         upNext.innerHTML ='UpNext';
         startBtnPause();
+        event.target.blur();
     });
 
     // Adds pause/play functionality to the escape key
@@ -927,7 +1015,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 moveDownCurrent()
             }, fallSpeed);
             isInputEnabled = true;
-            nextRandom = Math.floor(Math.random() * amountOfColors)
             displayShape();
         }
     }
@@ -940,8 +1027,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Removes customization when game starts
         dropdownBtn.classList.add("hidden");
         aestheticCustom.classList.add("hidden");
-        container.style.marginLeft = "77.5px"
-        
+
         if (timerId) {
             startBtn.innerHTML = '<i class="fa-solid fa-play"></i>' + '  Play';
             clearInterval(timerId);
@@ -955,6 +1041,9 @@ document.addEventListener('DOMContentLoaded', () => {
             isInputEnabled = true;
             if (isClickedOnce) return;
             nextRandom = Math.floor(Math.random() * amountOfColors)
+            nextRandomSecondary = Math.floor(Math.random() * amountOfColors)
+            thirdRandom = Math.floor(Math.random() * amountOfColors)
+            thirdRandomSecondary = Math.floor(Math.random() * amountOfColors)
             displayShape();
             isClickedOnce = true;
         }

@@ -1,7 +1,10 @@
 /* Adds a gradient to the background of the page*/
 html body {
     background: linear-gradient(to top, gray, white);
-    height: 120vh;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
 /* Navbar at the top */
@@ -17,13 +20,17 @@ html body {
     color: white;
 }
 
-/* Controls */
-#controlDisplay { 
-    margin-top: 200px;
-    margin-left: -150px;
-    margin-right: -120px;
-    display: flex;
-    flex-direction: column;;
+/* Default controls button */
+#defaultControls {
+    padding-left: 50px;
+    padding-right: 50px;
+    height:auto;
+}
+
+/* Flipped controls button */
+#flippedControls {
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 /* Every dropdown display*/
@@ -33,8 +40,8 @@ html body {
 
 /* Contains all the dropdowns, the grid, upnext displays, and the controls*/
 .container {
+    width: auto;
     display: flex;
-    box-sizing: border-box;
     justify-content: center;
 }
 
@@ -116,7 +123,6 @@ html body {
     margin-left: 36px;
     width: 68px;
     height: 116px;
-    display: flex;
     flex-wrap: wrap;
     background-color: blue;
     border: 10px groove black;
@@ -137,7 +143,6 @@ html body {
     margin-top: 70px;
     width: 68px;
     height: 116px;
-    display: flex;
     flex-wrap: wrap;
     background-color: blue;
     border: 10px groove black;
@@ -207,10 +212,30 @@ html body {
     color: white;
   }
 
-  /* Applies to gameplay customization button */
+/* Applies to gameplay customization button */
 #gameplay-custom {
-    margin-right: 50px;
+    width: 0;
+    margin-right: -100px;
+    right: 380px;
     margin-bottom: 20px;
+}
+
+/* Applies to aesthetic customization button */
+#aesthetic-custom {
+    margin-right: -100px;
+    width: 0px;
+    left: 10px;
+}
+
+/* Controls */
+#controlDisplay { 
+    position: absolute;
+    white-space: nowrap;
+    margin-top: 200px;
+    margin-left: 390px;
+    margin-right: 0px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Applies to buttons that control grid width */ 
@@ -221,11 +246,6 @@ html body {
 /* Applies to every width button */
 .widthButton:hover {
     opacity: 70%;
-}
-
-/* Applies to aesthetic customization button */
-#aesthetic-custom {
-    margin-left: 20px;
 }
 
 /* Applies to emojis button */
@@ -268,9 +288,13 @@ html body {
 
 /* Applies to chain display */
 #chainDisplay {
+    white-space: nowrap;
+    position: absolute;
+    width: 0;
     font-family: "Font Awesome 6 Free";
     display: flex;
     margin-top: 200px;
+    margin-right: 740px;
     justify-content: center;
 }
 
@@ -304,29 +328,29 @@ html body {
     display: none;
 }
 
-/* Aplies to score and end display  */
+/* Applies to score and end display  */
 .parent-container {
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
-    margin-right: 240px;
+    margin-right: 248px;
 }
 
 /* Applies to start button */
 #startDisplay {
-    border-radius: 30;
-    position: relative;
+    box-sizing: border-box;
     display: flex;
-    margin-left: 30px;
     justify-content: center;
+    margin-right: 170px;
 }
 
 /* Applies to start button */
 #start-button {
+    box-sizing: border-box;
     width: 288px;
     min-width: 90px;
     max-width: 288px;
     border-radius: 10px;
-    margin-right: 165px;
     background-color: blanchedalmond;
     color: black;
     z-index: 1;
@@ -340,8 +364,9 @@ html body {
 /* Applies to up next display */
 #upNext {
     position: absolute;
+    justify-content: center;
     font-family: "Font Awesome 6 Free";
-    margin-left: 320px;
+    margin-left: 470px;
     text-decoration: underline;
 }
 
