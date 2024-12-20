@@ -11,6 +11,7 @@ html body {
 .navbar {
     font-family: "Font Awesome 6 Free"; 
     background: linear-gradient(to top, midnightblue, dodgerblue);
+    /* background: linear-gradient(to top, rgb(70, 21, 93), rgb(173, 30, 255)); */
     border-bottom: 5px solid lightgray;
     box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.5);
 }
@@ -28,7 +29,7 @@ html body {
 }
 
 /* Flipped controls button */
-#flippedControls {
+#altControls {
     padding-left: 40px;
     padding-right: 40px;
 }
@@ -37,6 +38,16 @@ html body {
 .dropdown {
     z-index: 1;
 }
+
+/* Dropdown lists */
+.dropdown-list {
+    transform: translateY(-10px);
+}
+
+/* Show the dropdown */
+.dropdown-list.show {
+    transform: translateY(0);
+  }
 
 /* Contains all the dropdowns, the grid, upnext displays, and the controls*/
 .container {
@@ -49,6 +60,7 @@ html body {
 .grid {
     font-family: "Font Awesome 6 Free"; 
     background: radial-gradient(#64a2ff, rgb(54, 54, 148));
+    /* background: radial-gradient(#c489ff, rgb(68, 30, 98)); */
     position: relative;
     min-width: 308px;
     min-height: 596px;
@@ -69,14 +81,16 @@ html body {
 /* Allows the emoji to display on the board */
 .grid::before {
     display: block;
-    content: "\f005";
-    color: white;
-    font-size: 100px;
+    content: var(--before-content, "\f005");
+    color: var(--before-color, white);
+    font-size: var(--before-font-size, 100px);
     position: absolute;
     top: 50%;
-    left: 50%;           
+    left: 50%;
     transform: translate(-50%, -50%); 
-    opacity: 30%;
+    opacity: var(--before-opacity, 30%);
+    font-family: var(--font-family, "Font Awesome 6 Free");
+    z-index: 0;
 }
 
 /* Each individual grid space */
@@ -382,10 +396,23 @@ html body {
     padding-right: 50px;
 }
 
+/* Applies to purple backgrond choice */
+#purpleBackground {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
 /* Applies to every puyo */
 .puyoBlob {
     border-radius: 50%; 
     z-index: 1;
+    display: block
+}
+
+.puyoBorder {
+    content: '';
+    border-radius: 0%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 1); 
 }
 
 /* Applies to all of the puyos */
@@ -396,6 +423,7 @@ html body {
     text-align: center;
     line-height: 1;
     z-index: 1;
+    display: block
 }
 
 /* Allows the puyos to have a font */
@@ -451,61 +479,61 @@ html body {
 
 /* Images of Elon for all colored puyos */
 .redPuyo.fontState::before {
-    background-image: url('images/redElon.jpg');
-    background-color: '';
+    /* background-color: ''; */
     box-shadow: 0 0 0 1px red; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('images/elias.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-40deg) brightness(0.9);
     content: '';
 }
 
 .greenPuyo.fontState::before {
-    background-color: '';
+    /* background-color: ''; */
     box-shadow: 0 0 0 1px forestgreen; /* Circular background */
-    border-radius: 50%; /* Makes the shadow circular */
-    background-image: url('images/greenElon.jpg');
+    border-radius: 100%; /* Makes the shadow circular */
+    background-image: url('images/sam.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-300deg) brightness(0.9);
     content: '';
 }
 
 .bluePuyo.fontState::before {
-    background-color: '';
+    /* background-color: ''; */
     box-shadow: 0 0 0 1px dodgerblue; /* Circular background */
-    border-radius: 50%; /* Makes the shadow circular */
-    background-image: url('images/blueElon.jpg');
+    border-radius: 100%; /* Makes the shadow circular */
+    background-image: url('images/jess.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-170deg) brightness(0.8);
     content: '';
 }
 
 .yellowPuyo.fontState::before {
-    background-color: '';
+    /* background-color: ''; */
     box-shadow: 0 0 0 1px yellow; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
-    background-image: url('/images/newYellowElon.jpg');
+    background-image: url('/images/maggie.jpg');
     filter: sepia(10) saturate(10) hue-rotate(20deg) brightness(1.2);
     content: '';
 }
 
 .purplePuyo.fontState::before {
-    background-color: '';
+    /* background-color: ''; */
     box-shadow: 0 0 0 1px blueviolet; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
-    background-image: url('images/purpleElon.jpg');
+    background-image: url('images/ceci.jpg');
     filter: sepia(10) saturate(20) hue-rotate(-140deg) brightness(0.9);
     content: '';
 }
 
 .tealPuyo.fontState::before {
-    background-color: '';
+    /* background-color: ''; */
     box-shadow: 0 0 0 1px teal; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
-    background-image: url('/images/newTealElon.jpg');
+    background-image: url('/images/daniel.jpg');
     filter: sepia(10) saturate(5) hue-rotate(-230deg) brightness(0.8);
     content: '';
 }
 
 .pinkPuyo.fontState::before {
-    background-color: '';
+    /* background-color: ''; */
     box-shadow: 0 0 0 1px hotpink; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
     background-image: url('/images/newPinkElon.jpg');
