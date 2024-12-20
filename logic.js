@@ -216,18 +216,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Key bindings object
     let keyBindings = {
-        "a": moveLeft,
-        "A": moveLeft,
-        "ArrowRight": rotateRight,
-        "ArrowLeft": rotateLeft,
-        "ArrowUp": rotateRight,
-        "ArrowDown": rotateLeft,
-        "d": moveRight,
-        "D": moveRight,
+        "a": rotateLeft,
+        "A": rotateLeft,
+        "z": rotateLeft,
+        "Z": rotateLeft,
+        "d": rotateRight,
+        "D": rotateRight,
         "s": moveDownCurrent,
         "S": moveDownCurrent,
-        "w": hardDrop,
-        "W": hardDrop,
+        "ArrowRight": moveRight,
+        "ArrowLeft": moveLeft,
+        "ArrowUp": rotateRight,
+        "ArrowDown": moveDownCurrent,
+        " ": hardDrop,
     };
 
     // Assigns functions to keyCodes
