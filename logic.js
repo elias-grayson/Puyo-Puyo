@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Move down function for already placed puyos
     async function moveDownPlaced(index, initialColor) {
-        
+
         // Move the Puyo down one row
         const belowIndex = index + width;
         return new Promise(resolve => {
@@ -297,6 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Allows the puyos to be snapped to the bottom instantly
     function hardDrop() {
+        if (!isUnpauseEnabled) return;
         undraw(currentPosition);  // Remove puyos from the current position
             while (!squares[currentPosition + width].classList.contains('taken')) {
                 moveDownCurrent();
