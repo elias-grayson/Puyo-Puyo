@@ -11,12 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.aestheticCustom = document.querySelector('#aesthetic-custom'); // Customize aesthetics button
     window.squares = Array.from(document.querySelectorAll('.grid div')); // Array of all grid spaces
 
-
     window.width = 6; // Width of each grid space
     let timerId = 0; // Interval in which puyos fall
     let score = 0; // Score
-    let isInputEnabled = false; // Controls whether input is enabled
-    let isClickedOnce = false; // Controls whether the start button has been clicked once
+    window.isInputEnabled = false; // Controls whether input is enabled
+    window.isClickedOnce = false; // Controls whether the start button has been clicked once
     let chainLength = 0; // Length of the current chain
     let puyoCount = 0; // Number of puyo cleared in a chain
     let chainPower = 0; // Chain power depending on chain length
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isGameOver = false; // Checks if a game over has occurred
     window.puyosToPop = 4; // Amount of puyos needed to connect in order to pop
     window.amountOfColors = 4; // Amount of different colors displayed
-    let fallSpeed = 1000; // How much time passes before puyos are moved down
+    window.fallSpeed = 1000; // How much time passes before puyos are moved down
     window.showImageClicked = false; // Checks whether the image puyos are selected
 
     // All colors of puyos
@@ -104,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (colorClass) {
             array[puyos + puyoPosition].classList.remove('fontState', colorClass);
         } else if (showImageClicked) {
-            console.log("addFont else if called");
+            // console.log("addFont else if called");
             if (computedColor == "rgba(0, 0, 0, 0)") return;
             array[puyos + puyoPosition].style.borderRadius = '50%';
             // array.forEach(index => {
@@ -141,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (colorClass) {
             array[puyos + puyoPosition].classList.add('fontState', colorClass);
         } else if (showImageClicked) {
-            console.log("removeFont else if called");
+            // console.log("removeFont else if called");
         //     array.forEach(index => {
         //         if (!index.classList.contains('aboveGrid')) return
         //         array[puyos + puyoPosition].classList.remove('fontState', colorClass);
@@ -214,23 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set to track keys currently held down
     const activeKeys = new Set();
 
-    // Key bindings object
-    let keyBindings = {
-        "a": rotateLeft,
-        "A": rotateLeft,
-        "z": rotateLeft,
-        "Z": rotateLeft,
-        "d": rotateRight,
-        "D": rotateRight,
-        "s": moveDownCurrent,
-        "S": moveDownCurrent,
-        "ArrowRight": moveRight,
-        "ArrowLeft": moveLeft,
-        "ArrowUp": rotateRight,
-        "ArrowDown": moveDownCurrent,
-        " ": hardDrop,
-    };
-
     // Assigns functions to keyCodes
     function control(e) {
         if (!isInputEnabled) return; // Ignore if input is disabled
@@ -253,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Move down function
-    function moveDownCurrent() {
+    window.sharedMoveDownCurrent = function moveDownCurrent() {
         if (!isUnpauseEnabled) return;
         multiplierTimeout();
         undraw(currentPosition);  // Remove puyos from the current position
@@ -297,11 +279,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Allows the puyos to be snapped to the bottom instantly
-    function hardDrop() {
+    window.sharedHardDrop = function hardDrop() {
         if (!isUnpauseEnabled) return;
         undraw(currentPosition);  // Remove puyos from the current position
             while (!squares[currentPosition + width].classList.contains('taken')) {
-                moveDownCurrent();
+                sharedMoveDownCurrent();
             }
     }
 
@@ -406,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Rotate the puyos to the right
-    function rotateRight() {
+    window.sharedRotateRight = function rotateRight() {
         if (!isUnpauseEnabled) return;
         undraw(currentPosition);
         checkRotationRight(currentPosition);
@@ -415,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Rotate the puyos to the left
-    function rotateLeft() {
+    window.sharedRotateLeft = function rotateLeft() {
         if (!isUnpauseEnabled) return;
         undraw(currentPosition);
         checkRotationLeft();
@@ -452,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Creates new puyos to fall
     function createNewPuyo() {
-        console.log("create new puyo called")
+        // console.log("create new puyo called")
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
         random = nextRandom;
         nextRandom = thirdRandom
@@ -539,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Move the puyos left, unless it is at the edge or there is a blockage
-    function moveLeft() {
+    window.sharedMoveLeft = function moveLeft() {
         if (!isUnpauseEnabled) return;
         undraw(currentPosition);
         const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0);
@@ -553,7 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Move the puyos right, unless it is at the edge or there is a blockage
-    function moveRight() {
+    window.sharedMoveRight = function moveRight() {
         if (!isUnpauseEnabled) return;
         undraw(currentPosition);
         const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1);
@@ -575,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Displays the puyos in the mini-grid display
     function displayShape() {
-        console.log("Display shape called")
+        // console.log("Display shape called")
         displaySquares.forEach(square => {
             // Remove font and puyos from the up next display
             removeFont(displayIndex, 0, displaySquares);
@@ -662,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(timerId);
         createNewPuyo();
         timerId = setInterval(() => {
-            moveDownCurrent();
+            sharedMoveDownCurrent();
         }, fallSpeed);
         displayShape();
         isInputEnabled = true
@@ -678,7 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             draw(currentPosition);
             timerId = setInterval(() => {
-                moveDownCurrent()
+                sharedMoveDownCurrent()
             }, fallSpeed);
             isInputEnabled = true;
             displayShape();
@@ -702,7 +684,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             draw(currentPosition);
             timerId = setInterval(() => {
-                moveDownCurrent()
+                sharedMoveDownCurrent()
             }, fallSpeed);
             isInputEnabled = true;
             if (isClickedOnce) return;
@@ -737,7 +719,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     chainDisplay.innerHTML = chainLength + " chain!";
                     displayScore();
                     falling(); // Check if any puyos need to fall after clearing
-                    console.log("Chain length: " + chainLength);
                 }
             }
         })
@@ -828,4 +809,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2000);
         }
     }
+    // window.sharedHardDrop = hardDrop;
+    // window.sharedMoveDownCurrent = moveDownCurrent;
+    // window.sharedMoveLeft = moveLeft;
+    // window.sharedMoveRight = moveRight;
+    // window.sharedRotateLeft = rotateLeft;
+    // window.sharedRotateRight = rotateRight;
+
+    // Key bindings object
+    window.keyBindings = {
+        "a": sharedRotateLeft,
+        "A": sharedRotateLeft,
+        "z": sharedRotateLeft,
+        "Z": sharedRotateLeft,
+        "d": sharedRotateRight,
+        "D": sharedRotateRight,
+        "s": sharedMoveDownCurrent,
+        "S": sharedMoveDownCurrent,
+        "ArrowRight": sharedMoveRight,
+        "ArrowLeft": sharedMoveLeft,
+        "ArrowUp": sharedRotateRight,
+        "ArrowDown": sharedMoveDownCurrent,
+        " ": sharedHardDrop,
+    };
 })

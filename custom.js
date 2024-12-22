@@ -434,19 +434,19 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         event.stopPropagation();
         keyBindings = {
-            "a": rotateLeft,
-            "A": rotateLeft,
-            "z": rotateLeft,
-            "Z": rotateLeft,
-            "d": rotateRight,
-            "D": rotateRight,
-            "s": moveDownCurrent,
-            "S": moveDownCurrent,
-            "ArrowRight": moveRight,
-            "ArrowLeft": moveLeft,
-            "ArrowUp": rotateRight,
-            "ArrowDown": moveDownCurrent,
-            " ": hardDrop,
+            "a": sharedRotateLeft,
+            "A": sharedRotateLeft,
+            "z": sharedRotateLeft,
+            "Z": sharedRotateLeft,
+            "d": sharedRotateRight,
+            "D": sharedRotateRight,
+            "s": sharedMoveDownCurrent,
+            "S": sharedMoveDownCurrent,
+            "ArrowRight": sharedMoveRight,
+            "ArrowLeft": sharedMoveLeft,
+            "ArrowUp": sharedRotateRight,
+            "ArrowDown": sharedMoveDownCurrent,
+            " ": sharedHardDrop,
         };
         leftControl.innerHTML = "Left: Left-arrow";
         rightControl.innerHTML = "Right: Right-arrow";
@@ -465,18 +465,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Key bindings
         keyBindings = {
-            "a": moveLeft,
-            "A": moveLeft,
-            "ArrowRight": rotateRight,
-            "ArrowLeft": rotateLeft,
-            "ArrowUp": rotateRight,
-            "ArrowDown": rotateLeft,
-            "d": moveRight,
-            "D": moveRight,
-            "s": moveDownCurrent,
-            "S": moveDownCurrent,
-            "w": hardDrop,
-            "W": hardDrop,
+        "a": sharedMoveLeft,
+        "A": sharedMoveLeft,
+        "ArrowRight": sharedRotateRight,
+        "ArrowLeft": sharedRotateLeft,
+        "ArrowUp": sharedRotateRight,
+        "ArrowDown": sharedRotateLeft,
+        "d": sharedMoveRight,
+        "D": sharedMoveRight,
+        "s": sharedMoveDownCurrent,
+        "S": sharedMoveDownCurrent,
+        "w": sharedHardDrop,
+        "W": sharedHardDrop,
         };
         leftControl.innerHTML = "Left: A";
         rightControl.innerHTML = "Right: D";
