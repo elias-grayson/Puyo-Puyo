@@ -490,8 +490,8 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         fallSpeed = 1000;
         amountOfColors = 4;
-        $("#amtPuyoValue").text(amountOfColors + " different colors (Default)");
-        $("#fallSpeedValue").text(fallSpeed / 1000 + " seconds per grid space");
+        $("#amtPuyoValue").text(amountOfColors + " different colors (default)");
+        $("#fallSpeedValue").text(fallSpeed / 1000 + " second per grid space (default)");
         fallRangeInput.value = 1000;
         amtPuyoInput.value = 4;
         widthChange(6, $(this))
