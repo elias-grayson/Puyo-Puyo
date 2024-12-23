@@ -24,11 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const amtPuyoInput = document.querySelector('#amtPuyoInput');
     const buttonContainer = document.getElementById("gameButtonContainer");
 
-
-    // window.width = 6; // Width of each grid space
-    let height = 14; // Height of the grid
-    let controlMargin = 390; // How big the left margin is for the controls display
-
     // Allows only one background button to be highlighted at once
     backgroundBtns.forEach(button => {
         button.addEventListener('click', () => {
@@ -110,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         randomSecondary = Math.floor(Math.random()*amountOfColors);
     })
 
+    let height = 14; // Height of the grid
     // Changes the grid width to the chosen value
     function widthChange(chosen, thisChosen) {
         chosenWidth = chosen; // Get the width from the button's data attribute
@@ -543,10 +539,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 
-    // Changes the controls to a flipped scheme
+    let areControlsFlipped = false; // Tracks if the controls are using the flipped scheme
+
+    // Changes the controls back to default scheme
     $("#controlContainer").on("click", "#defaultControls", function (event) {
         event.preventDefault();
         event.stopPropagation();
+        defaultControls();
+    })
+
+    function defaultControls() {
         keyBindings = {
             "a": sharedRotateLeft,
             "A": sharedRotateLeft,
@@ -570,27 +572,40 @@ document.addEventListener('DOMContentLoaded', () => {
         hardDropControl.innerHTML = "Hard drop: Space";
         controlDisplay.style.right = "150px"
         controlDisplay.style.marginLeft = "0px"
-    })
+    }
 
-    // Changes the controls back to default
+    // Changes the controls to flipped scheme
     $("#controlContainer").on("click", "#altControls", function (event) {
         event.preventDefault();
         event.stopPropagation();
+        flippedControls();
+    })
 
-        // Key bindings
+    // Hotkey for toggling controls
+    document.addEventListener('keydown', (e) => {
+        if ((e.key === "F" || e.key === "f") && !areControlsFlipped) {
+            flippedControls();
+            areControlsFlipped = true;
+        } else if ((e.key === "F" || e.key === "f") && areControlsFlipped) {
+            defaultControls();
+            areControlsFlipped = false;
+        }
+    });
+
+    function flippedControls() {
         keyBindings = {
-        "a": sharedMoveLeft,
-        "A": sharedMoveLeft,
-        "ArrowRight": sharedRotateRight,
-        "ArrowLeft": sharedRotateLeft,
-        "ArrowUp": sharedRotateRight,
-        "ArrowDown": sharedRotateLeft,
-        "d": sharedMoveRight,
-        "D": sharedMoveRight,
-        "s": sharedMoveDownCurrent,
-        "S": sharedMoveDownCurrent,
-        "w": sharedHardDrop,
-        "W": sharedHardDrop,
+            "a": sharedMoveLeft,
+            "A": sharedMoveLeft,
+            "ArrowRight": sharedRotateRight,
+            "ArrowLeft": sharedRotateLeft,
+            "ArrowUp": sharedRotateRight,
+            "ArrowDown": sharedRotateLeft,
+            "d": sharedMoveRight,
+            "D": sharedMoveRight,
+            "s": sharedMoveDownCurrent,
+            "S": sharedMoveDownCurrent,
+            "w": sharedHardDrop,
+            "W": sharedHardDrop,
         };
 
         leftControl.innerHTML = "Left: A";
@@ -600,6 +615,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cwControl.innerHTML = "Clockwise: Right-arrow";
         hardDropControl.innerHTML = "Hard drop: W";
         controlDisplay.style.marginLeft = "-58px"
-        controlDisplay.style.right = "90px"
-    })
+        controlDisplay.style.right = "92px"
+    }
 })

@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let colorBonus = 0; // Color bonus depending on how many different colored puyo were cleared
     let groupBonus = 1; // Group bonus depending on how many of the same color puyo were cleared
     let timeoutId; // Id for how long multiplier's increment
+    window.timeToSpeedUp = 10000; // How long it takes for the game to speed up
+    window.puyosToSpeedUp = 30; // How many puyos need to be placed in order for the game to speed up
+    let totalPuyoCount = 0; // How many total puyos have been placed
     let isFalling = false // Tracks if puyos are currently falling
     let isMovementResumed = true // Tracks if current position movement can occur
     let isGameOver = false; // Checks if a game over has occurred
@@ -378,7 +381,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Freeze function 
     function freeze() {
-        // let gameActive = true;
         if (current.some(index => {
             const nextIndex = currentPosition + index + width;
             return nextIndex >= squares.length - width || squares[nextIndex].classList.contains('taken');
@@ -408,6 +410,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Creates new puyos to fall
     function createNewPuyo() {
+
+        // If a certain amount of puyos have been placed, speed the game up
+        if ((totalPuyoCount !== 0) && (totalPuyoCount % puyosToSpeedUp == 0) && (fallSpeed > 100)) {
+            fallSpeed *= 0.8;
+            console.log("Speed Up!");
+            scoreDisplay.innerHTML = "Speed up!";
+            setTimeout(() => scoreDisplay.innerHTML = score, 2000);
+        }
+        if (fallSpeed < 100) 
+            fallSpeed = 100;
+
+        totalPuyoCount+= 2;
+        console.log("Total puyo count: " + totalPuyoCount)
+
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
 
         // Makes the up next puyos the current puyo
@@ -638,7 +654,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isGameOver) return;
 
         // Hides customization menus when game starts
-        // custom.classList.add("hidden");
         custom.disabled = true;
 
         if (timerId) { // If game is already paused
