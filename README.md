@@ -4,3 +4,5 @@ This is an almost fully functionable puyo puyo game with a lot of customization 
 
 Image Credits:
 Myself
+
+Optimized for chrome
