@@ -436,6 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chainLength = 0;
         puyoCount = 0;
         chainPower = 0;
+        groupBonus = 1;
     }
     
     // Allows puyos to fall 
@@ -685,6 +686,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 connected.forEach(ind => {
                     globalConnectedPuyos.add(ind);
                     localConnected.add(ind);
+                    const indexColor = window.getComputedStyle(squares[ind]).backgroundColor
+                    // Assures the same color does not get counted multiple times
+                    if (!colorVisited.has(indexColor))
+                        colorVisited.add(indexColor);
                 });
             }
         }
@@ -720,10 +725,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let neighborColor = 'rgb(128, 128, 128)';
             if (window.getComputedStyle(squares[neighborIndex]).backgroundColor !== 'rgba(0, 0, 0, 0)') {
                 neighborColor = window.getComputedStyle(squares[neighborIndex]).backgroundColor;
-
-                // Assures the same color does not get counted multiple times
-                if (!colorVisited.has(neighborColor))
-                    colorVisited.add(neighborColor);
             }
 
             // Boundary checks
@@ -753,6 +754,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 squares[ind].style.backgroundColor = '';
                 puyoCount++;
             });
+            colorVisited.clear();
             if (puyoCount > puyosToPop + 6) {
                 groupBonus = 10;
             } else if (puyoCount > puyosToPop) {
@@ -767,7 +769,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Reset global connections and colors for the next turn
             globalConnectedPuyos.clear();
-            colorVisited.clear();
         }
     }
 
