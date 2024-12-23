@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.dropdownBtn = document.querySelector('.dropdown'); // All dropdown menus
     window.aestheticCustom = document.querySelector('#aesthetic-custom'); // Customize aesthetics button
     window.squares = Array.from(document.querySelectorAll('.grid div')); // Array of all grid spaces
+    const custom = document.querySelector('#custom');
 
     window.width = 6; // Width of each grid space
     let timerId = 0; // Interval in which puyos fall
@@ -20,10 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let puyoCount = 0; // Number of puyo cleared in a chain
     let chainPower = 0; // Chain power depending on chain length
     let colorBonus = 0; // Color bonus depending on how many different colored puyo were cleared
-    let groupBonus = 0; // Group bonus depending on how many of the same color puyo were cleared
+    let groupBonus = 1; // Group bonus depending on how many of the same color puyo were cleared
     let timeoutId; // Id for how long multiplier's increment
     let isFalling = false // Tracks if puyos are currently falling
-    let isUnpauseEnabled = true // Tracks if current position movement can occur
+    let isMovementResumed = true // Tracks if current position movement can occur
     let isGameOver = false; // Checks if a game over has occurred
     window.puyosToPop = 4; // Amount of puyos needed to connect in order to pop
     window.amountOfColors = 4; // Amount of different colors displayed
@@ -103,28 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (colorClass) {
             array[puyos + puyoPosition].classList.remove('fontState', colorClass);
         } else if (showImageClicked) {
-            // console.log("addFont else if called");
             if (computedColor == "rgba(0, 0, 0, 0)") return;
             array[puyos + puyoPosition].style.borderRadius = '50%';
-            // array.forEach(index => {
-            //     if (!isClickedOnce) return;
-            //     if (index.classList.contains('aboveGrid')) return
-            //     let rgbValues = computedColor.match(/\d+/g);
-            //     let newColor = `rgba(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]}, 0)`;
-            //     array[puyos + puyoPosition].style.backgroundColor = newColor;
-            //     array[puyos + puyoPosition].classList.remove('fontState', colorClass);
-            //     array[puyos + puyoPosition].style.boxShadow = "0 0 0 1px rgba(0, 0, 0, 0.3) inset";
-            //     array[puyos + puyoPosition].style.borderRadius = '0%';
-            //     array[puyos + puyoPosition].removeAttribute('id');
-            //     array[puyos + puyoPosition].classList.add('fontState', colorClass);
-            //     array[puyos + puyoPosition].classList.add(colorClassMap[computedColor]);
-            //     array[puyos + puyoPosition].classList.remove('undefined', 'null');
-            // })
-            // if (array[puyos + puyoPosition].classList.contains('aboveGrid')) {
-            //     array[puyos + puyoPosition].classList.remove('fontState', 'undefined', 'null');
-            //     array[puyos + puyoPosition].style.boxShadow = "none";
-            //     array[puyos + puyoPosition].style.boxShadow = "100%";
-            // }
         }
             // If the computed color matches one in the map, add font
             if (colorClassMap[computedColor]) {
@@ -140,16 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (colorClass) {
             array[puyos + puyoPosition].classList.add('fontState', colorClass);
         } else if (showImageClicked) {
-            // console.log("removeFont else if called");
-        //     array.forEach(index => {
-        //         if (!index.classList.contains('aboveGrid')) return
-        //         array[puyos + puyoPosition].classList.remove('fontState', colorClass);
-        //         // array[puyos + puyoPosition].classList.remove(colorClassMap[computedColor]);
-        //         array[puyos + puyoPosition].style.border = "none";
-        //         array[puyos + puyoPosition].style.boxShadow = "";
-        //         array[puyos + puyoPosition].className = '';
-        //         array[puyos + puyoPosition].id = 'gridDiv';
-        //     })
         }
     
         // If the computed color matches one in the map, remove font
@@ -236,9 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Move down function
     window.sharedMoveDownCurrent = function moveDownCurrent() {
-        if (!isUnpauseEnabled) return;
+        if (!isMovementResumed) return;
         multiplierTimeout();
-        undraw(currentPosition);  // Remove puyos from the current position
+        undraw(currentPosition); // Remove puyos from the current position
         currentPosition += width;
         draw(currentPosition);
     }
@@ -280,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Allows the puyos to be snapped to the bottom instantly
     window.sharedHardDrop = function hardDrop() {
-        if (!isUnpauseEnabled) return;
+        if (!isMovementResumed) return;
         undraw(currentPosition);  // Remove puyos from the current position
             while (!squares[currentPosition + width].classList.contains('taken')) {
                 sharedMoveDownCurrent();
@@ -389,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Rotate the puyos to the right
     window.sharedRotateRight = function rotateRight() {
-        if (!isUnpauseEnabled) return;
+        if (!isMovementResumed) return;
         undraw(currentPosition);
         checkRotationRight(currentPosition);
         current = puyo[currentRotation];
@@ -398,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Rotate the puyos to the left
     window.sharedRotateLeft = function rotateLeft() {
-        if (!isUnpauseEnabled) return;
+        if (!isMovementResumed) return;
         undraw(currentPosition);
         checkRotationLeft();
         current = puyo[currentRotation];
@@ -407,11 +378,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Freeze function 
     function freeze() {
+        // let gameActive = true;
         if (current.some(index => {
             const nextIndex = currentPosition + index + width;
             return nextIndex >= squares.length - width || squares[nextIndex].classList.contains('taken');
         })) {
-            isUnpauseEnabled = false;
+            isMovementResumed = false;
             freezeContinue();
             scoreDisplay.innerHTML = score;
         }
@@ -426,7 +398,9 @@ document.addEventListener('DOMContentLoaded', () => {
             pauseEverything();
         } else {
             setTimeout(() => {
-                checkAdjacentColor(currentPosition);
+                current.slice().forEach(index => {
+                    checkAdjacentColor(currentPosition + index);
+                })
             }, 200);
             multiplierTimeout();
         }
@@ -434,15 +408,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Creates new puyos to fall
     function createNewPuyo() {
-        // console.log("create new puyo called")
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
+
+        // Makes the up next puyos the current puyo
         random = nextRandom;
         nextRandom = thirdRandom
         randomSecondary = nextRandomSecondary;
         nextRandomSecondary = thirdRandomSecondary;
-        currentRotation = 0;
         thirdRandom = Math.floor(Math.random() * amountOfColors);
         thirdRandomSecondary = Math.floor(Math.random() * amountOfColors);
+
+        currentRotation = 0;
         current = puyo[currentRotation];
         currentPosition = Math.ceil(width / 2 - 1);
         if (width == 1) {
@@ -451,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
         draw(currentPosition);
         setTimeout(() => {
             chainDisplay.innerHTML = "";
-        }, 3000);
+        }, 2200);
     }
 
     // Resets multiplier variables to default when the chain ends
@@ -471,11 +447,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Loops through the grid squares
         squares.forEach((square, index) => {
+
             // Skips if it's not a Puyo or already visited
             if (!square.classList.contains('puyoBlob') || visited.has(index) || 
             square.classList.contains('currentPosition')) return;
 
             const belowIndex = index + width; // Position below the current puyo
+            
             // Skips if below the grid or if the square is already filled
             if (belowIndex >= squares.length - width) return;
 
@@ -492,19 +470,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 isFalling = true;
             }
         });
+
         // Wait for all moves to finish before continuing
         if (movedPuyos) {
-            await Promise.all(promises);
-            falling();  // Recursively call falling to check if any new Puyos need to fall
+            await Promise.all(promises); // Wait for all puyos to stop falling
+            falling(); // Recursively call falling to check if any new Puyos need to fall
         } else {
             // After all Puyos have settled, check for adjacent Puyos to clear
-            squares.forEach((square, index) => {
-                if (square.classList.contains('puyoBlob')) {
-                    setTimeout(() => {
-                        checkAdjacentColor(index);
-                    }, 200);
-                }
-            });
+            setTimeout(() => {
+                squares.forEach((square, index) => {
+                    if (square.classList.contains('puyoBlob')) {
+                            checkAdjacentColor(index);
+                    }
+                });
+                processClears();
+            }, 200);
         }
         isFalling = false;
     }
@@ -516,13 +496,13 @@ document.addEventListener('DOMContentLoaded', () => {
         timeoutId = setTimeout(() => {
             unPauseCurrent();
             gameOver();
-            isUnpauseEnabled = true
+            isMovementResumed = true
         }, 201)
     }
 
-    // Move the puyos left, unless it is at the edge or there is a blockage
+    // Move puyos left, unless at the edge or there is a blockage
     window.sharedMoveLeft = function moveLeft() {
-        if (!isUnpauseEnabled) return;
+        if (!isMovementResumed) return;
         undraw(currentPosition);
         const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0);
         if (!isAtLeftEdge)
@@ -534,9 +514,9 @@ document.addEventListener('DOMContentLoaded', () => {
         draw(currentPosition);
     }
 
-    // Move the puyos right, unless it is at the edge or there is a blockage
+    // Move puyos right, unless at the edge or there is a blockage
     window.sharedMoveRight = function moveRight() {
-        if (!isUnpauseEnabled) return;
+        if (!isMovementResumed) return;
         undraw(currentPosition);
         const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1);
 
@@ -549,15 +529,14 @@ document.addEventListener('DOMContentLoaded', () => {
         draw(currentPosition);
     }
 
-    // Show up-next puyos in mini grid
+    // Shows up-next puyos in mini grids
     window.displaySquares = document.querySelectorAll('.mini-grid div');
     window.displayIndex = 0;
     window.nextDisplaySquares = document.querySelectorAll('.next-mini-grid div');
     window.nextDisplayIndex = 0;
 
     // Displays the puyos in the mini-grid display
-    function displayShape() {
-        // console.log("Display shape called")
+    window.displayShape = function displayShape() {
         displaySquares.forEach(square => {
             // Remove font and puyos from the up next display
             removeFont(displayIndex, 0, displaySquares);
@@ -581,20 +560,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 displaySquares[displayIndex].style.backgroundColor = colors[nextRandom];
                 displaySquares[displayIndex + 1].classList.add('puyoBlob');
                 displaySquares[displayIndex + 1].style.backgroundColor = colors[nextRandomSecondary];
-                // console.log(displaySquares[displayIndex].style.backgroundColor);
+
             } else {
-                const computedColor1 = window.getComputedStyle(displaySquares[displayIndex]).backgroundColor;
-                const computedColor2 = window.getComputedStyle(displaySquares[displayIndex + 1]).backgroundColor;
-                let fontColor1 = getColorNameFromRgba(window.getComputedStyle(displaySquares[displayIndex]).backgroundColor);
-                let fontColor2 = getColorNameFromRgba(window.getComputedStyle(displaySquares[displayIndex + 1]).backgroundColor);
                 displaySquares[displayIndex].classList.add('puyoBlob');
                 displaySquares[displayIndex].style.backgroundColor = colors[nextRandom];
                 displaySquares[displayIndex + 1].classList.add('puyoBlob');
                 displaySquares[displayIndex + 1].style.backgroundColor = colors[nextRandomSecondary];
-                // console.log(displaySquares[displayIndex + 1].style.backgroundColor);
-                displaySquares[displayIndex].classList.add(rgbaClassMap[fontColor1]);
-                // console.log("computed color 1: " + computedColor1);
-                displaySquares[displayIndex + 1].classList.add(rgbaClassMap[fontColor2]);
             }
 
             addFont(displayIndex, 0, displaySquares);
@@ -606,21 +577,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 nextDisplaySquares[nextDisplayIndex + 1].classList.add('puyoBlob');
                 nextDisplaySquares[nextDisplayIndex + 1].style.backgroundColor = colors[thirdRandomSecondary];
             } else {
-                // const computedColor1 = window.getComputedStyle(nextDisplaySquares[nextDisplayIndex]).backgroundColor;
-                // const computedColor2 = window.getComputedStyle(nextDisplaySquares[nextDisplayIndex + 1]).backgroundColor;
-                // let fontColor1 = getColorNameFromRgba(window.getComputedStyle(nextDisplaySquares[nextDisplayIndex]).backgroundColor);
-                // let fontColor2 = getColorNameFromRgba(window.getComputedStyle(nextDisplaySquares[nextDisplayIndex + 1]).backgroundColor);
                 nextDisplaySquares[nextDisplayIndex].classList.add('puyoBlob');
                 nextDisplaySquares[nextDisplayIndex].style.backgroundColor = colors[thirdRandom];
                 nextDisplaySquares[nextDisplayIndex + 1].classList.add('puyoBlob');
                 nextDisplaySquares[nextDisplayIndex + 1].style.backgroundColor = colors[thirdRandomSecondary];
-                // nextDisplaySquares[nextDisplayIndex].classList.add(rgbaClassMap[fontColor1]);
-                // nextDisplaySquares[nextDisplayIndex + 1].classList.add(rgbaClassMap[fontColor2]);
             }
             addFont(nextDisplayIndex, 0, nextDisplaySquares);
             addFont(nextDisplayIndex, 1, nextDisplaySquares);
     }
-    window.displayShape = displayShape;
 
     // Adds functionality to the pause button
     startBtn.addEventListener('click', () => {
@@ -669,68 +633,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Starts, pauses, and unpauses the game
     function startBtnPause() {
-        if (!isUnpauseEnabled) return;
+        if (!isMovementResumed) return;
         if (isGameOver) return;
 
-        // Removes customization when game starts
-        dropdownBtn.classList.add("hidden");
-        aestheticCustom.classList.add("hidden");
+        // Hides customization menus when game starts
+        // custom.classList.add("hidden");
+        custom.disabled = true;
 
-        if (timerId) {
+        if (timerId) { // If game is already paused
             startBtn.innerHTML = '<i class="fa-solid fa-play"></i>' + '  Play';
-            clearInterval(timerId);
+            clearInterval(timerId); // Reset fall timer when game is paused
             timerId = null;
             isInputEnabled = false;
-        } else {
+        } else { 
             draw(currentPosition);
             timerId = setInterval(() => {
                 sharedMoveDownCurrent()
             }, fallSpeed);
             isInputEnabled = true;
             if (isClickedOnce) return;
-            nextRandom = Math.floor(Math.random() * amountOfColors)
-            nextRandomSecondary = Math.floor(Math.random() * amountOfColors)
-            thirdRandom = Math.floor(Math.random() * amountOfColors)
-            thirdRandomSecondary = Math.floor(Math.random() * amountOfColors)
+
+            // Ensures up next puyos are randomized at start
+            nextRandom = Math.floor(Math.random() * amountOfColors);
+            nextRandomSecondary = Math.floor(Math.random() * amountOfColors);
+            thirdRandom = Math.floor(Math.random() * amountOfColors);
+            thirdRandomSecondary = Math.floor(Math.random() * amountOfColors);
+
             displayShape();
             isClickedOnce = true;
         }
     }
-    
-    // Main function to check and clear adjacent Puyos
+
+    // A global variable to track connected puyos on each turn
+    let globalConnectedPuyos = new Set();
+
+    // Main function to check the color of adjacent puyos
     function checkAdjacentColor(puyoIndex) {
-        if (isGameOver) return;
-        current.some(index => {
-            let neighborIndex = puyoIndex + index;
-            if (neighborIndex >= 0 && neighborIndex < squares.length - width) {
-                let color = window.getComputedStyle(squares[puyoIndex + index]).backgroundColor;
-                const connected = (getConnectedPuyos(puyoIndex + index, color, new Set()));
-            
-                // If the puyos to pop value or more connected puyos are found, clear them
-                    if (connected.length >= puyosToPop) {
-                    connected.forEach(ind => {
-                        removeFont(ind, 0, squares);
-                        squares[ind].classList.remove('taken');
-                        squares[ind].classList.remove('puyoBlob');
-                        squares[ind].style.backgroundColor = '';
-                        puyoCount++;
-                    });
-                    chainLength++; // Increment length of chain
-                    chainDisplay.innerHTML = chainLength + " chain!";
-                    displayScore();
-                    falling(); // Check if any puyos need to fall after clearing
-                }
+        if (isGameOver || isFalling) return;
+
+        let localConnected = new Set(); // Collects connected puyos for this call
+
+        // If in bounds, continue
+        if (puyoIndex >= 0 && puyoIndex < squares.length - width) {
+
+            // Sets color to be compared
+            let color = window.getComputedStyle(squares[puyoIndex]).backgroundColor;
+            let connected = (getConnectedPuyos(puyoIndex, color, new Set()));
+
+            // If the puyos to pop value or more connected puyos are found, add them to both sets
+            if (connected.length >= puyosToPop) {
+                connected.forEach(ind => {
+                    globalConnectedPuyos.add(ind);
+                    localConnected.add(ind);
+                });
             }
-        })
+        }
     }
+
+    // Tracks if a color has already been visited in the connected index
+    let colorVisited = new Set();
 
     // Helper for checkAdjacentColor to recursively find all connected Puyos of the same color
     function getConnectedPuyos(index, color, visited = new Set()) {
+
         // Base case: Makes sure puyos don't get counted more than once
         if (visited.has(index)) return [];
-        visited.add(index); //
+
         let connectedPuyos = []; // Array of same colored puyos that are adjacent to each other
-        connectedPuyos.push(index);
+        connectedPuyos.push(index); 
 
         const directions = [
             -width, // Up
@@ -740,14 +710,20 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         // Color comparison loop
-        directions.forEach(direction => {
-        let neighborIndex = index + direction; // Index of neighboring puyos
+        directions.slice().forEach(direction => {
+
+            let neighborIndex = index + direction; // Index of neighboring puyos
+
+            visited.add(index);
+
             // Makes sure both current color and neighboring colors are in the same color format
             let neighborColor = 'rgb(128, 128, 128)';
-                if (neighborIndex >= 0 && neighborIndex < squares.length - width) {
-                if (window.getComputedStyle(squares[neighborIndex]).backgroundColor !== 'rgba(0, 0, 0, 0)') {
-                    neighborColor = window.getComputedStyle(squares[neighborIndex]).backgroundColor;
-                }
+            if (window.getComputedStyle(squares[neighborIndex]).backgroundColor !== 'rgba(0, 0, 0, 0)') {
+                neighborColor = window.getComputedStyle(squares[neighborIndex]).backgroundColor;
+
+                // Assures the same color does not get counted multiple times
+                if (!colorVisited.has(neighborColor))
+                    colorVisited.add(neighborColor);
             }
 
             // Boundary checks
@@ -757,11 +733,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Compares colors
             if (neighborColor === color && !visited.has(neighborIndex)) {
+
                 // Adds adjacent puyos to connected list
                 connectedPuyos = connectedPuyos.concat(getConnectedPuyos(neighborIndex, color, visited));
             }
-        })
-        return connectedPuyos;   
+        }) 
+        return connectedPuyos;
+    }
+
+    // Function to process all puyo pops after collecting global connections
+    function processClears() {
+        if (globalConnectedPuyos.size > 0) {
+
+            // Clears the puyos
+            globalConnectedPuyos.forEach(ind => {
+                removeFont(ind, 0, squares);
+                squares[ind].classList.remove('taken');
+                squares[ind].classList.remove('puyoBlob');
+                squares[ind].style.backgroundColor = '';
+                puyoCount++;
+            });
+            if (puyoCount > puyosToPop + 6) {
+                groupBonus = 10;
+            } else if (puyoCount > puyosToPop) {
+                groupBonus++;
+            }
+
+            chainLength++; // Increments chain length
+            chainDisplay.innerHTML = chainLength + " chain!"; // Displays chain length
+            displayScore();
+            groupBonus = 1;
+            falling(); // Handles falling puyos
+
+            // Reset global connections and colors for the next turn
+            globalConnectedPuyos.clear();
+            colorVisited.clear();
+        }
     }
 
     // Logic for a clear board
@@ -773,12 +780,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Calculates and displays score according to Puyo Puyo Tsu rules
+    // Calculates and displays score according to Puyo Puyo Tsu's scoring
     function displayScore() {
-        if (chainLength === 1) {
-            score += 10 * puyoCount;
-            scoreDisplay.innerHTML = score;
-        } else if (chainLength > 1) {
+        if (chainLength > 1) {
 
             // Exponential growth until chain is greater than 5
             if (chainLength <= 5) {
@@ -786,37 +790,33 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (chainLength > 5) {
                 chainPower += 32;
             }
-
-            finalScoreAdd = ((10 * puyoCount) * chainPower); // Final score calculation
-            score += finalScoreAdd;
-            scoreDisplay.innerHTML = score; // Displays the score
         }
+        colorBonus = colorVisited.size * 3;
+        finalScoreAdd = ((10 * puyoCount) * (chainPower + colorBonus + groupBonus)); // Final score calculation
+        score += finalScoreAdd;
+        scoreDisplay.innerHTML = score; // Displays the score
     }
     
     // Game over if reached the top
     function gameOver() {
         if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
             endDisplay.innerHTML = 'game over';
-            isUnpauseEnabled = false;
+            isMovementResumed = false;
             isGameOver = true;
             clearInterval(timerId);
             isInputEnabled = false
+
+            // Prompts players to restart page to play again
             setTimeout(() => {
                 gameOverDisplay.innerHTML = "To restart, refresh the page";
                 gameOverDisplay.style.padding = '20px';
                 gameOverDisplay.style.border= "solid 3px black";
                 gameOverDisplay.style.borderRadius = '30px';
-            }, 2000);
+            }, 3000);
         }
     }
-    // window.sharedHardDrop = hardDrop;
-    // window.sharedMoveDownCurrent = moveDownCurrent;
-    // window.sharedMoveLeft = moveLeft;
-    // window.sharedMoveRight = moveRight;
-    // window.sharedRotateLeft = rotateLeft;
-    // window.sharedRotateRight = rotateRight;
 
-    // Key bindings object
+    // Key bindings
     window.keyBindings = {
         "a": sharedRotateLeft,
         "A": sharedRotateLeft,

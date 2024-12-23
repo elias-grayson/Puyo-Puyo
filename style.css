@@ -11,7 +11,6 @@ html body {
 .navbar {
     font-family: "Font Awesome 6 Free"; 
     background: linear-gradient(to top, midnightblue, dodgerblue);
-    /* background: linear-gradient(to top, rgb(70, 21, 93), rgb(173, 30, 255)); */
     border-bottom: 5px solid lightgray;
     box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.5);
 }
@@ -23,44 +22,58 @@ html body {
 
 /* Default controls button */
 #defaultControls {
-    padding-left: 50px;
-    padding-right: 50px;
-    height:auto;
+    border-right: none;
 }
 
 /* Flipped controls button */
 #altControls {
-    padding-left: 40px;
-    padding-right: 40px;
+    border-left: none;
 }
 
 /* Every dropdown display*/
 .dropdown {
+    background: radial-gradient(#b1b1b1, #6c757d);
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 15px;
     z-index: 1;
+    border-top: 2px outset white;
+    border-radius: 10px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    box-shadow: 2px -2px 4px rgba(0, 0, 0, 0.7);
 }
 
-/* Dropdown lists */
-.dropdown-list {
-    transform: translateY(-10px);
+.nextDropdown {
+    padding-top: 30px;
+    background: radial-gradient(#b1b1b1, #6c757d);
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 15px;
+    z-index: 2;
+    border-top: 2px solid white;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 00px;
+    border-bottom-left-radius: 00px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
-
-/* Show the dropdown */
-.dropdown-list.show {
-    transform: translateY(0);
-  }
 
 /* Contains all the dropdowns, the grid, upnext displays, and the controls*/
 .container {
+    position: relative;
     width: auto;
     display: flex;
     justify-content: center;
+    left: 105px;
 }
 
 /* Contains the puyo board */
 .grid {
     font-family: "Font Awesome 6 Free"; 
     background: radial-gradient(#64a2ff, rgb(54, 54, 148));
-    /* background: radial-gradient(#c489ff, rgb(68, 30, 98)); */
     position: relative;
     min-width: 308px;
     min-height: 596px;
@@ -216,79 +229,182 @@ html body {
     text-align: left;
 }
 
-/* Applies to all buttons when hovering over them */
-.btn:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
 /* Applies to all text in all drop menus */
 #dropdownText {
     color: white;
   }
 
-/* Applies to gameplay customization button */
-#gameplay-custom {
-    width: 0;
-    margin-right: -100px;
-    right: 380px;
+/* Applies to customization button */
+#custom {
+    border: none;
+    color: white;
+    position: relative;
+    background-color: #0d6efd;
+    margin-right: -150px;
+    right: 160px; 
     margin-bottom: 20px;
+    white-space: nowrap;
+}
+
+#custom:hover {
+    opacity: 100%;
+    box-shadow: 1px 1px 6px 1px rgba(0, 0, 0, 0.3);
+}
+
+#custom:active {
+    border: 1px solid white;
+}
+
+#gameplay-custom {
+    background-color: none;
+    margin: auto;
+    align-items: start;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Entire modal */
+.modal-content {
+    justify-content: start;
+    background: radial-gradient(#b1b1b1, #6c757d);
+    border: 5px solid black;
+    border-width: 6px;
+}
+
+.custom-modal-width {
+    top: 20px; 
+    justify-content: start;
+    max-width: 600px; /* Adjust width here */
+    margin: auto;    /* Keeps the modal centered */
+  }
+
+/* Customization overlay */
+.custom-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+/* Header of the modal */
+.modal-header {
+    color: white;
+    background: linear-gradient(to top, midnightblue, dodgerblue);
+    z-index: 2;
 }
 
 /* Applies to aesthetic customization button */
 #aesthetic-custom {
-    margin-right: -100px;
-    width: 0px;
-    left: 10px;
+    background-color: none;
+    margin: auto;
+    margin-top: 0px; 
+    align-items: start;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 /* Controls */
 #controlDisplay { 
-    position: absolute;
+    position: relative;
     white-space: nowrap;
     margin-top: 200px;
-    margin-left: 390px;
-    margin-right: 0px;
+    margin-left: 0px;
+    right: 150px;
     display: flex;
     flex-direction: column;
 }
 
+#gameButtonContainer {
+    white-space: nowrap;
+    justify-content: center;
+}
+
+#boardChange {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
 /* Applies to buttons that control grid width */ 
 .widthButton {
-    border-radius: 20%;
+    border: 3px solid white;
+    color: white;
+    background-color: rgb(46, 46, 46);
+    height: auto;
 }
 
 /* Applies to every width button */
 .widthButton:hover {
-    opacity: 70%;
+    box-shadow: none;
+    background-color: rgba(68, 68, 68, 1);
+    border-color: white;
+}
+
+.btn {
+    background-color: rgb(46, 46, 46);
+    opacity: 100%;
+    border: 3px solid white;
+    color: white;
+    height: auto;
+}
+
+.btn:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+
+/* Applies to all buttons when hovering over them */
+.btn:hover {
+    border: 3px solid white;
+    color: white;
+    background-color: rgba(68, 68, 68, 1);
+    height: auto;
+}
+
+.btn.active {
+    background-color: rgba(68, 68, 68, 1);
+    color: lightgray;
+}
+
+#boardBackground {
+    color: white;
+    border-bottom: 2px inset white;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding-top: 20px;
+}
+
+#blueBackground {
+    border-right: none;
+    border-bottom: none;
+}
+
+#redBackground {
+    border-left: none;
+    border-bottom: none;
+}
+
+#greenBackground {
+    border-right: none;
+    border-top: none;
+}
+
+#purpleBackground {
+    border-left: none;
+    border-top: none;
 }
 
 /* Applies to emojis button */
 #showFont {
-    border-radius: 10px;
-    background-color: #6c757d;
-    border: none;
-    margin-bottom: 5px;
-    padding-left: 20px;
-    padding-right: 20px;
+    border-bottom: none;
 }
 
-/* Applies to emojis button when hovering over */
-#showFont:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* Applies to Elon Musk button */
+/* Applies to friend .5s button */
 #showImage {
-    border-radius: 10px;
-    background-color: #6c757d;
-    border: none;
-    padding-left: 40px;
-    padding-right: 40px;
-}
-
-/* Applies to Elon Musk button when hovering over */
-#showImage:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-top: none;
 }
 
 /* Applies to score display */
@@ -303,12 +419,12 @@ html body {
 /* Applies to chain display */
 #chainDisplay {
     white-space: nowrap;
-    position: absolute;
-    width: 0;
+    position: relative;
+    width: 0px;
     font-family: "Font Awesome 6 Free";
     display: flex;
-    margin-top: 200px;
-    margin-right: 650px;
+    margin-top: 250px;
+    right: 75px;
     justify-content: center;
 }
 
@@ -382,24 +498,6 @@ html body {
     font-family: "Font Awesome 6 Free";
     margin-left: 470px;
     text-decoration: underline;
-}
-
-/* Applies to the green background choice */
-#greenBackground {
-    padding-left: 40px;
-    padding-right: 40px;
-}
-
-/* Applies to red backgrond choice */
-#redBackground {
-    padding-left: 50px;
-    padding-right: 50px;
-}
-
-/* Applies to purple backgrond choice */
-#purpleBackground {
-    padding-left: 40px;
-    padding-right: 40px;
 }
 
 /* Applies to every puyo */

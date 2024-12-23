@@ -21,7 +21,7 @@
         <!--Navigation bar for the title of the page-->
         <nav class="navbar navbar-light">
             <div class="container-fluid">
-                <a class="navbar-brand mx-auto" id="title" href="#">Elias' Puyo Puyo Project</a>
+                <a class="navbar-brand mx-auto" id="title">Elias' Puyo Puyo Project</a>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarID">
                 </div>
@@ -48,138 +48,142 @@
             <h3 id="upNext"></h3>
         </div>
 
+        <!--Contains all centered content-->
         <div class="container">
-
-            <!--Gameplay Dropdown-->
-            <div class="dropdown" data-bs-close="outside" id="gameplay-custom">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Gameplay Customization
+           
+            <!-- Button to trigger modal -->
+            <div>
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal" id="custom">
+                    Customization
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropDownMenu">
-
-                    <!--Fall speed customization-->
-                    <li class="dropend" id="dropendButton">
-                        <button 
-                            class="btn dropdown-toggle" 
-                            type="button" 
-                            id="nestedDropdown" 
-                            data-bs-toggle="dropdown" 
-                            style="color: white; padding-left: 50px;"
-                            aria-expanded="false">
-                            Fall speed
-                        </button>
-                        <ul class="dropdown-menu text-center" aria-labelledby="nestedDropdown" id="dropEndMenu">
-                            <li>
-                                <input 
-                                type="range" 
-                                class="form-range text-center" 
-                                id="fallSpeedInput"
-                                style="color: white" 
-                                min="100" 
-                                max="3000" 
-                                step="100" 
-                                value="800">
-                                <span id="fallSpeedValue" style="color: white">1 second (default)</span>
-                            </li>
-                        </ul>
-
-                    <!--Puyos to pop customization-->
-                    <li class="dropstart dropFrontButton">
-                        <button 
-                        class="btn dropdown-toggle" 
-                        type="button" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false" 
-                        style="color: white"
-                        id="nestedDropdown">
-                            Puyos to clear
-                        </button>
-                        <ul class="dropdown-menu text-center" id="dropFrontMenu">
-                                <input 
-                                type="range" 
-                                class="slider" 
-                                id="puyoPopInput" 
-                                style="color: white"
-                                value="4" 
-                                min="2" 
-                                max="10" 
-                                step="1">
-                                <span id="puyoPopValue" style="color: white">4 puyos (default)</span>
-                        </ul>
-                    </li>
-
-                    <!--Customization for how many different colored puyos appear-->
-                    <li class="dropend" id="dropendButton">
-                        <button 
-                        class="btn dropdown-toggle" 
-                        type="button" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false"
-                        style="color: white" 
-                        id="nestedDropdown">
-                            Amount of colors
-                        </button>
-                        <ul class="dropdown-menu text-center" id="dropEndMenu">
-                                <input 
-                                type="range" 
-                                class="form-range" 
-                                id="amtPuyoInput" 
-                                style="color: white"
-                                value="4" 
-                                min="1" 
-                                max="7" 
-                                step="1"></li></li>
-                                <span id="amtPuyoValue" style="color: white">4 colors (default)</span>
-                        </ul>
-                    </li>
-
-                    <!--Control customization-->
-                    <li class="dropstart" id="dropFrontButton">
-                        <button class="btn dropdown-toggle dropdownText" 
-                        type="button" 
-                        data-bs-toggle="dropdown" 
-                        style="color: white; padding-right: 70px;"
-                        id="nestedDropdown"
-                        aria-expanded="false">
-                            Controls
-                        </button>
-                        <ul class="dropdown-menu text-center" aria-labelledby="nestedDropdown" id="dropFrontMenu">
-                            <div id="controlContainer">
-                                <button class=" btn dropDownText" id="defaultControls" style="color: white">Default</button>
-                                <button class=" btn dropdownText" id="altControls" style="color: white">Alternate</button>
-                            </div>
-                        </ul>
-                    </li>
-
-                    <!--Customization for how many different colored puyos appear-->
-                    <li class="dropdown">
-                        <button 
-                        class="btn dropdown-toggle" 
-                        type="button" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false" 
-                        style="color: white; padding-right: 40px;"
-                        id="nestedDropdown">
-                            Board width
-                        </button>
-                        <ul class="dropdown-menu text-center" id="dropDownMenu">
-                            <div id="gameButtonContainer" style="color: white">
-                                <button class="widthButton" data-width="1">1</button>
-                                <button class="widthButton" data-width="2">2</button>
-                                <button class="widthButton" data-width="3">3</button>
-                                <button class="widthButton" data-width="4">4</button>
-                                <button class="widthButton" data-width="5">5</button>
-                                <button class="widthButton" data-width="6">6</button>
-                                <button class="widthButton" data-width="7">7</button>
-                                <button class="widthButton" data-width="8">8</button>
-                                <button class="widthButton" data-width="9">9</button>
-                                <button class="widthButton" data-width="10">10</button>
-                                <span id="gridSpaces" style="color: white">6 grid spaces (default)</span>
-                            </div>
-                        </ul>
-                    </li>
-                </ul>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog custom-modal-width">
+                    <div class="modal-content">
+                        <div class="modal-header" style="border: none;">
+                            <h5 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-wand-magic-sparkles"></i> Customization</h5>
+                            <div data-bs-theme="dark">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+
+                            <!--Difficulty Customization-->
+                            <div class="difficultyPresets" style="margin-bottom: 20px; margin-right: 10px; justify-content: center;">
+                                <a style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"><h5>Difficulty</h5></a>
+                                <div class="row" id="presetContainer">
+                                    <div class="col" style="white-space: nowrap;">
+                                        <button class="btn presetBtn col-3" id="easyBtn" data-width="1">Easy</button>
+                                        <button class="btn presetBtn col-3 active" id="normalBtn" data-width="2">Normal</button>
+                                        <button class="btn presetBtn col-3" data-width="3" id="hardBtn">Hard</button>
+                                        <button class="btn presetBtn col-3" data-width="4" id="insaneBtn">Insane</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                                <div class="row">
+
+                            <!--Gameplay Customization-->
+                            <div class="col-6" id="gameplay-custom">
+                                <div>
+                                    <h5 style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Gameplay</h5>
+                                </div>
+
+                                <!-- Fall Speed Customization -->
+                                <div class="dropdown" style="color: white;">
+                                    <a style="font-family: 'Font Awesome 6 Free'">Fall Speed</a>
+                                    <input type="range" class="form-range" id="fallSpeedInput" min="100" max="3000" step="100" value="800">
+                                    <span id="fallSpeedValue" style="color: white">1 second per grid space (default)</span>
+                                </div>
+                
+                                <!-- Puyos to Clear Customization -->
+                                 <div class="nextDropdown" style="color: white;" >
+                                    <a style="font-family: 'Font Awesome 6 Free'">Puyos to Pop</a>
+                                    <input type="range" class="form-range" id="puyoPopInput" value="4" min="2" max="10" step="1">
+                                    <span id="puyoPopValue" style="color: white;">4 puyos to pop (default)</span>
+                                </div>
+
+                                <!-- Amount of Colors Customization -->
+                                <div class="nextDropdown" style="color: white;">
+                                    <a style="font-family: 'Font Awesome 6 Free'">Amount of Colors</a>
+                                    <input type="range" class="form-range" id="amtPuyoInput" value="4" min="1" max="7" step="1">
+                                    <span id="amtPuyoValue" style="color: white">4 different colors (default)</span>
+                                </div>
+                
+                                <!-- Controls Customization -->
+                                <div class="nextDropdown" style="color: white; ">
+                                    <a style="font-family: 'Font Awesome 6 Free'">Controls</a>
+                                    <div class="row" style="margin-top: 5px; justify-content: center;" id="controlContainer">
+                                        <button class="btn col-5 controlBtn active" id="defaultControls">Default</button>
+                                        <button class="btn col-5 controlBtn" id="altControls">Flipped</button>
+                                    </div>
+                                </div>
+                
+                                <!-- Board Width Customization -->
+                                <div class="nextDropdown" id="boardChange" style="color: white; border-bottom: 2px inset white;">
+                                    <a style="font-family: 'Font Awesome 6 Free';">Board Width</a>
+                                    <div id="gameButtonContainer" class="row" style="margin-top: 10px; margin-bottom: 5px;">
+                                        <div class="row-6 col" style="justify-content: center;">
+                                            <button class="btn widthButton" data-width="1">1</button>
+                                            <button class="btn widthButton" data-width="2">2</button>
+                                            <button class="btn widthButton" data-width="3">3</button>
+                                            <button class="btn widthButton" data-width="4">4</button>
+                                            <button class="btn widthButton" data-width="5">5</button>
+                                        </div>
+                                            <div class="row-6 col" style="justify-content: center;">
+                                            <button class="btn widthButton active" data-width="6">6</button>
+                                            <button class="btn widthButton" data-width="7">7</button>
+                                            <button class="btn widthButton" data-width="8">8</button>
+                                            <button class="btn widthButton" data-width="9">9</button>
+                                            <button class="btn widthButton" data-width="10">10</button>
+                                        </div>
+                                    </div>
+                                    <span id="gridSpaces">6 grid spaces (default)</span>
+                                </div>
+                            </div>
+
+                            <!--Aesthetic customization-->
+                            <div class="col-6" id="aesthetic-custom">
+                                <div>
+                                    <h5 style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Aesthetic</h5>
+                                </div>
+
+                                <!--Puyo Font Customization-->
+                                <div class="dropdown" style="padding-bottom: 20px;">
+                                    <a style="color: white; font-family: 'Font Awesome 6 Free'">Puyo Font</a>
+                                    <div id="aestheticButtonContainer" class="row" style="margin: 3px; margin-top: 10px; justify-content: center;">
+                                        <button class="btn fontButton active" id="showFont">emojis (default)</button>
+                                        <button class="btn fontButton" id="showImage">Friend .5s</button>
+                                    </div>
+                                </div>
+            
+                                <!--Board Background Customization-->
+                                <div class="nextDropdown" id="boardBackground">
+                                    <a style="font-family: 'Font Awesome 6 Free'">Color Theme</a>
+                                    <div class="row" style="justify-content: center; margin-top: 15px;">
+                                        <div class="backGroundBtn row">
+                                            <button class="btn col-6 backgroundBtn active" 
+                                            id="blueBackground" 
+                                            style="white-space: nowrap;">Blue (Default)</button>
+                                            <button class="btn col-6 backgroundBtn" id="redBackground" href="#">Red</button>
+                                        </div>
+                                        <div class="backGroundBtn row">
+                                            <button class="btn col-6 backgroundBtn" id="greenBackground" href="#">Green</button>
+                                            <button class="btn col-6 backgroundBtn" id="purpleBackground" href="#">Purple</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>        
 
             <!--Chain display becomes visible once at least 1 group of puyos are cleared-->
             <div id="chainDisplay">
@@ -309,50 +313,6 @@
                     <h5 id="pause">Pause/Play: Escape</h5>
                     <h5 id="hardDrop">Hard drop: Space</h5>
                 </div>
-            </div>
-
-            <!--Aesthetic Dropdown-->
-            <div class="dropdown" id="aesthetic-custom">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Aesthetic Customization
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropDownMenu">
-
-                    <!--Puyo Font Customization-->
-                    <li class="dropend" id="dropendButton">
-                        <button class="btn dropdown-toggle dropdownText" 
-                        type="button" 
-                        id="fontNestedDropdown" 
-                        data-bs-toggle="dropdown" 
-                        style="color: white; padding-left: 70px;"
-                        aria-expanded="false">
-                            Puyo Font
-                        </button>
-                        <ul class="dropdown-menu text-center" aria-labelledby="nestedDropdown" id="dropEndMenu">
-                            <div id="aestheticButtonContainer">
-                                <button class="fontButton" id="showFont" style="color: white">emojis (default)</button>
-                                <button class="fontButton dropdownText" id="showImage" style="color: white">Friend .5s</button>
-                            </div>
-                        </ul>
-                    </li>
-
-                    <!--Board Background Customization-->
-                    <li class="dropdown">
-                        <button class="btn dropdown-toggle" 
-                        type="button" 
-                        data-bs-toggle="dropdown"
-                        style="color: white" 
-                        aria-expanded="false">
-                            Board Background
-                        </button>
-                        <ul class="dropdown-menu text-center backGroundBtn" id="dropDownMenu">
-                            <li><button class="btn" id="blueBackground" style="color: white" href="#">Blue (Default)</button></li>
-                            <li><button class="btn" id="greenBackground" style="color: white" href="#">Green</button></li>
-                            <li><button class="btn" id="redBackground" style="color: white" href="#">Red</button></li>
-                            <li><button class="btn" id="purpleBackground" style="color: white" href="#">Purple</button></li>
-                        </ul>
-                    </li>
-                </ul>
             </div>
         </div>
     </body>
