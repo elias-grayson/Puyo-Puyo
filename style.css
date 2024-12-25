@@ -239,6 +239,7 @@ html body {
     border-width: 6px;
 }
 
+/* Applies to entire modal */
 .custom-modal-width {
     top: 20px; 
     justify-content: start;
@@ -355,7 +356,7 @@ html body {
     border-bottom: 2px inset white;
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 /* Styling for the range slider thumb */
