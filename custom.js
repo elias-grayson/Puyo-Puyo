@@ -22,57 +22,83 @@ document.addEventListener('DOMContentLoaded', () => {
     const controlDisplay = document.querySelector('#controlDisplay')
     const fallRangeInput = document.querySelector('#fallSpeedInput');
     const amtPuyoInput = document.querySelector('#amtPuyoInput');
-    const buttonContainer = document.getElementById("gameButtonContainer");
+    const buttonContainer = document.getElementById("boardWidthContainer");
+    const altButton = document.querySelector('#altControls');
+    const defaultButton = document.querySelector('#defaultControls');
+    const speedUpToggle = document.querySelector('#speedUpToggle');
+    const rangeSliders = document.querySelectorAll('.form-range');
+    let activeColor = "#0d6efd";
 
     // Allows only one background button to be highlighted at once
     backgroundBtns.forEach(button => {
         button.addEventListener('click', () => {
-          backgroundBtns.forEach(btn => btn.classList.remove('active'));
+            backgroundBtns.forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.backgroundColor = "";
+            });
     
-          button.classList.add('active');
+            button.style.backgroundColor = activeColor;
+            button.classList.add('active');
         });
     });
 
     // Allows only one control button to be highlighted at once
     controlBtns.forEach(button => {
         button.addEventListener('click', () => {
-          controlBtns.forEach(btn => btn.classList.remove('active'));
+            controlBtns.forEach(btn => {
+                btn.classList.remove('active')
+                btn.style.backgroundColor = "";
+            });
     
-          button.classList.add('active');
+            button.style.backgroundColor = activeColor;
+            button.classList.add('active');
         });
     });
 
     // Allows only one font button to be highlighted at once
     fontBtns.forEach(button => {
-    button.addEventListener('click', () => {
-        fontBtns.forEach(btn => btn.classList.remove('active'));
+        button.addEventListener('click', () => {
+            fontBtns.forEach(btn => {
+                btn.classList.remove('active')
+                btn.style.backgroundColor = "";
+            });
 
-        button.classList.add('active');
-    });
+            button.style.backgroundColor = activeColor;
+            button.classList.add('active');
+        });
     });
 
     // Allows only one width button to be highlighted at once
     widthBtns.forEach(button => {
         button.addEventListener('click', () => {
-          widthBtns.forEach(btn => btn.classList.remove('active'));
-    
-          button.classList.add('active');
+            widthBtns.forEach(btn => {
+                btn.classList.remove('active')
+                btn.style.backgroundColor = "";
+            });
+
+            button.style.backgroundColor = activeColor;
+            button.classList.add('active');
         });
     });
 
     // Allows only one difficulty button to be highlighted at once
     presetBtns.forEach(button => {
         button.addEventListener('click', () => {
-          presetBtns.forEach(btn => btn.classList.remove('active'));
-    
-          button.classList.add('active');
+            presetBtns.forEach(btn => {
+                btn.classList.remove('active')
+                btn.style.backgroundColor = "";
+            });
+
+            button.style.backgroundColor = activeColor;
+            button.classList.add('active');
         });
     });
 
     // Allows the fall speed display to change on input
     $("#fallSpeedInput").on("change input", function() {
         fallSpeed = $(this).val(); // Changes the fall speed to the chosen value
-        var dividedValue = fallSpeed / 1000;
+        originalFallSpeed = fallSpeed;
+        var dividedValue = fallSpeed / 1000; // Fall speed in seconds
         if (dividedValue == 1) {
             $("#fallSpeedValue").text(dividedValue + " second per grid space (default)");
         } else {
@@ -347,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Allows the grid width to be changed when clicking the corresponding button
-    $("#gameButtonContainer").on("click", ".widthButton", function () {
+    $("#boardWidthContainer").on("click", ".widthButton", function () {
         widthChange($(this).data("width"), $(this));
     });
 
@@ -393,14 +419,55 @@ document.addEventListener('DOMContentLoaded', () => {
         nextMiniGrid.style.background = "radial-gradient(#4eb760, rgb(27, 78, 41))"
         navbar.style.background = "linear-gradient(to top, rgb(16, 72, 31), rgb(37, 201, 59))"
         modalHeader.style.background = "linear-gradient(to top, rgb(16, 72, 31), rgb(37, 201, 59))"
-        custom.style.backgroundColor = "rgb(37, 201, 59)";
+        custom.style.backgroundColor = "rgb(37, 201, 59)"
+        activeColor = "rgb(37, 201, 59)"
+        if (speedUpToggle.checked) {
+            speedUpToggle.style.backgroundColor = activeColor;
+            speedUpToggle.style.borderColor = activeColor;
+        } else {
+            speedUpToggle.style.backgroundColor = "";
+            speedUpToggle.style.borderColor = "";
+        }
+
+        // Changes the color of the range slider thumbs
+        rangeSliders.forEach(slider => {
+            slider.style.setProperty('--thumb-color', activeColor);
+        })
+
+        // Ensures the control buttons retain the color theme when the hotkey is pressed
+        if (areControlsFlipped)
+            altButton.style.backgroundColor = activeColor;
+        else 
+            defaultButton.style.backgroundColor = activeColor;
+
+        // Makes sure all the active buttons update accordingly
+        presetBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(37, 201, 59)";
+        });
+        backgroundBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(37, 201, 59)";
+        });
+        controlBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(37, 201, 59)";
+        });
+        fontBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(37, 201, 59)";
+        });
+        widthBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(37, 201, 59)";
+        });
 
         // Changes the background detail back to default
-        grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
-        grid.style.setProperty('--before-font-size', '100px');
-        grid.style.setProperty('--before-color', 'white');
-        grid.style.setProperty('--before-opacity', '30%');
-        grid.style.setProperty('--before-content', '"\\f005"');
+        // grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
+        // grid.style.setProperty('--before-font-size', '100px');
+        // grid.style.setProperty('--before-color', 'white');
+        // grid.style.setProperty('--before-opacity', '30%');
+        // grid.style.setProperty('--before-content', '"\\f005"');
     })
 
     // Changes the background to red when clicked
@@ -414,13 +481,54 @@ document.addEventListener('DOMContentLoaded', () => {
         navbar.style.background = "linear-gradient(to top, rgb(103, 23, 23), rgb(255, 30, 30))"
         modalHeader.style.background = "linear-gradient(to top, rgb(103, 23, 23), rgb(255, 30, 30))"
         custom.style.backgroundColor = "rgb(255, 30, 30)"
+        activeColor = "rgb(255, 30, 30)"
+        if (speedUpToggle.checked) {
+            speedUpToggle.style.backgroundColor = activeColor;
+            speedUpToggle.style.borderColor = activeColor;
+        } else {
+            speedUpToggle.style.backgroundColor = "";
+            speedUpToggle.style.borderColor = "";
+        }
+
+        // Changes the color of the range slider thumbs
+        rangeSliders.forEach(slider => {
+            slider.style.setProperty('--thumb-color', activeColor);
+        })
+
+        // Ensures the control buttons retain the color theme when the hotkey is pressed
+        if (areControlsFlipped)
+            altButton.style.backgroundColor = activeColor;
+        else 
+            defaultButton.style.backgroundColor = activeColor;
+
+        // Makes sure all the active buttons update accordingly
+        presetBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(255, 30, 30)";
+        });
+        backgroundBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(255, 30, 30)";
+        });
+        controlBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(255, 30, 30)";
+        });
+        fontBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(255, 30, 30)";
+        });
+        widthBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(255, 30, 30)";
+        });
 
         // Changes the background detail back to default
-        grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
-        grid.style.setProperty('--before-font-size', '100px');
-        grid.style.setProperty('--before-color', 'white');
-        grid.style.setProperty('--before-opacity', '30%');
-        grid.style.setProperty('--before-content', '"\\f005"');
+        // grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
+        // grid.style.setProperty('--before-font-size', '100px');
+        // grid.style.setProperty('--before-color', 'white');
+        // grid.style.setProperty('--before-opacity', '30%');
+        // grid.style.setProperty('--before-content', '"\\f005"');
     })
 
     // Changes the background to purple and changes the background icon to "Elias" in comic sans when clicked
@@ -434,6 +542,48 @@ document.addEventListener('DOMContentLoaded', () => {
         navbar.style.background = "linear-gradient(to top, rgb(54, 17, 72), rgb(183, 60, 255))"
         modalHeader.style.background = "linear-gradient(to top, rgb(54, 17, 72), rgb(183, 60, 255))"
         custom.style.backgroundColor = "rgb(183, 60, 255)"
+        activeColor = "rgb(183, 60, 255)"
+        if (speedUpToggle.checked) {
+            speedUpToggle.style.backgroundColor = activeColor;
+            speedUpToggle.style.borderColor = activeColor;
+        } else {
+            speedUpToggle.style.backgroundColor = "";
+            speedUpToggle.style.borderColor = "";
+        }
+
+        // Changes the color of the range slider thumbs
+        rangeSliders.forEach(slider => {
+            slider.style.setProperty('--thumb-color', activeColor);
+        })
+
+        // Ensures the control buttons retain the color theme when the hotkey is pressed
+        if (areControlsFlipped)
+            altButton.style.backgroundColor = activeColor;
+        else 
+            defaultButton.style.backgroundColor = activeColor;
+
+        // Makes sure all the active buttons update accordingly
+        presetBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(183, 60, 255)";
+        });
+        backgroundBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(183, 60, 255)";
+        });
+        controlBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(183, 60, 255)";
+        });
+        fontBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(183, 60, 255)";
+        });
+        widthBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(183, 60, 255)";
+        });
+
 
         // Changes the background detail to Elias in comic sans
         // grid.style.setProperty('--before-content', '"Elias :)"'); 
@@ -454,38 +604,111 @@ document.addEventListener('DOMContentLoaded', () => {
         navbar.style.background = "linear-gradient(to top, midnightblue, dodgerblue)"
         modalHeader.style.background = "linear-gradient(to top, midnightblue, dodgerblue)"
         custom.style.backgroundColor = "#0d6efd"
+        activeColor = "#0d6efd"
+        if (speedUpToggle.checked) {
+            speedUpToggle.style.backgroundColor = activeColor;
+            speedUpToggle.style.borderColor = activeColor;
+        } else {
+            speedUpToggle.style.backgroundColor = "";
+            speedUpToggle.style.borderColor = "";
+        }
+
+        // Changes the color of the range slider thumbs
+        rangeSliders.forEach(slider => {
+            slider.style.setProperty('--thumb-color', activeColor);
+        })
+
+        // Ensures the control buttons retain the color theme when the hotkey is pressed
+        if (areControlsFlipped)
+            altButton.style.backgroundColor = activeColor;
+        else 
+            defaultButton.style.backgroundColor = activeColor;
+
+
+        // Makes sure all the active buttons update accordingly
+        presetBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "#0d6efd";
+        });
+        backgroundBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "#0d6efd";
+        });
+        controlBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "#0d6efd";
+        });
+        fontBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "#0d6efd";
+        });
+        widthBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "#0d6efd";
+        });
 
         // Changes the background back to default
-        grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
-        grid.style.setProperty('--before-font-size', '100px');
-        grid.style.setProperty('--before-color', 'white');
-        grid.style.setProperty('--before-opacity', '30%');
-        grid.style.setProperty('--before-content', '"\\f005"');
+        // grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
+        // grid.style.setProperty('--before-font-size', '100px');
+        // grid.style.setProperty('--before-color', 'white');
+        // grid.style.setProperty('--before-opacity', '30%');
+        // grid.style.setProperty('--before-content', '"\\f005"');
     })
 
     $("#presetContainer").on("click", "#easyBtn", function (event) {
         event.preventDefault();
         fallSpeed = 2000;
+        originalFallSpeed = fallSpeed;
         amountOfColors = 3;
+        timeToSpeedUp = 90000;
+        remainingTime = timeToSpeedUp;
+        widthBtns.forEach(btn => {
+            btn.classList.remove('active')
+            btn.style.backgroundColor = "";
+        });
+        presetBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
+        controlBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
         $("#amtPuyoValue").text(amountOfColors + " different colors");
         $("#fallSpeedValue").text(fallSpeed / 1000 + " seconds per grid space");
         fallRangeInput.value = 2000;
         amtPuyoInput.value = 3;
-        widthChange(7, $(this))
-        widthBtn.value = 7;
+        widthChange(6, $(this))
+        widthBtn.value = 6;
         widthBtns.forEach(button => button.classList.remove("active"));
 
         // Find the button with the specific data-width and add 'active' class
-        const targetButton = buttonContainer.querySelector(`.widthButton[data-width="${7}"]`);
+        const targetButton = buttonContainer.querySelector(`.widthButton[data-width="${6}"]`);
         if (targetButton) {
             targetButton.classList.add("active");
         }
+        targetButton.style.backgroundColor = activeColor;
     })
 
     $("#presetContainer").on("click", "#normalBtn", function (event) {
         event.preventDefault();
         fallSpeed = 1000;
+        originalFallSpeed = fallSpeed;
         amountOfColors = 4;
+        timeToSpeedUp = 90000;
+        remainingTime = timeToSpeedUp;
+        widthBtns.forEach(btn => {
+            btn.classList.remove('active')
+            btn.style.backgroundColor = "";
+        });
+        presetBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
+        controlBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
         $("#amtPuyoValue").text(amountOfColors + " different colors (default)");
         $("#fallSpeedValue").text(fallSpeed / 1000 + " second per grid space (default)");
         fallRangeInput.value = 1000;
@@ -499,12 +722,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (targetButton) {
             targetButton.classList.add("active");
         }
+        targetButton.style.backgroundColor = activeColor;
     })
 
     $("#presetContainer").on("click", "#hardBtn", function (event) {
         event.preventDefault();
         fallSpeed = 700;
+        originalFallSpeed = fallSpeed;
         amountOfColors = 5;
+        timeToSpeedUp = 80000;
+        remainingTime = timeToSpeedUp;
+        widthBtns.forEach(btn => {
+            btn.classList.remove('active')
+            btn.style.backgroundColor = "";
+        });
+        presetBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
+        controlBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
         $("#amtPuyoValue").text(amountOfColors + " different colors");
         $("#fallSpeedValue").text(fallSpeed / 1000 + " seconds per grid space");
         fallRangeInput.value = 700;
@@ -518,25 +757,42 @@ document.addEventListener('DOMContentLoaded', () => {
         if (targetButton) {
             targetButton.classList.add("active");
         }
+        targetButton.style.backgroundColor = activeColor;
     })
 
     $("#presetContainer").on("click", "#insaneBtn", function (event) {
         event.preventDefault();
-        fallSpeed = 600;
+        fallSpeed = 700;
+        originalFallSpeed = fallSpeed;
         amountOfColors = 6;
+        timeToSpeedUp = 70000;
+        remainingTime = timeToSpeedUp;
+        widthBtns.forEach(btn => {
+            btn.classList.remove('active')
+            btn.style.backgroundColor = "";
+        });
+        presetBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
+        controlBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
         $("#amtPuyoValue").text(amountOfColors + " different colors");
         $("#fallSpeedValue").text(fallSpeed / 1000 + " seconds per grid space");
-        fallRangeInput.value = 600;
+        fallRangeInput.value = 700;
         amtPuyoInput.value = 6;
-        widthChange(5, $(this))
-        widthBtn.value = 5;
+        widthChange(6, $(this))
+        widthBtn.value = 6;
         widthBtns.forEach(button => button.classList.remove("active"));
 
         // Find the button with the specific data-width and add 'active' class
-        const targetButton = buttonContainer.querySelector(`.widthButton[data-width="${5}"]`);
+        const targetButton = buttonContainer.querySelector(`.widthButton[data-width="${6}"]`);
         if (targetButton) {
             targetButton.classList.add("active");
         }
+        targetButton.style.backgroundColor = activeColor;
     })
 
     let areControlsFlipped = false; // Tracks if the controls are using the flipped scheme
@@ -548,6 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
         defaultControls();
     })
 
+    // Changes the controls to the default
     function defaultControls() {
         keyBindings = {
             "a": sharedRotateLeft,
@@ -586,12 +843,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if ((e.key === "F" || e.key === "f") && !areControlsFlipped) {
             flippedControls();
             areControlsFlipped = true;
+            controlBtns.forEach(btn => {
+                btn.classList.remove('active')
+                btn.style.backgroundColor = "";
+                altButton.style.backgroundColor = activeColor;
+            });
+
         } else if ((e.key === "F" || e.key === "f") && areControlsFlipped) {
             defaultControls();
             areControlsFlipped = false;
+            controlBtns.forEach(btn => {
+                btn.classList.remove('active')
+                btn.style.backgroundColor = "";
+                defaultButton.style.backgroundColor = activeColor;
+            });
         }
     });
 
+    // Switches to the flipped control scheme
     function flippedControls() {
         keyBindings = {
             "a": sharedMoveLeft,
@@ -617,4 +886,17 @@ document.addEventListener('DOMContentLoaded', () => {
         controlDisplay.style.marginLeft = "-58px"
         controlDisplay.style.right = "92px"
     }
+
+    // Allows speeding up to be turned on and off
+    speedUpToggle.addEventListener('change', () => {
+        if (speedUpToggle.checked) {
+            isSpeedUpEnabled = true;
+            speedUpToggle.style.backgroundColor = activeColor;
+            speedUpToggle.style.borderColor = activeColor;
+        } else {
+            isSpeedUpEnabled = false;
+            speedUpToggle.style.backgroundColor = "";
+            speedUpToggle.style.borderColor = "";
+        }
+    });
 })

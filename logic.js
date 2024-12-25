@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.width = 6; // Width of each grid space
     let timerId = 0; // Interval in which puyos fall
-    let score = 0; // Score
+    let score = 0; // Score of the game
     window.isInputEnabled = false; // Controls whether input is enabled
     window.isClickedOnce = false; // Controls whether the start button has been clicked once
     let chainLength = 0; // Length of the current chain
@@ -23,18 +23,25 @@ document.addEventListener('DOMContentLoaded', () => {
     let colorBonus = 0; // Color bonus depending on how many different colored puyo were cleared
     let groupBonus = 1; // Group bonus depending on how many of the same color puyo were cleared
     let timeoutId; // Id for how long multiplier's increment
-    window.timeToSpeedUp = 10000; // How long it takes for the game to speed up
-    window.puyosToSpeedUp = 30; // How many puyos need to be placed in order for the game to speed up
-    let totalPuyoCount = 0; // How many total puyos have been placed
     let isFalling = false // Tracks if puyos are currently falling
     let isMovementResumed = true // Tracks if current position movement can occur
     let isGameOver = false; // Checks if a game over has occurred
     window.puyosToPop = 4; // Amount of puyos needed to connect in order to pop
     window.amountOfColors = 4; // Amount of different colors displayed
     window.fallSpeed = 1000; // How much time passes before puyos are moved down
+    window.originalFallSpeed = 1000; // The original fall speed which does not change
     window.showImageClicked = false; // Checks whether the image puyos are selected
+    window.timeToSpeedUp = 5000; // How long it takes for the game to speed up
+    window.remainingTime = timeToSpeedUp; // The time it takes for the game to speed up, unalterable
+    window.isSpeedUpEnabled = true; // Tracks if speed up is enabled
+    let speedInterval = 0;
+    let hasSpedUp = false; // Tracks if the game has sped up
+    // window.puyosToSpeedUp = 30; // How many puyos need to be placed in order for the game to speed up
+    // let totalPuyoCount = 0; // How many total puyos have been placed
+    let startTime; // Time since the game has started
+    let isPaused = false; // Tracks if the speed up timer has been paused
 
-    // All colors of puyos
+    // All puyo colors
     window.colors = [
         'red',
         'forestgreen',
@@ -137,13 +144,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return colorClassMap[color] || null;
     }
 
-    function getColorNameFromRgba(rgba) {
-        return rgbaToName[rgba] || "unknown color";
-    }
-
     // Draws puyos
     function draw(puyos) {
-        if (isGameOver) return
+        if (isGameOver) return;
             current.forEach(index => {
 
                 // Sets the background color and adds the puyoBlob class
@@ -387,7 +390,22 @@ document.addEventListener('DOMContentLoaded', () => {
         })) {
             isMovementResumed = false;
             freezeContinue();
-            scoreDisplay.innerHTML = score;
+            if (hasSpedUp) {
+                fallSpeed -= originalFallSpeed * 0.2;
+                if (fallSpeed < 100) 
+                    fallSpeed = 100;
+                hasSpedUp = false;
+                if (fallSpeed == 100) return;
+                endDisplay.innerHTML = "Speed up!"
+                endDisplay.style.color = "Green"
+                endDisplay.style.fontStyle = "italic"
+            } 
+            if (!isGameOver) {
+                setTimeout(() => {
+                    if (isGameOver) return;
+                    endDisplay.innerHTML = ""
+                }, 2000)
+            }
         }
     }
     // Continues freeze function
@@ -412,17 +430,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function createNewPuyo() {
 
         // If a certain amount of puyos have been placed, speed the game up
-        if ((totalPuyoCount !== 0) && (totalPuyoCount % puyosToSpeedUp == 0) && (fallSpeed > 100)) {
-            fallSpeed *= 0.8;
-            console.log("Speed Up!");
-            scoreDisplay.innerHTML = "Speed up!";
-            setTimeout(() => scoreDisplay.innerHTML = score, 2000);
-        }
-        if (fallSpeed < 100) 
-            fallSpeed = 100;
+        // if ((totalPuyoCount !== 0) && (totalPuyoCount % puyosToSpeedUp == 0) && (fallSpeed > 100)) {
+        //     fallSpeed *= 0.8;
+        //     scoreDisplay.innerHTML = "Speed up!";
+        //     setTimeout(() => scoreDisplay.innerHTML = score, 2000);
+        // }
+        // if (fallSpeed < 100) 
+        //     fallSpeed = 100;
 
-        totalPuyoCount+= 2;
-        console.log("Total puyo count: " + totalPuyoCount)
+        // totalPuyoCount+= 2;
 
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
 
@@ -653,20 +669,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isMovementResumed) return;
         if (isGameOver) return;
 
-        // Hides customization menus when game starts
+        // Disables customization menu when game starts
         custom.disabled = true;
 
         if (timerId) { // If game is already paused
             startBtn.innerHTML = '<i class="fa-solid fa-play"></i>' + '  Play';
-            clearInterval(timerId); // Reset fall timer when game is paused
+            pauseTimer();
+            clearInterval(timerId); // Clear fall timer when paused
             timerId = null;
             isInputEnabled = false;
         } else { 
             draw(currentPosition);
-            timerId = setInterval(() => {
+            timerId = setInterval(() => { // Set fall timer when unpaused
                 sharedMoveDownCurrent()
             }, fallSpeed);
             isInputEnabled = true;
+            startTimer();
             if (isClickedOnce) return;
 
             // Ensures up next puyos are randomized at start
@@ -677,6 +695,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
             displayShape();
             isClickedOnce = true;
+        }
+    }
+
+    // Starts and resumes the speed up timer
+    function startTimer() {
+        if (isGameOver) return;
+        if (!isSpeedUpEnabled) return;
+        startTime = Date.now(); // Records when the timer started
+        
+        // Speeds the game up every remaining time interval
+        speedInterval = setTimeout(() => {
+            remainingTime = timeToSpeedUp; // Reset the timer
+            hasSpedUp = true;
+            startTimer(); // Restarts the interval
+            console.log("Speed up!")
+        }, remainingTime);
+        isPaused = false;
+    }
+
+    // Pauses the speed up timer
+    function pauseTimer() {
+        if (!isSpeedUpEnabled) return;
+        if (!isPaused) {
+            clearTimeout(speedInterval);
+            const elapsedTime = Date.now() - startTime;
+            remainingTime -= elapsedTime;
+            isPaused = true;
         }
     }
 
@@ -701,7 +746,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 connected.forEach(ind => {
                     globalConnectedPuyos.add(ind);
                     localConnected.add(ind);
-                    const indexColor = window.getComputedStyle(squares[ind]).backgroundColor
+                    const indexColor = window.getComputedStyle(squares[ind]).backgroundColor;
+
                     // Assures the same color does not get counted multiple times
                     if (!colorVisited.has(indexColor))
                         colorVisited.add(indexColor);
@@ -813,14 +859,17 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreDisplay.innerHTML = score; // Displays the score
     }
     
-    // Game over if reached the top
+    /* Game over if reached the top */
     function gameOver() {
         if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
-            endDisplay.innerHTML = 'game over';
             isMovementResumed = false;
             isGameOver = true;
+            isPaused = true;
             clearInterval(timerId);
             isInputEnabled = false
+            endDisplay.innerHTML = 'game over';
+            endDisplay.style.color = "red";
+            endDisplay.style.fontStyle = "";
 
             // Prompts players to restart page to play again
             setTimeout(() => {

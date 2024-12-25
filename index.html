@@ -83,7 +83,7 @@
                                 </div>
                             </div>
 
-                                <div class="row">
+                            <div class="row">
 
                             <!--Gameplay Customization-->
                             <div class="col-6" id="gameplay-custom">
@@ -94,21 +94,24 @@
                                 <!-- Fall Speed Customization -->
                                 <div class="dropdown" style="color: white;">
                                     <a style="font-family: 'Font Awesome 6 Free'">Fall Speed</a>
-                                    <input type="range" class="form-range" id="fallSpeedInput" min="100" max="3000" step="100" value="800">
+                                    <input title="How long it takes for puyos to move down one grid space" 
+                                    type="range" class="form-range" id="fallSpeedInput" min="100" max="3000" step="100" value="1000">
                                     <span id="fallSpeedValue" style="color: white">1 second per grid space (default)</span>
                                 </div>
                 
                                 <!-- Puyos to Clear Customization -->
                                  <div class="nextDropdown" style="color: white;" >
                                     <a style="font-family: 'Font Awesome 6 Free'">Puyos to Pop</a>
-                                    <input type="range" class="form-range" id="puyoPopInput" value="4" min="2" max="10" step="1">
+                                    <input title="How many same colored puyos need to be connected to pop them"
+                                    type="range" class="form-range" id="puyoPopInput" value="4" min="2" max="10" step="1">
                                     <span id="puyoPopValue" style="color: white;">4 puyos to pop (default)</span>
                                 </div>
 
                                 <!-- Amount of Colors Customization -->
                                 <div class="nextDropdown" style="color: white;">
                                     <a style="font-family: 'Font Awesome 6 Free'">Amount of Colors</a>
-                                    <input type="range" class="form-range" id="amtPuyoInput" value="4" min="1" max="7" step="1">
+                                    <input title="How many different colors will appear" 
+                                    type="range" class="form-range" id="amtPuyoInput" value="4" min="1" max="7" step="1">
                                     <span id="amtPuyoValue" style="color: white">4 different colors (default)</span>
                                 </div>
                 
@@ -116,28 +119,29 @@
                                 <div class="nextDropdown" style="color: white; ">
                                     <a style="font-family: 'Font Awesome 6 Free'">Controls</a>
                                     <div class="row" style="margin-top: 5px; justify-content: center;" id="controlContainer">
-                                        <button class="btn col-5 controlBtn active" id="defaultControls">Default</button>
-                                        <button class="btn col-5 controlBtn" id="altControls">Flipped</button>
+                                        <button title="I think this is the default control scheme for Tetris games? Idk I grabbed this off of the tetris site" 
+                                        class="btn col-5 active controlBtn" id="defaultControls">Default</button>
+                                        <button title="My preferred control scheme" class="btn col-5 controlBtn" id="altControls">Flipped</button>
                                     </div>
                                 </div>
                 
                                 <!-- Board Width Customization -->
                                 <div class="nextDropdown" id="boardChange" style="color: white; border-bottom: 2px inset white;">
                                     <a style="font-family: 'Font Awesome 6 Free';">Board Width</a>
-                                    <div id="gameButtonContainer" class="row" style="margin-top: 10px; margin-bottom: 5px;">
+                                    <div id="boardWidthContainer" class="row" style="margin-top: 10px; margin-bottom: 5px;">
                                         <div class="row-6 col" style="justify-content: center;">
-                                            <button class="btn widthButton" data-width="1">1</button>
-                                            <button class="btn widthButton" data-width="2">2</button>
-                                            <button class="btn widthButton" data-width="3">3</button>
-                                            <button class="btn widthButton" data-width="4">4</button>
-                                            <button class="btn widthButton" data-width="5">5</button>
+                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="1">1</button>
+                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="2">2</button>
+                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="3">3</button>
+                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="4">4</button>
+                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="5">5</button>
                                         </div>
                                             <div class="row-6 col" style="justify-content: center;">
-                                            <button class="btn widthButton active" data-width="6">6</button>
-                                            <button class="btn widthButton" data-width="7">7</button>
-                                            <button class="btn widthButton" data-width="8">8</button>
-                                            <button class="btn widthButton" data-width="9">9</button>
-                                            <button class="btn widthButton" data-width="10">10</button>
+                                            <button title="Modifies how wide the grid is" class="btn widthButton active" data-width="6">6</button>
+                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="7">7</button>
+                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="8">8</button>
+                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="9">9</button>
+                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="10">10</button>
                                         </div>
                                     </div>
                                     <span id="gridSpaces">6 grid spaces (default)</span>
@@ -154,8 +158,8 @@
                                 <div class="dropdown" style="padding-bottom: 20px;">
                                     <a style="color: white; font-family: 'Font Awesome 6 Free'">Puyo Font</a>
                                     <div id="aestheticButtonContainer" class="row" style="margin: 3px; margin-top: 10px; justify-content: center;">
-                                        <button class="btn fontButton active" id="showFont">emojis (default)</button>
-                                        <button class="btn fontButton" id="showImage">Friend .5s</button>
+                                        <button title="Emojis from fontawesome" class="btn fontButton active" id="showFont">emojis (default)</button>
+                                        <button title="Pictures of my college friends in 0.5x zoom" class="btn fontButton" id="showImage">Friend .5s</button>
                                     </div>
                                 </div>
             
@@ -166,7 +170,7 @@
                                         <div class="backGroundBtn row">
                                             <button class="btn col-6 backgroundBtn active" 
                                             id="blueBackground" 
-                                            style="white-space: nowrap;">Blue (Default)</button>
+                                            style="white-space: nowrap; text-align: left">Blue (Default)</button>
                                             <button class="btn col-6 backgroundBtn" id="redBackground" href="#">Red</button>
                                         </div>
                                         <div class="backGroundBtn row">
@@ -174,6 +178,14 @@
                                             <button class="btn col-6 backgroundBtn" id="purpleBackground" href="#">Purple</button>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="form-check" style="color: white; margin-top: 15px; margin-left: 10px;">
+                                    <input title="Toggles whether the game will speed up after a certain amount of time" 
+                                    class="form-check-input" type="checkbox" value="" id="speedUpToggle" checked>
+                                    <label title="Toggles whether the game will speed up after a certain amount of time" 
+                                    class="form-check-label" for="speedUpToggle">
+                                        Speed up toggle
+                                    </label>
                                 </div>
                                 </div>
                             </div>

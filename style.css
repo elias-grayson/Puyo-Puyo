@@ -183,37 +183,6 @@ html body {
     width: 48px;
 }
 
-/* Applies to only dropdown menus, not any other drop types */
-#dropDownMenu {
-    position: relative;
-    background-color: #6c757d;
-    border-left: 5px solid black;
-    border-right: 5px solid black;
-    border-bottom: 5px solid black;
-    border-top: 5px dotted black; 
-}
-
-/* Applies only to dropend menus */
-#dropEndMenu {
-    position: relative;
-    margin-left: auto;
-    background-color: #6c757d;
-    border-left: 5px dotted black;
-    border-right: 5px solid black;
-    border-bottom: 5px solid black;
-    border-top: 5px solid black; 
-}
-
-/* Applies only to dropfront menus */
-#dropFrontMenu {
-    position: relative;
-    background-color: #6c757d;
-    border-left: 5px solid black;
-    border-right: 5px dotted black;
-    border-bottom: 5px solid black;
-    border-top: 5px solid black; 
-}
-
 /* Applies only to dropfront buttons */
 .dropFrontButton {
     text-align: left;
@@ -302,6 +271,7 @@ html body {
 #aesthetic-custom {
     background-color: none;
     margin: auto;
+    padding: auto;
     margin-top: 0px; 
     align-items: start;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
@@ -318,14 +288,16 @@ html body {
     flex-direction: column;
 }
 
-#gameButtonContainer {
-    white-space: nowrap;
-    justify-content: center;
-}
-
+/* Applies to the board width container */
 #boardChange {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 10px;
+}
+
+/* Applies to the board width buttons container */
+#boardWidthContainer {
+    white-space: nowrap;
+    justify-content: center;
 }
 
 /* Applies to buttons that control grid width */ 
@@ -343,6 +315,7 @@ html body {
     border-color: white;
 }
 
+/* Applies to all menu buttons */
 .btn {
     background-color: rgb(46, 46, 46);
     opacity: 100%;
@@ -351,7 +324,13 @@ html body {
     height: auto;
 }
 
+/* Applies to all menu buttons when hovered over */
 .btn:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+
+  .presetBtn.focus {
     outline: 2px solid white;
     outline-offset: 2px;
   }
@@ -364,11 +343,13 @@ html body {
     height: auto;
 }
 
+/* Applies to all buttons that have been clicked */
 .btn.active {
-    background-color: rgba(68, 68, 68, 1);
-    color: lightgray;
+    background-color: #0d6efd;
+    color: white;
 }
 
+/* Applies to the color theme container */
 #boardBackground {
     color: white;
     border-bottom: 2px inset white;
@@ -377,34 +358,51 @@ html body {
     padding-top: 20px;
 }
 
+/* Styling for the range slider thumb */
+input[type="range"]::-webkit-slider-thumb {
+    background-color: var(--thumb-color, #0d6efd);
+    border: 3px solid white;
+    border-radius: 50%;
+    transform: translateY(-10%);
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+  }
+
+/* Applies to blue color theme option */
 #blueBackground {
-    border-right: none;
-    border-bottom: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 120px;
+    margin-right: 5px;
 }
 
-#redBackground {
-    border-left: none;
-    border-bottom: none;
+/* Applies to red color theme option */
+#redBackground {  
+    width: 120px; 
 }
 
-#greenBackground {
-    border-right: none;
-    border-top: none;
+/* Applies to green color theme option */
+#greenBackground {  
+    width: 120px;
+    margin-right: 5px;
+    margin-top: 5px;
 }
 
-#purpleBackground {
-    border-left: none;
-    border-top: none;
+/* Applies to purple color theme option */
+#purpleBackground { 
+    width: 120px;
+    margin-top: 5px;
 }
 
 /* Applies to emojis button */
 #showFont {
-    border-bottom: none;
+    margin-bottom: none;
 }
 
 /* Applies to friend .5s button */
 #showImage {
-    border-top: none;
+    margin-top: 5px;
 }
 
 /* Applies to score display */
@@ -574,9 +572,8 @@ html body {
     content: "\f58b"; /* Unicode for 'face-grin-tongue-wink' icon */
 }
 
-/* Images of Elon for all colored puyos */
+/* Images of friends for all colored puyos */
 .redPuyo.fontState::before {
-    /* background-color: ''; */
     box-shadow: 0 0 0 1px red; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
     background-image: url('images/elias.jpg');
@@ -585,7 +582,6 @@ html body {
 }
 
 .greenPuyo.fontState::before {
-    /* background-color: ''; */
     box-shadow: 0 0 0 1px forestgreen; /* Circular background */
     border-radius: 100%; /* Makes the shadow circular */
     background-image: url('images/sam.jpg');
@@ -594,7 +590,6 @@ html body {
 }
 
 .bluePuyo.fontState::before {
-    /* background-color: ''; */
     box-shadow: 0 0 0 1px dodgerblue; /* Circular background */
     border-radius: 100%; /* Makes the shadow circular */
     background-image: url('images/jess.jpg');
@@ -603,7 +598,6 @@ html body {
 }
 
 .yellowPuyo.fontState::before {
-    /* background-color: ''; */
     box-shadow: 0 0 0 1px yellow; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
     background-image: url('/images/maggie.jpg');
@@ -612,7 +606,6 @@ html body {
 }
 
 .purplePuyo.fontState::before {
-    /* background-color: ''; */
     box-shadow: 0 0 0 1px blueviolet; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
     background-image: url('images/ceci.jpg');
@@ -621,7 +614,6 @@ html body {
 }
 
 .tealPuyo.fontState::before {
-    /* background-color: ''; */
     box-shadow: 0 0 0 1px teal; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
     background-image: url('/images/daniel.jpg');
@@ -630,7 +622,6 @@ html body {
 }
 
 .pinkPuyo.fontState::before {
-    /* background-color: ''; */
     box-shadow: 0 0 0 1px hotpink; /* Circular background */
     border-radius: 50%; /* Makes the shadow circular */
     background-image: url('/images/newPinkElon.jpg');
