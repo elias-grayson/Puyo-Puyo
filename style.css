@@ -432,7 +432,7 @@ input[type="range"]::-webkit-slider-thumb {
     display: flex;
     position: top;
     justify-content: center;
-    color: maroon;
+    color: red;
     font-size: 28px;
     margin-left: 30px;
     margin-top: 5px;
@@ -445,9 +445,9 @@ input[type="range"]::-webkit-slider-thumb {
     font-family: "Font Awesome 6 Free";
     position: absolute;
     margin-top: 200px;
-    justify-content: center;
-    align-items: center;
     z-index: 3;
+    white-space: nowrap;
+    margin-right: 360px;
 }
 
 /* Hides elements when added to a classList*/

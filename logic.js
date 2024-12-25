@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.fallSpeed = 1000; // How much time passes before puyos are moved down
     window.originalFallSpeed = 1000; // The original fall speed which does not change
     window.showImageClicked = false; // Checks whether the image puyos are selected
-    window.timeToSpeedUp = 5000; // How long it takes for the game to speed up
+    window.timeToSpeedUp = 90000; // How long it takes for the game to speed up
     window.remainingTime = timeToSpeedUp; // The time it takes for the game to speed up, unalterable
     window.isSpeedUpEnabled = true; // Tracks if speed up is enabled
     let speedInterval = 0;
@@ -390,6 +390,10 @@ document.addEventListener('DOMContentLoaded', () => {
         })) {
             isMovementResumed = false;
             freezeContinue();
+            squares.slice().forEach(index => {
+                if (index.classList.contains('aboveGrid') && index.classList.contains('taken'))
+                    index.classList.remove('taken');
+            })
             if (hasSpedUp) {
                 fallSpeed -= originalFallSpeed * 0.2;
                 if (fallSpeed < 100) 
@@ -703,7 +707,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isGameOver) return;
         if (!isSpeedUpEnabled) return;
         startTime = Date.now(); // Records when the timer started
-        
+
         // Speeds the game up every remaining time interval
         speedInterval = setTimeout(() => {
             remainingTime = timeToSpeedUp; // Reset the timer
