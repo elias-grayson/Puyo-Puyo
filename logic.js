@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // let totalPuyoCount = 0; // How many total puyos have been placed
     let startTime; // Time since the game has started
     let isPaused = false; // Tracks if the speed up timer has been paused
+    let isAllClear = false;
 
     // All puyo colors
     window.colors = [
@@ -405,11 +406,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 endDisplay.style.color = "Green"
                 endDisplay.style.fontStyle = "italic"
             } 
-            if (!isGameOver) {
+            if (isAllClear && !isGameOver) {
                 setTimeout(() => {
                     if (isGameOver) return;
                     endDisplay.innerHTML = ""
                 }, 3000)
+                if (!isAllClear) return;
+                endDisplay.innerHTML = ""
             }
         }
     }
@@ -463,6 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         draw(currentPosition);
         setTimeout(() => {
+            if (!isMovementResumed) return;
             chainDisplay.innerHTML = "";
         }, 2200);
     }
@@ -844,7 +848,9 @@ document.addEventListener('DOMContentLoaded', () => {
         square.classList.contains('currentPosition'))) {
             endDisplay.innerHTML = 'All Clear!';
             endDisplay.style.color = "#0d6efd"
+            isAllClear = true;
             score += 5000;
+            scoreDisplay.innerHTML = score
         }
     }
 
