@@ -409,6 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isAllClear && !isGameOver) {
                 setTimeout(() => {
                     if (isGameOver) return;
+                    if (isAllClear) return;
                     endDisplay.innerHTML = ""
                 }, 3000)
                 if (!isAllClear) return;
