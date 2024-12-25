@@ -329,12 +329,13 @@ html body {
 .btn:focus {
     outline: 2px solid white;
     outline-offset: 2px;
-  }
+}
 
-  .presetBtn.focus {
+/* Applies to the difficulty preset buttons */
+.presetBtn.focus {
     outline: 2px solid white;
     outline-offset: 2px;
-  }
+}
 
 /* Applies to all buttons when hovering over them */
 .btn:hover {

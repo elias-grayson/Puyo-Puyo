@@ -390,6 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })) {
             isMovementResumed = false;
             freezeContinue();
+            scoreDisplay.innerHTML = score;
             squares.slice().forEach(index => {
                 if (index.classList.contains('aboveGrid') && index.classList.contains('taken'))
                     index.classList.remove('taken');
@@ -408,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     if (isGameOver) return;
                     endDisplay.innerHTML = ""
-                }, 2000)
+                }, 3000)
             }
         }
     }
@@ -841,7 +842,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function allClear() {
         if (squares.every(square => !square.classList.contains('puyoBlob') || 
         square.classList.contains('currentPosition'))) {
-            scoreDisplay.innerHTML = 'All Clear!';
+            endDisplay.innerHTML = 'All Clear!';
+            endDisplay.style.color = "#0d6efd"
             score += 5000;
         }
     }

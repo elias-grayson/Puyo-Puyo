@@ -139,17 +139,16 @@ document.addEventListener('DOMContentLoaded', () => {
         let widthDif = width - chosenWidth; // Difference between old and new width
 
         upNext.style.marginLeft = chosenWidth * 48 + 200 + "px"; // Adjusts position of upnext text based on grid width
-        startBtn.style.width = chosenWidth * 96 / 2 + 'px';
+        startBtn.style.width = chosenWidth * 96 / 2 + 'px'; // Adjusts width of the start button based on grid width
 
-        // Adjusts width of the start button based on grid width
-        if (chosenWidth == 1) {
-            $("#gridSpaces").text(chosenWidth + " grid space");
-        } else if (chosenWidth == 6) {
-            $("#gridSpaces").text(chosenWidth + " grid spaces (default)");
-        } 
-        else {
-            $("#gridSpaces").text(chosenWidth + " grid spaces");
-        }
+        // if (chosenWidth == 1) {
+        //     $("#gridSpaces").text(chosenWidth + " grid space");
+        // } else if (chosenWidth == 6) {
+        //     $("#gridSpaces").text(chosenWidth + " grid spaces (default)");
+        // } 
+        // else {
+        //     $("#gridSpaces").text(chosenWidth + " grid spaces");
+        // }
 
         // Updates the width display
         grid.style.width = `${chosenWidth * 48 + 20}px`; 
@@ -655,6 +654,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // grid.style.setProperty('--before-content', '"\\f005"');
     })
 
+    // Easy difficulty
     $("#presetContainer").on("click", "#easyBtn", function (event) {
         event.preventDefault();
         fallSpeed = 2000;
@@ -662,6 +662,8 @@ document.addEventListener('DOMContentLoaded', () => {
         amountOfColors = 3;
         timeToSpeedUp = 90000;
         remainingTime = timeToSpeedUp;
+
+        // Makes sure active buttons stay the chosen color theme
         widthBtns.forEach(btn => {
             btn.classList.remove('active')
             btn.style.backgroundColor = "";
@@ -674,6 +676,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = activeColor;
         });
+
+        // Assures adjustments are displayed to the player
         $("#amtPuyoValue").text(amountOfColors + " different colors");
         $("#fallSpeedValue").text(fallSpeed / 1000 + " seconds per grid space");
         fallRangeInput.value = 2000;
@@ -690,6 +694,7 @@ document.addEventListener('DOMContentLoaded', () => {
         targetButton.style.backgroundColor = activeColor;
     })
 
+    // Normal difficulty
     $("#presetContainer").on("click", "#normalBtn", function (event) {
         event.preventDefault();
         fallSpeed = 1000;
@@ -697,6 +702,8 @@ document.addEventListener('DOMContentLoaded', () => {
         amountOfColors = 4;
         timeToSpeedUp = 90000;
         remainingTime = timeToSpeedUp;
+
+        // Makes sure active buttons stay the chosen color theme
         widthBtns.forEach(btn => {
             btn.classList.remove('active')
             btn.style.backgroundColor = "";
@@ -709,6 +716,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = activeColor;
         });
+
+        // Assures adjustments are displayed to the player
         $("#amtPuyoValue").text(amountOfColors + " different colors (default)");
         $("#fallSpeedValue").text(fallSpeed / 1000 + " second per grid space (default)");
         fallRangeInput.value = 1000;
@@ -725,13 +734,16 @@ document.addEventListener('DOMContentLoaded', () => {
         targetButton.style.backgroundColor = activeColor;
     })
 
+    // Hard difficulty
     $("#presetContainer").on("click", "#hardBtn", function (event) {
         event.preventDefault();
-        fallSpeed = 700;
+        fallSpeed = 800;
         originalFallSpeed = fallSpeed;
         amountOfColors = 5;
         timeToSpeedUp = 80000;
         remainingTime = timeToSpeedUp;
+
+        // Makes sure active buttons stay the chosen color theme
         widthBtns.forEach(btn => {
             btn.classList.remove('active')
             btn.style.backgroundColor = "";
@@ -744,9 +756,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = activeColor;
         });
+
+        // Assures adjustments are displayed to the player
         $("#amtPuyoValue").text(amountOfColors + " different colors");
         $("#fallSpeedValue").text(fallSpeed / 1000 + " seconds per grid space");
-        fallRangeInput.value = 700;
+        fallRangeInput.value = 800;
         amtPuyoInput.value = 5;
         widthChange(6, $(this))
         widthBtn.value = 6;
@@ -760,13 +774,16 @@ document.addEventListener('DOMContentLoaded', () => {
         targetButton.style.backgroundColor = activeColor;
     })
 
+    // Insane difficulty
     $("#presetContainer").on("click", "#insaneBtn", function (event) {
         event.preventDefault();
         fallSpeed = 700;
         originalFallSpeed = fallSpeed;
         amountOfColors = 6;
-        timeToSpeedUp = 70000;
+        timeToSpeedUp = 75000;
         remainingTime = timeToSpeedUp;
+
+        // Makes sure active buttons stay the chosen color theme
         widthBtns.forEach(btn => {
             btn.classList.remove('active')
             btn.style.backgroundColor = "";
@@ -779,6 +796,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = activeColor;
         });
+
+        // Assures adjustments are displayed to the player
         $("#amtPuyoValue").text(amountOfColors + " different colors");
         $("#fallSpeedValue").text(fallSpeed / 1000 + " seconds per grid space");
         fallRangeInput.value = 700;
