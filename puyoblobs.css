@@ -1,0 +1,131 @@
+/* Applies to every puyo */
+.puyoBlob {
+    border-radius: 50%; 
+    z-index: 1;
+    display: block
+}
+
+.puyoBorder {
+    content: '';
+    border-radius: 0%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 1); 
+}
+
+/* Applies to all of the puyos */
+.redPuyo, .greenPuyo, .bluePuyo, .purplePuyo, .yellowPuyo, .tealPuyo, .pinkPuyo {
+    font-family: "Font Awesome 6 Free"; 
+    font-weight: 100;
+    font-size: 48px;
+    text-align: center;
+    line-height: 1;
+    z-index: 1;
+    display: block
+}
+
+/* Allows the puyos to have a font */
+.redPuyo::before, 
+.greenPuyo::before, 
+.bluePuyo::before, 
+.purplePuyo::before, 
+.yellowPuyo::before, 
+.tealPuyo::before, 
+.pinkPuyo::before {
+    content: '';
+    display: block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center top;
+    width: 48px;
+    height: 48px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-image: none;
+    background-color: '';
+    filter: none;
+    z-index: 1;
+}
+
+/* Fonts for all 7 puyos */
+.redPuyo::before {
+    content: "\f556"; /* Unicode for 'face-rolling-eyes' icon */
+}
+
+.greenPuyo::before {
+    content: "\f5a5"; /* Unicode for 'face-rolling-eyes' icon */
+}
+
+.bluePuyo::before {
+    content: "\f5c8"; /* Unicode for 'face-rolling-eyes' icon */
+}
+
+.yellowPuyo::before {
+    content: "\f59a"; /* Unicode for 'face-rolling-eyes' icon */
+}
+
+.purplePuyo::before {
+    content: "\f597"; /* Unicode for 'face-rolling-eyes' icon */
+}
+
+.tealPuyo::before {
+    content: "\f5b3"; /* Unicode for 'face-sad-cry' icon */
+}
+
+.pinkPuyo::before {
+    content: "\f58b"; /* Unicode for 'face-grin-tongue-wink' icon */
+}
+
+/* Images of friends for all colored puyos */
+.redPuyo.fontState::before {
+    box-shadow: 0 0 0 1px red; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('images/elias.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(-40deg) brightness(0.9);
+    content: '';
+}
+
+.greenPuyo.fontState::before {
+    box-shadow: 0 0 0 1px forestgreen; /* Circular background */
+    border-radius: 100%; /* Makes the shadow circular */
+    background-image: url('images/sam.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(-300deg) brightness(0.9);
+    content: '';
+}
+
+.bluePuyo.fontState::before {
+    box-shadow: 0 0 0 1px dodgerblue; /* Circular background */
+    border-radius: 100%; /* Makes the shadow circular */
+    background-image: url('images/jess.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(-170deg) brightness(0.8);
+    content: '';
+}
+
+.yellowPuyo.fontState::before {
+    box-shadow: 0 0 0 1px yellow; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('/images/maggie.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(20deg) brightness(1.2);
+    content: '';
+}
+
+.purplePuyo.fontState::before {
+    box-shadow: 0 0 0 1px blueviolet; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('images/ceci.jpg');
+    filter: sepia(10) saturate(20) hue-rotate(-140deg) brightness(0.9);
+    content: '';
+}
+
+.tealPuyo.fontState::before {
+    box-shadow: 0 0 0 1px teal; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('/images/daniel.jpg');
+    filter: sepia(10) saturate(5) hue-rotate(-230deg) brightness(0.8);
+    content: '';
+}
+
+.pinkPuyo.fontState::before {
+    box-shadow: 0 0 0 1px hotpink; /* Circular background */
+    border-radius: 50%; /* Makes the shadow circular */
+    background-image: url('/images/newPinkElon.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(-70deg) brightness(0.9);
+    content: '';
+}
