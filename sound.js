@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const sound = joshSpells[i];
             await loadAndCacheSound(sound.url);
         }
+        // Preload the current pop sound
+        await loadAndCacheSound(currentPopSound);
     }
 
     // Load and cache audio file
@@ -64,8 +66,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Tracks the currently playing spell
     let currentSpell = null;
+    const currentPopSound = 'game-sounds/coin-pickup.mp3'
 
-    // Preload all sounds as soon as the page loads
+
+    // Preloads all sounds as soon as the page loads
     await preloadSounds();
 
     // Plays the appropriate spell based on the chain length
@@ -85,10 +89,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             pitch = 2.0;
         }
 
-        // Play the spell sound and adjust pitch
         playSound(currentSpell.url, 1.0, currentSpell.volume);
 
-        // Assuming currentPopSound is another sound you want to play
         playSound(currentPopSound, pitch); 
     }
 })
