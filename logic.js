@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 squares[index].style.backgroundColor = '';
                 removeFont(index, 0, squares);
                 resolve(); // Resolves the promise once the move is completed
-            }, 50); // Delay for each puyo move
+            }, 80); // Delay for each puyo move
         });
     }
     
@@ -445,7 +445,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     speedDisplay.innerHTML = ""
                 }, 3000)
             }
-            if (!isGameOver) return;
+            // if (!isGameOver) return;
             endDisplay.innerHTML = "";
             speedDisplay.innerHTML = "";
             speedSound.pause();
