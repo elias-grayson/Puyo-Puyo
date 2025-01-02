@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const gainNode = audioContext.createGain();
     gainNode.connect(audioContext.destination);
 
+    // Current sound state
+    let currentSource = null;
+    let isPaused = false;
+    let startTime = 0;
+    let pauseTime = 0;
+
     // Connects the gain node to the audio destination
     gainNode.connect(audioContext.destination);
 
@@ -19,25 +25,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Play the sound with a specific pitch
     window.playSound = async function playSound(url, pitch = 1.0, volume = 0.3) {
+        // Load the audio buffer
         const audioBuffer = await loadSound(url);
 
-        // Create a buffer source for the sound
+        // Create a new buffer source
         const source = audioContext.createBufferSource();
         source.buffer = audioBuffer;
 
-        // Set the playback rate for pitch adjustment
+        // Set pitch and volume
         source.playbackRate.value = pitch;
-
-        // Set the gain (volume) for this sound
         const soundGainNode = audioContext.createGain();
-        soundGainNode.gain.value = volume; // Adjust volume for this sound
+        soundGainNode.gain.value = volume;
 
-        // Connect the source to the gain node and the destination
+        // Connect to destination
         source.connect(soundGainNode);
         soundGainNode.connect(audioContext.destination);
 
-        // Start the sound
-        source.start();
+        // Play the sound
+        startTime = audioContext.currentTime - pauseTime;
+        source.start(0, pauseTime);
+
+        // Save reference to the current source
+        currentSource = source;
+
+        // Handle sound completion
+        source.onended = () => {
+            currentSource = null;
+            pauseTime = 0;
+            isPaused = false;
+        };
+    }
+
+    // Pause the current sound
+    function pauseSound() {
+        if (currentSource && !isPaused) {
+            currentSource.stop(); // Stops the sound
+            pauseTime = audioContext.currentTime - startTime; // Save playback time
+            isPaused = true;
+        }
+    }
+
+    // Resume the current sound
+    async function resumeSound(url, pitch = 1.0, volume = 0.5) {
+        if (isPaused) {
+            isPaused = false;
+            await playSound(url, pitch, volume); // Resumes from the saved pause time
+        }
     }
 
     // Josh's voice clips
@@ -53,6 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Tracks the currently playing spell
     let currentSpell = null;
+
+    for (let i = 0; i < joshSpells.length; i++) {
+        currentSpell = joshSpells[i];
+        resumeSound(currentSpell.url, 1.0, currentSpell.volume);
+        pauseSound();
+    }
 
     // Plays the appropriate spell based on the chain length
     window.playVoiceLine = function playVoiceLine() {
