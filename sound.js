@@ -1,77 +1,55 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Initialize AudioContext
-    const audioContext = new (window.AudioContext || window.webkitAudioContext);
+     // Initialize AudioContext
+     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    // Create a gain node for volume control
-    const gainNode = audioContext.createGain();
-    gainNode.connect(audioContext.destination);
-
-    // Current sound state
-    let currentSource = null;
-    let isPaused = false;
-    let startTime = 0;
-    let pauseTime = 0;
-
-    // Connects the gain node to the audio destination
-    gainNode.connect(audioContext.destination);
-
-    // Load the audio file
-    async function loadSound(url) {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        return audioContext.decodeAudioData(arrayBuffer);
-    }
-
-    // Play the sound with a specific pitch
-    window.playSound = async function playSound(url, pitch = 1.0, volume = 0.3) {
-        // Load the audio buffer
-        const audioBuffer = await loadSound(url);
-
-        // Create a new buffer source
-        const source = audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-
-        // Set pitch and volume
-        source.playbackRate.value = pitch;
-        const soundGainNode = audioContext.createGain();
-        soundGainNode.gain.value = volume;
-
-        // Connect to destination
-        source.connect(soundGainNode);
-        soundGainNode.connect(audioContext.destination);
-
-        // Play the sound
-        startTime = audioContext.currentTime - pauseTime;
-        source.start(0, pauseTime);
-
-        // Save reference to the current source
-        currentSource = source;
-
-        // Handle sound completion
-        source.onended = () => {
-            currentSource = null;
-            pauseTime = 0;
-            isPaused = false;
-        };
-    }
-
-    // Pause the current sound
-    function pauseSound() {
-        if (currentSource && !isPaused) {
-            currentSource.stop(); // Stops the sound
-            pauseTime = audioContext.currentTime - startTime; // Save playback time
-            isPaused = true;
-        }
-    }
-
-    // Resume the current sound
-    async function resumeSound(url, pitch = 1.0, volume = 0.5) {
-        if (isPaused) {
-            isPaused = false;
-            await playSound(url, pitch, volume); // Resumes from the saved pause time
-        }
-    }
+     // Create a gain node for volume control
+     const gainNode = audioContext.createGain();
+     gainNode.connect(audioContext.destination);
+ 
+     // Cache for preloaded audio buffers
+     const cachedSounds = {};
+ 
+     // Load and cache audio file
+     async function loadAndCacheSound(url) {
+         if (cachedSounds[url]) {
+             return cachedSounds[url]; // Return the cached sound if already loaded
+         }
+         
+         const response = await fetch(url);
+         const arrayBuffer = await response.arrayBuffer();
+         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+         cachedSounds[url] = audioBuffer; // Cache the audio buffer for future use
+         return audioBuffer;
+     }
+ 
+     // Play the sound with a specific pitch and volume
+     async function playSound(url, pitch = 1.0, volume = 0.5) {
+         const audioBuffer = await loadAndCacheSound(url); // Load sound (from cache if available)
+ 
+         // Create a new buffer source
+         const source = audioContext.createBufferSource();
+         source.buffer = audioBuffer;
+ 
+         // Set pitch and volume
+         source.playbackRate.value = pitch;
+         const soundGainNode = audioContext.createGain();
+         soundGainNode.gain.value = volume;
+ 
+         // Connect to destination
+         source.connect(soundGainNode);
+         soundGainNode.connect(audioContext.destination);
+ 
+         // Play the sound
+         source.start();
+ 
+         // Handle sound completion
+         source.onended = () => {
+             currentSource = null;
+             pauseTime = 0;
+             isPaused = false;
+         };
+     }
 
     // Josh's voice clips
     const joshSpells = [
