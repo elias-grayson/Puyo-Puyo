@@ -65,12 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Tracks the currently playing spell
     let currentSpell = null;
 
-    for (let i = 0; i < joshSpells.length; i++) {
-        currentSpell = joshSpells[i];
-        resumeSound(currentSpell.url, 1.0, currentSpell.volume);
-        pauseSound();
-    }
-
     // Plays the appropriate spell based on the chain length
     window.playVoiceLine = function playVoiceLine() {
         let pitch = 0.6 + Math.min(chainLength - 1, 6) * (1/8);
