@@ -1,3 +1,4 @@
+/* This document controls all of the customization options */
 document.addEventListener('DOMContentLoaded', () => {
 
     // DOM elements
@@ -27,7 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const defaultButton = document.querySelector('#defaultControls');
     const speedUpToggle = document.querySelector('#speedUpToggle');
     const rangeSliders = document.querySelectorAll('.form-range');
-    let activeColor = "#0d6efd";
+
+    let activeColor = "#0d6efd"; // Current color theme choice
 
     // Allows only one background button to be highlighted at once
     backgroundBtns.forEach(button => {
@@ -140,15 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         upNext.style.marginLeft = chosenWidth * 48 + 200 + "px"; // Adjusts position of upnext text based on grid width
         startBtn.style.width = chosenWidth * 96 / 2 + 'px'; // Adjusts width of the start button based on grid width
-
-        // if (chosenWidth == 1) {
-        //     $("#gridSpaces").text(chosenWidth + " grid space");
-        // } else if (chosenWidth == 6) {
-        //     $("#gridSpaces").text(chosenWidth + " grid spaces (default)");
-        // } 
-        // else {
-        //     $("#gridSpaces").text(chosenWidth + " grid spaces");
-        // }
 
         // Updates the width display
         grid.style.width = `${chosenWidth * 48 + 20}px`; 
@@ -660,6 +653,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fallSpeed = 2000;
         originalFallSpeed = fallSpeed;
         amountOfColors = 3;
+        random = Math.floor(Math.random()*amountOfColors);
+        randomSecondary = Math.floor(Math.random()*amountOfColors);
         timeToSpeedUp = 90000;
         remainingTime = timeToSpeedUp;
 
@@ -702,6 +697,8 @@ document.addEventListener('DOMContentLoaded', () => {
         amountOfColors = 4;
         timeToSpeedUp = 90000;
         remainingTime = timeToSpeedUp;
+        random = Math.floor(Math.random()*amountOfColors);
+        randomSecondary = Math.floor(Math.random()*amountOfColors);
 
         // Makes sure active buttons stay the chosen color theme
         widthBtns.forEach(btn => {
@@ -742,6 +739,8 @@ document.addEventListener('DOMContentLoaded', () => {
         amountOfColors = 5;
         timeToSpeedUp = 80000;
         remainingTime = timeToSpeedUp;
+        random = Math.floor(Math.random()*amountOfColors);
+        randomSecondary = Math.floor(Math.random()*amountOfColors);
 
         // Makes sure active buttons stay the chosen color theme
         widthBtns.forEach(btn => {
@@ -782,6 +781,8 @@ document.addEventListener('DOMContentLoaded', () => {
         amountOfColors = 6;
         timeToSpeedUp = 75000;
         remainingTime = timeToSpeedUp;
+        random = Math.floor(Math.random()*amountOfColors);
+        randomSecondary = Math.floor(Math.random()*amountOfColors);
 
         // Makes sure active buttons stay the chosen color theme
         widthBtns.forEach(btn => {
