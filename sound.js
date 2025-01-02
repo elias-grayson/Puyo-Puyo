@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Plays the appropriate spell based on the chain length
     window.playVoiceLine = function playVoiceLine() {
-        let pitch = 0.6 + Math.min(chainLength - 1, 6) * (1/8);
+        let pitch = 0.6 + Math.min(chainLength - 1, 6) * (1/9)
 
         // Pauses the current voice line if another one is already being played
         if (currentSpell) {
@@ -86,11 +86,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             currentSpell = joshSpells[chainLength - 1];
         } else {
             currentSpell = joshSpells[6];
-            pitch = 2.0;
+            pitch = 1.225;
         }
 
         playSound(currentSpell.url, 1.0, currentSpell.volume);
-
+        // console.log(0.6 + Math.min(6 - 1, 6) * (1/8))
         playSound(currentPopSound, pitch); 
     }
 })
