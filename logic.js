@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.fallSpeed = 1000; // How much time passes before puyos are moved down
     window.originalFallSpeed = 1000; // The original fall speed which does not change
     window.showImageClicked = false; // Checks whether the image puyos are selected
-    window.timeToSpeedUp = 90000; // How long it takes for the game to speed up
+    window.timeToSpeedUp = 5000; // How long it takes for the game to speed up
     window.remainingTime = timeToSpeedUp; // The time it takes for the game to speed up, unalterable
     window.isSpeedUpEnabled = true; // Tracks if speed up is enabled
     let speedInterval = 0; // Interval in which the game speeds up
@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resumeTimer = 200; // How long it takes for puyos to land
     let resumeTimerChange = false // Tracks if the landing timer has been resumed
     let isReset = true // Tracks if process clears has been called already
+    let isAtMaxSpeed = false; // Tracks whether the game is at the maximum speed
 
     // All puyo colors
     window.colors = [
@@ -436,12 +437,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (index.classList.contains('aboveGrid') && index.classList.contains('taken'))
                     index.classList.remove('taken');
             })
-            if (hasSpedUp) {
+            if (hasSpedUp && !isAtMaxSpeed) {
                 fallSpeed -= originalFallSpeed * 0.2;
-                if (fallSpeed < 100) 
+                if (fallSpeed < 100) {
                     fallSpeed = 100;
+                    isAtMaxSpeed = true;
+                }
                 hasSpedUp = false;
-                if (fallSpeed == 100) return;
                 speedDisplay.innerHTML = "Speed up!"
                 speedSound.play();
                 setTimeout(() => {
