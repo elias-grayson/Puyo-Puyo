@@ -1,9 +1,20 @@
 document.addEventListener('DOMContentLoaded', async () => {
 
-     // Initialize AudioContext
+    // Josh's voice clips
+    window.spells = [
+        { url: 'josh-spells/1.mp3', volume: 1.0 },
+        { url: 'josh-spells/2.mp3', volume: 1.0 },
+        { url: 'josh-spells/3.mp3', volume: 1.0 }, 
+        { url: 'josh-spells/4.mp3', volume: 1.0 },
+        { url: 'josh-spells/5.mp3', volume: 1.0 },
+        { url: 'josh-spells/6.mp3', volume: 1.0 },
+        { url: 'josh-spells/7.mp3', volume: 1.0 }
+    ];
+
+     // Initializes AudioContext
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    // Create a gain node for volume control
+    // Creates a gain node for volume control
     const gainNode = audioContext.createGain();
     gainNode.connect(audioContext.destination);
 
@@ -12,8 +23,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Preload and cache all sounds at the start
     async function preloadSounds() {
-        for (let i = 0; i < joshSpells.length; i++) {
-            const sound = joshSpells[i];
+        for (let i = 0; i < spells.length; i++) {
+            const sound = spells[i];
             await loadAndCacheSound(sound.url);
         }
         // Preload the current pop sound
@@ -21,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Load and cache audio file
-    async function loadAndCacheSound(url) {
+    window.loadAndCacheSound = async function loadAndCacheSound(url) {
         if (cachedSounds[url]) {
             return cachedSounds[url]; // Return the cached sound if already loaded
         }
@@ -32,37 +43,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         cachedSounds[url] = audioBuffer; // Cache the audio buffer for future use
     }
 
-    // Play the sound with a specific pitch and volume
-    function playSound(url, pitch = 1.0, volume = 0.5) {
+    // Play sthe sound with a specific pitch and volume
+    function playSound(url, pitch = 1.0, volume = 0.3) {
         const audioBuffer = cachedSounds[url]; // Get the cached sound
 
-        // Create a new buffer source
+        // Creates a new buffer source
         const source = audioContext.createBufferSource();
         source.buffer = audioBuffer;
 
-        // Set pitch and volume
+        // Sets pitch and volume
         source.playbackRate.value = pitch;
         const soundGainNode = audioContext.createGain();
         soundGainNode.gain.value = volume;
 
-        // Connect to destination
+        // Connects to destination
         source.connect(soundGainNode);
         soundGainNode.connect(audioContext.destination);
 
-        // Play the sound
+        // Plays the sound
         source.start();
     }
-
-    // Josh's voice clips (you can adjust volume per clip if necessary)
-    const joshSpells = [
-        { url: 'josh-spells/1.mp3', volume: 1.0 },
-        { url: 'josh-spells/2.mp3', volume: 1.0 },
-        { url: 'josh-spells/3.mp3', volume: 1.0 }, 
-        { url: 'josh-spells/4.mp3', volume: 1.0 },
-        { url: 'josh-spells/5.mp3', volume: 1.0 },
-        { url: 'josh-spells/6.mp3', volume: 1.0 },
-        { url: 'josh-spells/7.mp3', volume: 1.0 } 
-    ];
 
     // Tracks the currently playing spell
     let currentSpell = null;
@@ -83,14 +83,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Sets the appropriate sound based on chain length
         if (chainLength < 7) {
-            currentSpell = joshSpells[chainLength - 1];
+            currentSpell = spells[chainLength - 1];
         } else {
-            currentSpell = joshSpells[6];
+            currentSpell = spells[6];
             pitch = 1.225;
         }
 
         playSound(currentSpell.url, 1.0, currentSpell.volume);
-        // console.log(0.6 + Math.min(6 - 1, 6) * (1/8))
         playSound(currentPopSound, pitch); 
     }
 })

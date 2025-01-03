@@ -37,11 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.timeToSpeedUp = 90000; // How long it takes for the game to speed up
     window.remainingTime = timeToSpeedUp; // The time it takes for the game to speed up, unalterable
     window.isSpeedUpEnabled = true; // Tracks if speed up is enabled
-    let speedInterval = 0; // 
+    let speedInterval = 0; // Interval in which the game speeds up
     let hasSpedUp = false; // Tracks if the game has sped up
     let startTime; // Time since the game has started
     let isPaused = false; // Tracks if the speed up timer has been paused
-    let isAllClear = false;
+    const fallingAndColorTimer = 600; // How long it takes for puyos to clear
+    const resumeTimer = 200; // How long it takes for puyos to land
+    let resumeTimerChange = false // Tracks if the landing timer has been resumed
+    let isReset = true // Tracks if process clears has been called already
 
     // All puyo colors
     window.colors = [
@@ -252,13 +255,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 squares[index].style.backgroundColor = '';
                 removeFont(index, 0, squares);
                 resolve(); // Resolves the promise once the move is completed
-            }, 80); // Delay for each puyo move
+            }, 70); // Delay for each puyo move
         });
     }
     
+    const hardDropSound = new Audio('game-sounds/thump.mp3');
+    let currentHardDropSound = null;
+
     // Allows the puyos to be snapped to the bottom instantly
     window.sharedHardDrop = function hardDrop() {
         if (!isMovementResumed) return;
+
+        if (currentHardDropSound) {
+            currentHardDropSound.pause();
+            currentHardDropSound.currentTime = 0;
+        }
+        currentHardDropSound = hardDropSound;
+        currentHardDropSound.play();
         
         undraw(currentPosition); // Remove puyos from the current position
         while (!squares[currentPosition + width].classList.contains('taken')) {
@@ -408,9 +421,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const speedSound = new Audio('game-sounds/cute-level-up-2.mp3');
-    const placedSound = new Audio('game-sounds/thump.mp3');
-    placedSound.volume = 1.0;
-    let currentPlacedSound = null;
 
     // Freeze function 
     function freeze() {
@@ -419,19 +429,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return nextIndex >= squares.length - width || squares[nextIndex].classList.contains('taken');
         })) {
             isMovementResumed = false;
-            if (currentPlacedSound) {
-                currentPlacedSound.pause();
-                currentPlacedSound.currentTime = 0;
-            }
-            currentPlacedSound = placedSound;
-            currentPlacedSound.play();
+            isReset = false;
             freezeContinue();
             scoreDisplay.innerHTML = score;
             squares.slice().forEach(index => {
                 if (index.classList.contains('aboveGrid') && index.classList.contains('taken'))
                     index.classList.remove('taken');
             })
-            // if (isMovementResumed) return;
             if (hasSpedUp) {
                 fallSpeed -= originalFallSpeed * 0.2;
                 if (fallSpeed < 100) 
@@ -445,10 +449,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     speedDisplay.innerHTML = ""
                 }, 3000)
             }
-            // if (!isGameOver) return;
             endDisplay.innerHTML = "";
-            speedDisplay.innerHTML = "";
-            speedSound.pause();
+            setTimeout (() => {
+                if (!isGameOver) return;
+                speedSound.pause();
+                speedDisplay.innerHTML = "";
+            }, 20)
         }
     }
     // Continues freeze function
@@ -460,13 +466,13 @@ document.addEventListener('DOMContentLoaded', () => {
             startBtn.innerHTML = 'Pause';
             pauseEverything();
         } else {
-            setTimeout(() => {
-                if (isFalling) return;
-                if (isMovementResumed) return;
-                current.slice().forEach(index => {
-                    checkAdjacentColor(currentPosition + index);
-                })
-            }, 300);
+            // setTimeout(() => {
+            //     if (isFalling) return;
+            //     if (isMovementResumed) return;
+            //     current.forEach(index => {
+            //         checkAdjacentColor(currentPosition + index);
+            //     })
+            // }, fallingAndColorTimer);
             multiplierTimeout();
         }
     }
@@ -474,7 +480,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Creates new puyos to fall
     function createNewPuyo() {
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
-
         // Makes the up next puyos the current puyo
         random = nextRandom;
         nextRandom = thirdRandom
@@ -545,14 +550,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
 
             // After all Puyos have settled, check for adjacent Puyos to clear
-            setTimeout(() => {
-                squares.forEach((square, index) => {
-                    if (square.classList.contains('puyoBlob')) {
-                            checkAdjacentColor(index);
-                    }
-                });
-                processClears();
-            }, 300);
+            squares.forEach((square, index) => {
+                if (square.classList.contains('puyoBlob')) {
+                    processClears();
+                        checkAdjacentColor(index);
+                }
+            });
+            processClears();
         }
         isFalling = false;
     }
@@ -563,10 +567,11 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
             if (isFalling) return;
+            if (resumeTimerChange) return;
             unPauseCurrent();
             gameOver();
             isMovementResumed = true
-        }, 301)
+        }, resumeTimer)
     }
 
     // Move puyos left, unless at the edge or there is a blockage
@@ -700,7 +705,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const startSound = new Audio('game-sounds/success-1.mp3');
+    const startSound = new Audio('game-sounds/new-notification-7.mp3');
     startSound.volume = 0.5;
 
     // Starts, pauses, and unpauses the game
@@ -770,29 +775,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Main function to check the color of adjacent puyos
     function checkAdjacentColor(puyoIndex) {
-        if (isGameOver || isFalling) return;
+        if (isGameOver) return;
 
         let localConnected = new Set(); // Collects connected puyos for this call
 
         // If in bounds, continue
         if (puyoIndex >= 0 && puyoIndex < squares.length - width) {
-
             // Sets color to be compared
             let color = window.getComputedStyle(squares[puyoIndex]).backgroundColor;
             let connected = (getConnectedPuyos(puyoIndex, color, new Set()));
-
             // If the puyos to pop value or more connected puyos are found, add them to both sets
             if (connected.length >= puyosToPop) {
+                resumeTimerChange = true;
+                isReset = true
                 connected.forEach(ind => {
                     globalConnectedPuyos.add(ind);
                     localConnected.add(ind);
                     const indexColor = window.getComputedStyle(squares[ind]).backgroundColor;
 
                     // Assures the same color does not get counted multiple times
-                    if (!colorVisited.has(indexColor))
+                    if (!colorVisited.has(indexColor)) {
                         colorVisited.add(indexColor);
+                    }
                 });
-            }
+            } 
         }
     }
 
@@ -801,7 +807,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper for checkAdjacentColor to recursively find all connected Puyos of the same color
     function getConnectedPuyos(index, color, visited = new Set()) {
-
         // Base case: Makes sure puyos don't get counted more than once
         if (visited.has(index)) return [];
 
@@ -817,9 +822,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Color comparison loop
         directions.slice().forEach(direction => {
-
             let neighborIndex = index + direction; // Index of neighboring puyos
-
             visited.add(index);
 
             // Makes sure both current color and neighboring colors are in the same color format
@@ -834,11 +837,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if ((direction === 1 && (index + 1) % width === 0) && width != 1) return;  // Right boundary
 
             // Compares colors
-            if (neighborColor === color && !visited.has(neighborIndex)) {
-
+            if (neighborColor == color) {
                 // Adds adjacent puyos to connected list
                 connectedPuyos = connectedPuyos.concat(getConnectedPuyos(neighborIndex, color, visited));
-            }
+            } else 
+                return;
         }) 
         return connectedPuyos;
     }
@@ -849,34 +852,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to process all puyo pops after collecting global connections
     function processClears() {
-        if (globalConnectedPuyos.size > 0) {
+        if (!isReset) return;
+        setTimeout (() => {
+            if (!isReset) return;
+            isReset = false;
 
-            // Clears the puyos
-            globalConnectedPuyos.forEach(ind => {
-                removeFont(ind, 0, squares);
-                squares[ind].classList.remove('taken');
-                squares[ind].classList.remove('puyoBlob');
-                squares[ind].style.backgroundColor = '';
-                puyoCount++;
-            });
-            colorVisited.clear();
-            if (puyoCount > puyosToPop + 6) {
-                groupBonus = 10;
-            } else if (puyoCount > puyosToPop) {
-                groupBonus++;
+            if (globalConnectedPuyos.size > 0) {
+                // Clears the puyo
+                globalConnectedPuyos.forEach(ind => {
+                    removeFont(ind, 0, squares);
+                    squares[ind].classList.remove('taken');
+                    squares[ind].classList.remove('puyoBlob');
+                    squares[ind].style.backgroundColor = '';
+                    puyoCount++;
+                });
+                colorVisited.clear();
+                console.log("Puyos cleared")
+                if (puyoCount > puyosToPop + 6) {
+                    groupBonus = 10;
+                } else if (puyoCount > puyosToPop) {
+                    groupBonus++;
+                }
+
+                chainLength++; // Increments chain length
+                chainDisplay.innerHTML = chainLength + " chain!"; // Displays chain length
+                currentPopSound = popSound;
+                playVoiceLine();
+                displayScore();
+                groupBonus = 1;
+                falling(); // Handles falling puyos
+                globalConnectedPuyos.clear(); // Reset global connections and colors for the next turn
+                resumeTimerChange = false;
+                isReset = true;
             }
-
-            chainLength++; // Increments chain length
-            chainDisplay.innerHTML = chainLength + " chain!"; // Displays chain length
-            currentPopSound = popSound;
-            playVoiceLine();
-            displayScore();
-            groupBonus = 1;
-            falling(); // Handles falling puyos
-
-            // Reset global connections and colors for the next turn
-            globalConnectedPuyos.clear();
-        }
+        }, fallingAndColorTimer)
     }
 
     const allClearSound = new Audio('game-sounds/all-clear.mp3');
@@ -901,7 +910,6 @@ document.addEventListener('DOMContentLoaded', () => {
             score += 5000;
             scoreDisplay.innerHTML = score
             allClearSound.play();
-
         }
     }
 

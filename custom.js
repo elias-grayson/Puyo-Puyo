@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const defaultButton = document.querySelector('#defaultControls');
     const speedUpToggle = document.querySelector('#speedUpToggle');
     const rangeSliders = document.querySelectorAll('.form-range');
+    const voiceBtns = document.querySelectorAll('.voiceBtn');
 
     let activeColor = "#0d6efd"; // Current color theme choice
 
@@ -36,19 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             backgroundBtns.forEach(btn => {
                 btn.classList.remove('active');
-                btn.style.backgroundColor = "";
-            });
-    
-            button.style.backgroundColor = activeColor;
-            button.classList.add('active');
-        });
-    });
-
-    // Allows only one control button to be highlighted at once
-    controlBtns.forEach(button => {
-        button.addEventListener('click', () => {
-            controlBtns.forEach(btn => {
-                btn.classList.remove('active')
                 btn.style.backgroundColor = "";
             });
     
@@ -87,6 +75,19 @@ document.addEventListener('DOMContentLoaded', () => {
     presetBtns.forEach(button => {
         button.addEventListener('click', () => {
             presetBtns.forEach(btn => {
+                btn.classList.remove('active')
+                btn.style.backgroundColor = "";
+            });
+
+            button.style.backgroundColor = activeColor;
+            button.classList.add('active');
+        });
+    });
+
+    // Allows only one voice button to be highlighted at once
+    voiceBtns.forEach(button => {
+        button.addEventListener('click', () => {
+            voiceBtns.forEach(btn => {
                 btn.classList.remove('active')
                 btn.style.backgroundColor = "";
             });
@@ -360,8 +361,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (width == 1)
             currentPosition = Math.floor(1);
 
-        $(".widthButton").removeClass("active");  // Remove 'active' from all buttons
-        thisChosen.addClass("active"); // Add 'active' to the clicked button
+        $(".widthButton").removeClass("active");  // Removes 'active' from all buttons
+        thisChosen.addClass("active"); // Adds 'active' to the clicked button
     }
 
     // Allows the grid width to be changed when clicking the corresponding button
@@ -392,8 +393,6 @@ document.addEventListener('DOMContentLoaded', () => {
             puyo.classList.add('fontState');
             document.querySelectorAll('.puyoBlob').forEach((puyo) => {
                 puyo.style.border = "1px solid rgba(0, 0, 0, 0.3)";
-                // puyo.style.borderRadius = '0%';
-                // puyo.style.backgroundColor = '';
                 puyo.classList.add('fontState');
                 puyo.style.borderRadius = '50%';
             });
@@ -450,6 +449,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.style.backgroundColor = "rgb(37, 201, 59)";
         });
         widthBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(37, 201, 59)";
+        });
+        voiceBtns.forEach(button => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = "rgb(37, 201, 59)";
         });
@@ -514,6 +517,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = "rgb(255, 30, 30)";
         });
+        voiceBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(255, 30, 30)";
+        });
 
         // Changes the background detail back to default
         // grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
@@ -575,7 +582,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = "rgb(183, 60, 255)";
         });
-
+        voiceBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "rgb(183, 60, 255)";
+        });
 
         // Changes the background detail to Elias in comic sans
         // grid.style.setProperty('--before-content', '"Elias :)"'); 
@@ -638,6 +648,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = "#0d6efd";
         });
+        voiceBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = "#0d6efd";
+        });
 
         // Changes the background back to default
         // grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
@@ -659,14 +673,6 @@ document.addEventListener('DOMContentLoaded', () => {
         remainingTime = timeToSpeedUp;
 
         // Makes sure active buttons stay the chosen color theme
-        widthBtns.forEach(btn => {
-            btn.classList.remove('active')
-            btn.style.backgroundColor = "";
-        });
-        presetBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = activeColor;
-        });
         controlBtns.forEach(button => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = activeColor;
@@ -701,14 +707,6 @@ document.addEventListener('DOMContentLoaded', () => {
         randomSecondary = Math.floor(Math.random()*amountOfColors);
 
         // Makes sure active buttons stay the chosen color theme
-        widthBtns.forEach(btn => {
-            btn.classList.remove('active')
-            btn.style.backgroundColor = "";
-        });
-        presetBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = activeColor;
-        });
         controlBtns.forEach(button => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = activeColor;
@@ -743,14 +741,6 @@ document.addEventListener('DOMContentLoaded', () => {
         randomSecondary = Math.floor(Math.random()*amountOfColors);
 
         // Makes sure active buttons stay the chosen color theme
-        widthBtns.forEach(btn => {
-            btn.classList.remove('active')
-            btn.style.backgroundColor = "";
-        });
-        presetBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = activeColor;
-        });
         controlBtns.forEach(button => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = activeColor;
@@ -785,14 +775,6 @@ document.addEventListener('DOMContentLoaded', () => {
         randomSecondary = Math.floor(Math.random()*amountOfColors);
 
         // Makes sure active buttons stay the chosen color theme
-        widthBtns.forEach(btn => {
-            btn.classList.remove('active')
-            btn.style.backgroundColor = "";
-        });
-        presetBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = activeColor;
-        });
         controlBtns.forEach(button => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = activeColor;
@@ -822,6 +804,12 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         event.stopPropagation();
         defaultControls();
+        areControlsFlipped = false;
+        controlBtns.forEach(btn => {
+            btn.classList.remove('active')
+            btn.style.backgroundColor = "";
+            defaultButton.style.backgroundColor = activeColor;
+        });
     })
 
     // Changes the controls to the default
@@ -856,6 +844,12 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         event.stopPropagation();
         flippedControls();
+        areControlsFlipped = true;
+        controlBtns.forEach(btn => {
+            btn.classList.remove('active')
+            btn.style.backgroundColor = "";
+            altButton.style.backgroundColor = activeColor;
+        });
     })
 
     // Hotkey for toggling controls
@@ -919,4 +913,55 @@ document.addEventListener('DOMContentLoaded', () => {
             speedUpToggle.style.borderColor = "";
         }
     });
+
+    // Changes the voice lines to Josh's
+    $(".voiceButtons").on("click", "#joshVoice", async function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        window.spells.splice(0, spells.length,
+            { url: 'josh-spells/1.mp3', volume: 1.0 },
+            { url: 'josh-spells/2.mp3', volume: 1.0 },
+            { url: 'josh-spells/3.mp3', volume: 1.0 }, 
+            { url: 'josh-spells/4.mp3', volume: 1.0 },
+            { url: 'josh-spells/5.mp3', volume: 1.0 },
+            { url: 'josh-spells/6.mp3', volume: 1.0 },
+            { url: 'josh-spells/7.mp3', volume: 1.0 }
+        );
+
+        // Cache the new sound
+        for (const spell of spells) {
+            await loadAndCacheSound(spell.url);
+        }
+
+        voiceBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
+    })
+
+    // Changes the voice lines to British Micah's
+    $(".voiceButtons").on("click", "#britMicah", async function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        window.spells.splice(0, spells.length,
+            { url: 'british-micah-spells/1.mp3', volume: 3.0 },
+            { url: 'british-micah-spells/2.mp3', volume: 3.0 },
+            { url: 'british-micah-spells/3.mp3', volume: 3.0 }, 
+            { url: 'british-micah-spells/4.mp3', volume: 3.0 },
+            { url: 'british-micah-spells/5.mp3', volume: 3.0 },
+            { url: 'british-micah-spells/6.mp3', volume: 3.0 },
+            { url: 'british-micah-spells/7.mp3', volume: 3.0 }
+        );
+
+        // Cache the new sound
+        for (const spell of spells) {
+            await loadAndCacheSound(spell.url);
+        }
+
+        voiceBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
+    })
 })
