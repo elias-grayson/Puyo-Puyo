@@ -890,26 +890,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const allClearSound = new Audio('game-sounds/all-clear.mp3');
     allClearSound.volume = 0.8;
+    let allClearVoice = new Audio('british-micah-spells/all-clear.mp3');
 
     // Logic for a clear board
     function allClear() {
         if (squares.every(square => !square.classList.contains('puyoBlob') || 
         square.classList.contains('currentPosition'))) {
 
-            // Adds margin if both speed up and all clear happen at the same time
-            setTimeout(() => {
+            setTimeout (() => {
+                // Adds margin if both speed up and all clear happen at the same time
                 if (speedDisplay.innerHTML !== "") {
                     endDisplay.style.marginRight = "20px";
                 } else {
                     endDisplay.style.marginRight = "0px";
                 }
-            })
-            endDisplay.innerHTML = 'All Clear!';
-            endDisplay.style.color = "#0d6efd"
-            isAllClear = true;
-            score += 5000;
-            scoreDisplay.innerHTML = score
-            allClearSound.play();
+                if (isBritMicah) {
+                    allClearVoice.play();
+                }
+
+                endDisplay.innerHTML = 'All Clear!';
+                endDisplay.style.color = "#0d6efd"
+                isAllClear = true;
+                score += 5000;
+                scoreDisplay.innerHTML = score
+                allClearSound.play();
+            }, 500)
         }
     }
 

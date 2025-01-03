@@ -914,10 +914,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    window.isJosh = true; // Tracks whether Josh's lines are active
+    window.isBritMicah = false; // Tracks whether micah's lines are active
+
     // Changes the voice lines to Josh's
     $(".voiceButtons").on("click", "#joshVoice", async function (event) {
         event.preventDefault();
         event.stopPropagation();
+        isJosh = true;
+        isBritMicah = false
         window.spells.splice(0, spells.length,
             { url: 'josh-spells/1.mp3', volume: 1.0 },
             { url: 'josh-spells/2.mp3', volume: 1.0 },
@@ -943,7 +948,8 @@ document.addEventListener('DOMContentLoaded', () => {
     $(".voiceButtons").on("click", "#britMicah", async function (event) {
         event.preventDefault();
         event.stopPropagation();
-
+        isJosh = false;
+        isBritMicah = true
         window.spells.splice(0, spells.length,
             { url: 'british-micah-spells/1.mp3', volume: 3.0 },
             { url: 'british-micah-spells/2.mp3', volume: 3.0 },
@@ -951,7 +957,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { url: 'british-micah-spells/4.mp3', volume: 3.0 },
             { url: 'british-micah-spells/5.mp3', volume: 3.0 },
             { url: 'british-micah-spells/6.mp3', volume: 3.0 },
-            { url: 'british-micah-spells/7.mp3', volume: 3.0 }
+            { url: 'british-micah-spells/7.mp3', volume: 3.0 },
+            { url: 'british-micah-spells/all-clear.mp3', volume: 3.0 }
         );
 
         // Cache the new sound
