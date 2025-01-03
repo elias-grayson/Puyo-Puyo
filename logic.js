@@ -891,6 +891,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const allClearSound = new Audio('game-sounds/all-clear.mp3');
     allClearSound.volume = 0.8;
     let allClearVoice = new Audio('british-micah-spells/all-clear.mp3');
+    allClearVoice.volume = 0.7;
 
     // Logic for a clear board
     function allClear() {
