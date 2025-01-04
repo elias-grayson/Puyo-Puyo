@@ -431,6 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })) {
             isMovementResumed = false;
             isReset = false;
+            console.log("arePuyosCleared: ", arePuyosCleared)
             freezeContinue();
             scoreDisplay.innerHTML = score;
             squares.slice().forEach(index => {
@@ -852,9 +853,26 @@ document.addEventListener('DOMContentLoaded', () => {
     popSound.volume = 0.2;
     window.currentPopSound = null;
 
+    let arePuyosCleared = false;
     // Function to process all puyo pops after collecting global connections
     function processClears() {
         if (!isReset) return;
+        if (globalConnectedPuyos.size > 0) {
+            animatedReset();
+            arePuyosCleared = false;
+            totalElements = globalConnectedPuyos.size;
+            globalConnectedPuyos.forEach(ind => {    
+                startColor[ind] = parseRGB(squares[ind].style.backgroundColor);
+            })
+            setTimeout (() => {
+                if (!isReset) return;
+                if (isFalling) return
+                globalConnectedPuyos.forEach(ind => {  
+                    removeFont(ind, 0, squares);
+                })
+                requestAnimationFrame(animateColor)
+            }, 200);
+        }
         setTimeout (() => {
             if (!isReset) return;
             isReset = false;
@@ -886,8 +904,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 globalConnectedPuyos.clear(); // Reset global connections and colors for the next turn
                 resumeTimerChange = false;
                 isReset = true;
+                arePuyosCleared = true;
             }
         }, fallingAndColorTimer)
+    }
+
+    // Helper function to parse colors into [r, g, b] format
+    function parseRGB(color) {
+
+        // Extracts numeric RGB values if the color is in rgb format
+        if (color.startsWith("rgb")) {
+            const match = color.match(/\d+/g);
+            return match ? match.map(Number) : [0, 0, 0];
+        }
+
+        // Handles named colors
+        const dummyDiv = document.createElement("div");
+        dummyDiv.style.color = color; // Apply the named color
+        document.body.appendChild(dummyDiv); // Add to DOM to compute
+        const computedColor = window.getComputedStyle(dummyDiv).color; // Get computed RGB value
+        document.body.removeChild(dummyDiv); // Clean up DOM
+
+        return parseRGB(computedColor);
+    }
+    let startColor = {};
+    let animationStartTime = null;
+    let totalElements = globalConnectedPuyos.size;
+    const animationDuration = 400;
+    let elementsAnimated = 0;
+
+    // Gradually turns connected puyos white before popped
+    async function animateColor(timestamp) {
+        if (!animationStartTime) animationStartTime = timestamp;
+        const elapsedTime = timestamp - animationStartTime;
+        const progress = Math.min(elapsedTime / animationDuration, 1);
+
+        globalConnectedPuyos.forEach(ind => {
+            const currentElement = squares[ind];
+    
+            // Use the start color for this specific square
+            const color = startColor[ind];
+            if (!color || !Array.isArray(color)) {
+                console.log("color is undefined")
+                return;
+            }
+
+            const endColor = [255, 255, 255];
+
+            // Interpolate between startColor and endColor
+            if (color !== undefined) {
+                const currentColor = color.map((start, index) => {
+                    return Math.round(start + (endColor[index] - start) * progress);
+                });
+            
+    
+            // Apply the interpolated color
+            currentElement.style.backgroundColor = `rgb(${currentColor.join(',')})`;
+            }
+        });
+
+        // Continues animation if not finished
+        if (progress < 1) {
+            requestAnimationFrame(animateColor);
+        } 
+    }
+
+    function animatedReset() {
+        console.log("animated reset");
+        animationStartTime = null;
+        startColor = {};  // Reset the starting color for the next animation
+        elementsAnimated = 0; // Reset the counter
+        arePuyosCleared = false;
     }
 
     const allClearSound = new Audio('game-sounds/all-clear.mp3');
@@ -938,6 +1025,8 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreDisplay.innerHTML = score; // Displays the score
     }
     
+const gameOverSound = new Audio('game-sounds/error-10.mp3');
+gameOverSound.volume = 0.3;
     /* Game over if reached the top */
     function gameOver() {
         if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
@@ -949,6 +1038,7 @@ document.addEventListener('DOMContentLoaded', () => {
             endDisplay.innerHTML = 'game over';
             endDisplay.style.color = "red";
             endDisplay.style.fontStyle = "";
+            gameOverSound.play();
 
             // Prompts players to restart page to play again
             setTimeout(() => {
