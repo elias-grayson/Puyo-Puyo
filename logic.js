@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let hasSpedUp = false; // Tracks if the game has sped up
     let startTime; // Time since the game has started
     let isPaused = false; // Tracks if the speed up timer has been paused
-    const fallingAndColorTimer = 700; // How long it takes for puyos to clear
+    const fallingAndColorTimer = 800; // How long it takes for puyos to clear
     const resumeTimer = 200; // How long it takes for puyos to land
     let resumeTimerChange = false // Tracks if the landing timer has been resumed
     let isReset = true // Tracks if process clears has been called already
@@ -736,6 +736,7 @@ document.addEventListener('DOMContentLoaded', () => {
             hasSpedUp = false;
             speedDisplay.innerHTML = "Speed up!"
             speedSound.play();
+            moveDownInterval = fallSpeed * 0.06;
             setTimeout(() => {
                 if (isGameOver) return;
                 speedDisplay.innerHTML = ""
@@ -910,8 +911,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (isReset) return;
                     isFallingTimeout();
                     resumeTimerChange = false;
-                    setTimeout(() => allClear(), 200);
-                }, 300)
+                    setTimeout(() => allClear(), 400);
+                }, 100)
                 isReset = true;
                 arePuyosCleared = true;
             }
@@ -1077,12 +1078,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeDownKeys = new Map(); // Map to track holdable keys currently held down
     const activeNonHoldKeys = new Set(); // Set to track non-holdable keys currently held down
     const moveInterval = 50; // How long before horizontal movement is repeated
-    const moveDownInterval = 60; // How long before downward movement is repeated
+    window.moveDownInterval = fallSpeed * 0.06; // How long before downward movement is repeated
+    window.horizontalHoldInterval = 100; // How long it takes for the horizontal movement to start repeating
     let isHorKeyReleased = true; // Tracks whether horizontal movement keys have been released
 
     // Assigns functions to keyCodes
     function control(e) {
-        if (!isInputEnabled) return;
     
         // Handles downward key actions
         if (moveDownBindings[e.key]) {
@@ -1120,7 +1121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, moveInterval);
                     if (isHorKeyReleased) return;
                     activeHorizontalKeys.set(e.key, horizontalIntervalId);
-                }, 100) // Starts the movement after held for set amount of time
+                }, horizontalHoldInterval) // Starts the movement after held for set amount of time
             }
         }
 

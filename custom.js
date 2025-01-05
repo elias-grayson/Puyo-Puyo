@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Allows the fall speed display to change on input
     $("#fallSpeedInput").on("change input", function() {
         fallSpeed = $(this).val(); // Changes the fall speed to the chosen value
+        moveDownInterval = fallSpeed * 0.06;
         originalFallSpeed = fallSpeed;
         var dividedValue = fallSpeed / 1000; // Fall speed in seconds
         if (dividedValue == 1) {
@@ -665,7 +666,9 @@ document.addEventListener('DOMContentLoaded', () => {
     $("#presetContainer").on("click", "#easyBtn", function (event) {
         event.preventDefault();
         fallSpeed = 2000;
+        moveDownInterval = fallSpeed * 0.06;
         originalFallSpeed = fallSpeed;
+        horizontalHoldInterval = 200;
         amountOfColors = 3;
         random = Math.floor(Math.random()*amountOfColors);
         randomSecondary = Math.floor(Math.random()*amountOfColors);
@@ -700,7 +703,9 @@ document.addEventListener('DOMContentLoaded', () => {
     $("#presetContainer").on("click", "#normalBtn", function (event) {
         event.preventDefault();
         fallSpeed = 1000;
+        moveDownInterval = fallSpeed * 0.06;
         originalFallSpeed = fallSpeed;
+        horizontalHoldInterval = 100;
         amountOfColors = 4;
         timeToSpeedUp = 90000;
         remainingTime = timeToSpeedUp;
@@ -735,7 +740,9 @@ document.addEventListener('DOMContentLoaded', () => {
     $("#presetContainer").on("click", "#hardBtn", function (event) {
         event.preventDefault();
         fallSpeed = 800;
+        moveDownInterval = fallSpeed * 0.06;
         originalFallSpeed = fallSpeed;
+        horizontalHoldInterval = 100;
         amountOfColors = 5;
         timeToSpeedUp = 80000;
         remainingTime = timeToSpeedUp;
@@ -770,7 +777,9 @@ document.addEventListener('DOMContentLoaded', () => {
     $("#presetContainer").on("click", "#insaneBtn", function (event) {
         event.preventDefault();
         fallSpeed = 700;
+        moveDownInterval = fallSpeed * 0.06;
         originalFallSpeed = fallSpeed;
+        horizontalHoldInterval = 100;
         amountOfColors = 6;
         timeToSpeedUp = 75000;
         remainingTime = timeToSpeedUp;
