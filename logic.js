@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.squares = Array.from(document.querySelectorAll('.grid div')); // Array of all grid spaces
     const custom = document.querySelector('#custom');
     const speedDisplay = document.querySelector('#speedDisplay');
+    const overGrid = document.querySelector('.over-grid');
 
     // Variables
     window.width = 6; // Width of each grid space
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let hasSpedUp = false; // Tracks if the game has sped up
     let startTime; // Time since the game has started
     let isPaused = false; // Tracks if the speed up timer has been paused
-    const fallingAndColorTimer = 600; // How long it takes for puyos to clear
+    const fallingAndColorTimer = 700; // How long it takes for puyos to clear
     const resumeTimer = 200; // How long it takes for puyos to land
     let resumeTimerChange = false // Tracks if the landing timer has been resumed
     let isReset = true // Tracks if process clears has been called already
@@ -187,33 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
             squares[puyos + index].classList.remove('taken')
             squares[puyos + index].style.backgroundColor = '';
         })
-    }
-
-    document.addEventListener('keydown', control); // Attaches the control function to the 'keydown' event
-    document.addEventListener('keyup', releaseKey); // Attaches the releaseKey function to the 'keyup' event
-
-    // Set to track keys currently held down
-    const activeKeys = new Set();
-
-    // Assigns functions to keyCodes
-    function control(e) {
-        if (!isInputEnabled) return; // Ignore if input is disabled
-    
-        // Prevent repeated actions for specific keys
-        if (["ArrowRight", "ArrowLeft"].includes(e.key)) {
-            if (activeKeys.has(e.key)) return;
-            activeKeys.add(e.key);
-        }
-    
-        // Call the corresponding function from the keyBindings object
-        if (keyBindings[e.key]) {
-            keyBindings[e.key]();
-        }
-    }
-
-    function releaseKey(e) {
-        // Remove the key from the set when it is released
-        activeKeys.delete(e.key);
     }
 
     // Move down function
@@ -431,33 +405,12 @@ document.addEventListener('DOMContentLoaded', () => {
         })) {
             isMovementResumed = false;
             isReset = false;
-            console.log("arePuyosCleared: ", arePuyosCleared)
             freezeContinue();
             scoreDisplay.innerHTML = score;
             squares.slice().forEach(index => {
                 if (index.classList.contains('aboveGrid') && index.classList.contains('taken'))
                     index.classList.remove('taken');
             })
-            if (hasSpedUp && !isAtMaxSpeed) {
-                fallSpeed -= originalFallSpeed * 0.2;
-                if (fallSpeed < 100) {
-                    fallSpeed = 100;
-                    isAtMaxSpeed = true;
-                }
-                hasSpedUp = false;
-                speedDisplay.innerHTML = "Speed up!"
-                speedSound.play();
-                setTimeout(() => {
-                    if (isGameOver) return;
-                    speedDisplay.innerHTML = ""
-                }, 3000)
-            }
-            endDisplay.innerHTML = "";
-            setTimeout (() => {
-                if (!isGameOver) return;
-                speedSound.pause();
-                speedDisplay.innerHTML = "";
-            }, 20)
         }
     }
     // Continues freeze function
@@ -468,21 +421,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isFalling) {
             startBtn.innerHTML = 'Pause';
             pauseEverything();
-        } else {
-            // setTimeout(() => {
-            //     if (isFalling) return;
-            //     if (isMovementResumed) return;
-            //     current.forEach(index => {
-            //         checkAdjacentColor(currentPosition + index);
-            //     })
-            // }, fallingAndColorTimer);
+        } else 
             multiplierTimeout();
-        }
     }
 
     // Creates new puyos to fall
     function createNewPuyo() {
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
+        speedUp();
+
         // Makes the up next puyos the current puyo
         random = nextRandom;
         nextRandom = thirdRandom
@@ -566,7 +513,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Draws more puyos if falling and chaining has stopped
     function isFallingTimeout() {
-        allClear();
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
             if (isFalling) return;
@@ -671,9 +617,10 @@ document.addEventListener('DOMContentLoaded', () => {
         event.target.blur();
     });
 
+    let isEscapeEnabled = false;
     // Adds pause/play functionality to the escape key
     document.addEventListener('keydown', (e) => {
-        if (e.key === "Escape") {
+        if (e.key === "Escape" && isEscapeEnabled) {
             startBtn.innerHTML = '<i class="fa-solid fa-pause"></i>' + '  Pause';
             startBtnPause(); // Toggle pause/unpause when the escape key is pressed
         }
@@ -691,7 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isInputEnabled = true
     } 
 
-    // Pauses the movement of the current puyos
+    // Pauses the movement of the puyos being controlled
     function pauseEverything() {
         startBtn.innerHTML = '<i class="fa-solid fa-pause"></i>' + '  Pause';
         if (timerId) {
@@ -710,28 +657,59 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const startSound = new Audio('game-sounds/new-notification-7.mp3');
     startSound.volume = 0.5;
+    const pauseSound = new Audio('game-sounds/arcade-ui-5.mp3');
+    pauseSound.volume = 0.5;
+    let currentPauseSound = null;
+    const unPauseSound = new Audio('game-sounds/arcade-ui-14.mp3');
+    unPauseSound.volume = 0.5;
+    let currentUnPauseSound = null;
 
     // Starts, pauses, and unpauses the game
     function startBtnPause() {
-        if (!isMovementResumed) return;
-        if (isGameOver) return;
+        if (!isMovementResumed || isGameOver) {
+            startBtn.disabled = true;
+            return;
+        };
 
-        // Disables customization menu when game starts
-        custom.disabled = true;
+        custom.disabled = true; // Disables customization menu when game starts
+
+        isEscapeEnabled = true; // Lets the escape key be used for pausing
 
         if (timerId) { // If game is already paused
             startBtn.innerHTML = '<i class="fa-solid fa-play"></i>' + '  Play';
-            pauseTimer();
+            pauseSpeedUpTimer();
             clearInterval(timerId); // Clear fall timer when paused
             timerId = null;
             isInputEnabled = false;
+            overGrid.style.opacity = "50%"
+
+            if (currentUnPauseSound) {
+                currentPauseSound.pause()
+                currentPauseSound.currentTime = 0;
+                currentPauseSound.play();
+            } else {
+                currentPauseSound = pauseSound;
+                currentPauseSound.play();
+            }
         } else { 
+            startBtn.disabled = false;
             draw(currentPosition);
             timerId = setInterval(() => { // Set fall timer when unpaused
                 sharedMoveDownCurrent()
             }, fallSpeed);
             isInputEnabled = true;
-            startTimer();
+            startSpeedUpTimer();
+            overGrid.style.opacity = "0%"
+            if (isClickedOnce) {
+                if (currentUnPauseSound) {
+                    currentUnPauseSound.pause()
+                    currentUnPauseSound.currentTime = 0;
+                    currentUnPauseSound.play();
+                } else {
+                    currentUnPauseSound = unPauseSound;
+                    currentUnPauseSound.play();
+                }
+            }
             if (isClickedOnce) return;
 
             startSound.play();
@@ -747,8 +725,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Starts and resumes the speed up timer
-    function startTimer() {
+    // Speeds the game up
+    function speedUp() {
+        if (hasSpedUp && !isAtMaxSpeed) {
+            fallSpeed -= originalFallSpeed * 0.2;
+            if (fallSpeed < 100) {
+                fallSpeed = 100;
+                isAtMaxSpeed = true;
+            }
+            hasSpedUp = false;
+            speedDisplay.innerHTML = "Speed up!"
+            speedSound.play();
+            setTimeout(() => {
+                if (isGameOver) return;
+                speedDisplay.innerHTML = ""
+            }, 3000)
+        }
+        endDisplay.innerHTML = "";
+        setTimeout (() => {
+            if (!isGameOver) return;
+            speedSound.pause();
+            speedDisplay.innerHTML = "";
+        }, 20)
+    }
+
+    // Helper to start and resume the speed up timer
+    function startSpeedUpTimer() {
         if (isGameOver) return;
         if (!isSpeedUpEnabled) return;
         startTime = Date.now(); // Records when the timer started
@@ -757,13 +759,13 @@ document.addEventListener('DOMContentLoaded', () => {
         speedInterval = setTimeout(() => {
             remainingTime = timeToSpeedUp; // Reset the timer
             hasSpedUp = true;
-            startTimer(); // Restarts the interval
+            startSpeedUpTimer(); // Restarts the interval
         }, remainingTime);
         isPaused = false;
     }
 
-    // Pauses the speed up timer
-    function pauseTimer() {
+    // Helper to pause the speed up timer
+    function pauseSpeedUpTimer() {
         if (!isSpeedUpEnabled) return;
         if (!isPaused) {
             clearTimeout(speedInterval);
@@ -852,14 +854,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const popSound = 'game-sounds/coin-pickup.mp3';
     popSound.volume = 0.2;
     window.currentPopSound = null;
+    let arePuyosCleared = false; // Checks whether the current connected puyos have been cleared
 
-    let arePuyosCleared = false;
     // Function to process all puyo pops after collecting global connections
     function processClears() {
         if (!isReset) return;
         if (globalConnectedPuyos.size > 0) {
-            animatedReset();
-            arePuyosCleared = false;
+            resetPopAnimation();
+            arePuyosCleared = false; 
             totalElements = globalConnectedPuyos.size;
             globalConnectedPuyos.forEach(ind => {    
                 startColor[ind] = parseRGB(squares[ind].style.backgroundColor);
@@ -870,15 +872,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 globalConnectedPuyos.forEach(ind => {  
                     removeFont(ind, 0, squares);
                 })
-                requestAnimationFrame(animateColor)
+                requestAnimationFrame(animatePop)
             }, 200);
         }
         setTimeout (() => {
             if (!isReset) return;
             isReset = false;
 
+            // If there are puyos in the conneced list
             if (globalConnectedPuyos.size > 0) {
-                // Clears the puyo
+                // Clear the puyo
                 globalConnectedPuyos.forEach(ind => {
                     removeFont(ind, 0, squares);
                     squares[ind].classList.remove('taken');
@@ -887,7 +890,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     puyoCount++;
                 });
                 colorVisited.clear();
-                console.log("Puyos cleared")
+
+                // Group bonus calculation
                 if (puyoCount > puyosToPop + 6) {
                     groupBonus = 10;
                 } else if (puyoCount > puyosToPop) {
@@ -902,7 +906,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 groupBonus = 1;
                 falling(); // Handles falling puyos
                 globalConnectedPuyos.clear(); // Reset global connections and colors for the next turn
-                resumeTimerChange = false;
+                setTimeout(() => {
+                    if (isReset) return;
+                    isFallingTimeout();
+                    resumeTimerChange = false;
+                    setTimeout(() => allClear(), 200);
+                }, 300)
                 isReset = true;
                 arePuyosCleared = true;
             }
@@ -918,26 +927,25 @@ document.addEventListener('DOMContentLoaded', () => {
             return match ? match.map(Number) : [0, 0, 0];
         }
 
-        // Handles named colors
+        // Creates a temporary DOM element to extract color if in named format
         const dummyDiv = document.createElement("div");
-        dummyDiv.style.color = color; // Apply the named color
-        document.body.appendChild(dummyDiv); // Add to DOM to compute
-        const computedColor = window.getComputedStyle(dummyDiv).color; // Get computed RGB value
-        document.body.removeChild(dummyDiv); // Clean up DOM
+        dummyDiv.style.color = color;
+        document.body.appendChild(dummyDiv);
+        const computedColor = window.getComputedStyle(dummyDiv).color;
+        document.body.removeChild(dummyDiv);
 
         return parseRGB(computedColor);
     }
-    let startColor = {};
-    let animationStartTime = null;
-    let totalElements = globalConnectedPuyos.size;
-    const animationDuration = 400;
-    let elementsAnimated = 0;
 
-    // Gradually turns connected puyos white before popped
-    async function animateColor(timestamp) {
+    let startColor = {}; // Initialize the connected puyos starting color
+    let animationStartTime = null; // Determines when the clearing animation starts
+    const animationDuration = 400; // How long the popping animation lasts
+
+    // Fades puyos to white before being popped
+    async function animatePop(timestamp) {
         if (!animationStartTime) animationStartTime = timestamp;
         const elapsedTime = timestamp - animationStartTime;
-        const progress = Math.min(elapsedTime / animationDuration, 1);
+        const progress = Math.min(elapsedTime / animationDuration, 1); // Animation progress
 
         globalConnectedPuyos.forEach(ind => {
             const currentElement = squares[ind];
@@ -945,11 +953,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Use the start color for this specific square
             const color = startColor[ind];
             if (!color || !Array.isArray(color)) {
-                console.log("color is undefined")
                 return;
             }
 
-            const endColor = [255, 255, 255];
+            const endColor = [255, 255, 255]; // White
 
             // Interpolate between startColor and endColor
             if (color !== undefined) {
@@ -965,12 +972,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Continues animation if not finished
         if (progress < 1) {
-            requestAnimationFrame(animateColor);
+            requestAnimationFrame(animatePop);
         } 
     }
 
-    function animatedReset() {
-        console.log("animated reset");
+    // Resets the popping animation so it can be used again
+    function resetPopAnimation() {
         animationStartTime = null;
         startColor = {};  // Reset the starting color for the next animation
         elementsAnimated = 0; // Reset the counter
@@ -979,7 +986,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const allClearSound = new Audio('game-sounds/all-clear.mp3');
     allClearSound.volume = 0.8;
-    let allClearVoice = new Audio('british-micah-spells/all-clear.mp3');
+    window.allClearVoice = new Audio('british-micah-spells/all-clear.mp3');
+    window.currentAllClearVoice = null;
     allClearVoice.volume = 0.7;
 
     // Logic for a clear board
@@ -987,15 +995,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (squares.every(square => !square.classList.contains('puyoBlob') || 
         square.classList.contains('currentPosition'))) {
 
-            setTimeout (() => {
                 // Adds margin if both speed up and all clear happen at the same time
                 if (speedDisplay.innerHTML !== "") {
                     endDisplay.style.marginRight = "20px";
                 } else {
                     endDisplay.style.marginRight = "0px";
                 }
+
+                // If British Micah's voice is active, play matching all clear line
                 if (isBritMicah) {
-                    allClearVoice.play();
+                    currentAllClearVoice = new Audio('british-micah-spells/all-clear.mp3');
+                    currentAllClearVoice.play();
+                    currentSpell.stop();
+                    currentSpell = null
+                }
+
+                // If Southern Micah's voice is active, play matching all clear line
+                if (isSouthMicah) {
+                    currentAllClearVoice = new Audio('southern-micah-spells/all-clear.mp3');
+                    currentAllClearVoice.play();
+                    currentSpell.stop();
+                    currentSpell = null
                 }
 
                 endDisplay.innerHTML = 'All Clear!';
@@ -1004,17 +1024,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 score += 5000;
                 scoreDisplay.innerHTML = score
                 allClearSound.play();
-            }, 500)
         }
     }
 
-    // Calculates and displays score according to Puyo Puyo Tsu's scoring
+    // Calculates and displays score according to Puyo Puyo Tsu's scoring system
     function displayScore() {
         if (chainLength > 1) {
 
             // Exponential growth until chain is greater than 5
             if (chainLength <= 5) {
-            chainPower = (2 ** (chainLength));
+                chainPower = (2 ** (chainLength));
             } else if (chainLength > 5) {
                 chainPower += 32;
             }
@@ -1025,8 +1044,9 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreDisplay.innerHTML = score; // Displays the score
     }
     
-const gameOverSound = new Audio('game-sounds/error-10.mp3');
-gameOverSound.volume = 0.3;
+    const gameOverSound = new Audio('game-sounds/error-10.mp3');
+    gameOverSound.volume = 0.3;
+
     /* Game over if reached the top */
     function gameOver() {
         if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
@@ -1050,20 +1070,106 @@ gameOverSound.volume = 0.3;
         }
     }
 
-    // Key bindings
-    window.keyBindings = {
+    document.addEventListener('keydown', control); // Attaches the control function to the 'keydown' event
+    document.addEventListener('keyup', releaseKey); // Attaches the releaseKey function to the 'keyup' event
+
+    const activeHorizontalKeys = new Map(); // Map to track Horizontal keys
+    const activeDownKeys = new Map(); // Map to track holdable keys currently held down
+    const activeNonHoldKeys = new Set(); // Set to track non-holdable keys currently held down
+    const moveInterval = 50; // How long before horizontal movement is repeated
+    const moveDownInterval = 60; // How long before downward movement is repeated
+    let isHorKeyReleased = true; // Tracks whether horizontal movement keys have been released
+
+    // Assigns functions to keyCodes
+    function control(e) {
+        if (!isInputEnabled) return;
+    
+        // Handles downward key actions
+        if (moveDownBindings[e.key]) {
+            if (!activeDownKeys.has(e.key)) {
+                moveDownBindings[e.key]()
+
+                // Start the movement if the key is not already active
+                const intervalId = setInterval(() => {
+                    if (!isInputEnabled) return;
+                    moveDownBindings[e.key]()
+                }, moveDownInterval);
+                activeDownKeys.set(e.key, intervalId);
+            }
+        }
+
+        // Handles horizontal key actions
+        if (horizontalBindings[e.key]) {
+            if (!activeHorizontalKeys.has(e.key)) {
+
+                let horizontalIntervalId = null // Interval ID for horizontal movement
+
+                // If movement is not being held, move once
+                if (!horizontalIntervalId) {
+                    horizontalBindings[e.key]();
+                    activeHorizontalKeys.set(e.key);
+                    isHorKeyReleased = false;
+                }
+                
+                // Start the movement if the key is not already active
+                setTimeout(() => {
+                    if (isHorKeyReleased) return;
+                    horizontalIntervalId = setInterval(() => {
+                        if (!isInputEnabled || isHorKeyReleased) return;
+                        horizontalBindings[e.key]()
+                    }, moveInterval);
+                    if (isHorKeyReleased) return;
+                    activeHorizontalKeys.set(e.key, horizontalIntervalId);
+                }, 100) // Starts the movement after held for set amount of time
+            }
+        }
+
+        // Handles non-holdable key actions
+        if (nonHoldBindings[e.key]) {
+            if (!activeNonHoldKeys.has(e.key)) {
+                nonHoldBindings[e.key]()
+                activeNonHoldKeys.add(e.key);
+            }
+        }
+    }
+
+    function releaseKey(e) {
+        if (activeDownKeys.has(e.key)) {
+            clearInterval(activeDownKeys.get(e.key)); // Stop the interval for the key
+            activeDownKeys.delete(e.key);
+        }
+        if (activeHorizontalKeys.has(e.key)) {
+            clearInterval(activeHorizontalKeys.get(e.key)); // Stop the interval for the key
+            activeHorizontalKeys.delete(e.key);
+            isHorKeyReleased = true;
+        }
+        if (activeNonHoldKeys.has(e.key)) {
+            activeNonHoldKeys.delete(e.key);
+        }
+    }
+    
+    // Key bindings to move down
+    window.moveDownBindings = {
+        "s": sharedMoveDownCurrent,
+        "S": sharedMoveDownCurrent,
+        "ArrowDown": sharedMoveDownCurrent,
+    };
+
+    // Key bindings to move left/right
+    window.horizontalBindings = {
+        "ArrowRight": sharedMoveRight,
+        "ArrowLeft": sharedMoveLeft,
+    }
+
+    // Key bindings that are not able to be held
+    window.nonHoldBindings = {
         "a": sharedRotateLeft,
         "A": sharedRotateLeft,
         "z": sharedRotateLeft,
         "Z": sharedRotateLeft,
         "d": sharedRotateRight,
         "D": sharedRotateRight,
-        "s": sharedMoveDownCurrent,
-        "S": sharedMoveDownCurrent,
-        "ArrowRight": sharedMoveRight,
-        "ArrowLeft": sharedMoveLeft,
         "ArrowUp": sharedRotateRight,
-        "ArrowDown": sharedMoveDownCurrent,
         " ": sharedHardDrop,
-    };
+    }
 })

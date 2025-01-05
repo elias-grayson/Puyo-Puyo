@@ -686,6 +686,7 @@ document.addEventListener('DOMContentLoaded', () => {
         widthChange(6, $(this))
         widthBtn.value = 6;
         widthBtns.forEach(button => button.classList.remove("active"));
+        widthBtns.forEach(button => button.style.backgroundColor = "");
 
         // Find the button with the specific data-width and add 'active' class
         const targetButton = buttonContainer.querySelector(`.widthButton[data-width="${6}"]`);
@@ -720,6 +721,7 @@ document.addEventListener('DOMContentLoaded', () => {
         widthChange(6, $(this))
         widthBtn.value = 6;
         widthBtns.forEach(button => button.classList.remove("active"));
+        widthBtns.forEach(button => button.style.backgroundColor = "");
 
         // Find the button with the specific data-width and add 'active' class
         const targetButton = buttonContainer.querySelector(`.widthButton[data-width="${6}"]`);
@@ -754,6 +756,7 @@ document.addEventListener('DOMContentLoaded', () => {
         widthChange(6, $(this))
         widthBtn.value = 6;
         widthBtns.forEach(button => button.classList.remove("active"));
+        widthBtns.forEach(button => button.style.backgroundColor = "");
 
         // Find the button with the specific data-width and add 'active' class
         const targetButton = buttonContainer.querySelector(`.widthButton[data-width="${6}"]`);
@@ -788,6 +791,7 @@ document.addEventListener('DOMContentLoaded', () => {
         widthChange(6, $(this))
         widthBtn.value = 6;
         widthBtns.forEach(button => button.classList.remove("active"));
+        widthBtns.forEach(button => button.style.backgroundColor = "");
 
         // Find the button with the specific data-width and add 'active' class
         const targetButton = buttonContainer.querySelector(`.widthButton[data-width="${6}"]`);
@@ -814,21 +818,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Changes the controls to the default
     function defaultControls() {
-        keyBindings = {
+
+        // Key bindings to move down
+        moveDownBindings = {
+            "s": sharedMoveDownCurrent,
+            "S": sharedMoveDownCurrent,
+            "ArrowDown": sharedMoveDownCurrent,
+        };
+
+        // Key bindings to move left/right
+        horizontalBindings = {
+            "ArrowRight": sharedMoveRight,
+            "ArrowLeft": sharedMoveLeft,
+        }
+
+        // Key bindings that are not able to be held
+        nonHoldBindings = {
             "a": sharedRotateLeft,
             "A": sharedRotateLeft,
             "z": sharedRotateLeft,
             "Z": sharedRotateLeft,
             "d": sharedRotateRight,
             "D": sharedRotateRight,
-            "s": sharedMoveDownCurrent,
-            "S": sharedMoveDownCurrent,
-            "ArrowRight": sharedMoveRight,
-            "ArrowLeft": sharedMoveLeft,
             "ArrowUp": sharedRotateRight,
-            "ArrowDown": sharedMoveDownCurrent,
             " ": sharedHardDrop,
-        };
+        }
         leftControl.innerHTML = "Left: Left-arrow";
         rightControl.innerHTML = "Right: Right-arrow";
         downControl.innerHTML = "Down: Down-arrow, S";
@@ -876,20 +890,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Switches to the flipped control scheme
     function flippedControls() {
-        keyBindings = {
+
+        // Key bindings to move down
+        moveDownBindings = {
+            "s": sharedMoveDownCurrent,
+            "S": sharedMoveDownCurrent,
+        };
+
+        // Key bindings to move left/right
+        horizontalBindings = {
             "a": sharedMoveLeft,
             "A": sharedMoveLeft,
+            "d": sharedMoveRight,
+            "D": sharedMoveRight,
+        }
+
+        // Key bindings that are not able to be held
+        nonHoldBindings = {
             "ArrowRight": sharedRotateRight,
             "ArrowLeft": sharedRotateLeft,
             "ArrowUp": sharedRotateRight,
             "ArrowDown": sharedRotateLeft,
-            "d": sharedMoveRight,
-            "D": sharedMoveRight,
-            "s": sharedMoveDownCurrent,
-            "S": sharedMoveDownCurrent,
             "w": sharedHardDrop,
             "W": sharedHardDrop,
-        };
+        }
 
         leftControl.innerHTML = "Left: A";
         rightControl.innerHTML = "Right: D";
@@ -916,6 +940,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.isJosh = true; // Tracks whether Josh's lines are active
     window.isBritMicah = false; // Tracks whether micah's lines are active
+    window.isSouthMicah = false;
 
     // Changes the voice lines to Josh's
     $(".voiceButtons").on("click", "#joshVoice", async function (event) {
@@ -923,6 +948,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.stopPropagation();
         isJosh = true;
         isBritMicah = false
+        isSouthMicah = false
         window.spells.splice(0, spells.length,
             { url: 'josh-spells/1.mp3', volume: 1.0 },
             { url: 'josh-spells/2.mp3', volume: 1.0 },
@@ -950,6 +976,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.stopPropagation();
         isJosh = false;
         isBritMicah = true
+        isSouthMicah = false
         window.spells.splice(0, spells.length,
             { url: 'british-micah-spells/1.mp3', volume: 3.0 },
             { url: 'british-micah-spells/2.mp3', volume: 3.0 },
@@ -958,7 +985,34 @@ document.addEventListener('DOMContentLoaded', () => {
             { url: 'british-micah-spells/5.mp3', volume: 3.0 },
             { url: 'british-micah-spells/6.mp3', volume: 3.0 },
             { url: 'british-micah-spells/7.mp3', volume: 3.0 },
-            { url: 'british-micah-spells/all-clear.mp3', volume: 3.0 }
+        );
+
+        // Cache the new sound
+        for (const spell of spells) {
+            await loadAndCacheSound(spell.url);
+        }
+
+        voiceBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = activeColor;
+        });
+    })
+
+    // Changes the voice lines to Southern Micah's
+    $(".voiceButtons").on("click", "#southMicah", async function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        isJosh = false;
+        isBritMicah = false;
+        isSouthMicah = true
+        window.spells.splice(0, spells.length,
+            { url: 'southern-micah-spells/1.mp3', volume: 1.0 },
+            { url: 'southern-micah-spells/2.mp3', volume: 1.0 },
+            { url: 'southern-micah-spells/3.mp3', volume: 1.0 }, 
+            { url: 'southern-micah-spells/4.mp3', volume: 1.0 },
+            { url: 'southern-micah-spells/5.mp3', volume: 1.0 },
+            { url: 'southern-micah-spells/6.mp3', volume: 1.0 },
+            { url: 'southern-micah-spells/7.mp3', volume: 1.0 },
         );
 
         // Cache the new sound

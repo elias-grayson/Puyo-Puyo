@@ -91,6 +91,33 @@ html body {
     z-index: 0;
 }
 
+/* Grid that displays over the main grid */
+.over-grid {
+    background: black;
+    opacity: 0%;
+    left: 25px;
+    top: 10px;
+    position: absolute;
+    min-width: 288px;
+    min-height: 576px;
+    width: 288px;
+    height: 576px;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
+    border: none;
+    z-index: 5;
+    align-items: center;
+}
+
+.overGridText {
+    color: white;
+    font-family: "Font Awesome 6 Free";
+    opacity: 100%;
+    z-index: 1;
+}
+
 /* Allows the emoji to display on the board */
 .grid::before {
     display: block;
@@ -303,8 +330,6 @@ html body {
 
 /* Applies to buttons that control grid width */ 
 .widthButton {
-    border: 3px solid white;
-    color: white;
     background-color: rgb(46, 46, 46);
     height: auto;
 }
@@ -331,10 +356,9 @@ html body {
     outline-offset: 2px;
 }
 
-/* Applies to the difficulty preset buttons */
-.presetBtn.focus {
-    outline: 2px solid white;
-    outline-offset: 2px;
+.btn:disabled {
+    pointer-events: none;
+    opacity: 0.6;
 }
 
 /* Applies to all buttons when hovering over them */
@@ -375,6 +399,11 @@ html body {
 }
 
 #britMicah {
+    width: 110px;
+}
+
+#southMicah {
+    margin-top: 5px;
     width: 110px;
 }
 
@@ -454,7 +483,7 @@ input[type="range"]::-webkit-slider-thumb {
     justify-content: center;
     color: red;
     font-size: 28px;
-    margin-left: 30px;
+    margin-left: 20px;
     margin-top: 5px;
 }
 
@@ -498,7 +527,6 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Applies to start button */
 #startDisplay {
-    box-sizing: border-box;
     display: flex;
     justify-content: center;
     margin-right: 170px;
@@ -506,7 +534,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Applies to start button */
 #start-button {
-    box-sizing: border-box;
+    border: solid 2px black;
     width: 288px;
     min-width: 90px;
     max-width: 288px;
@@ -516,9 +544,14 @@ input[type="range"]::-webkit-slider-thumb {
     z-index: 1;
 }
 
-/* Applies to hovering over stat button */
+/* Applies to hovering over start button */
 #start-button:hover {
-    opacity: 70%;
+    background-color: rgb(229, 213, 187);
+}
+
+/* Applies to clicking start button */
+#start-button:active {
+    border: solid 2px white;
 }
 
 /* Applies to up next display */

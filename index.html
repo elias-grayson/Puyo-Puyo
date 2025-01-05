@@ -36,7 +36,7 @@
         <!--Navigation bar for the title of the page-->
         <nav class="navbar navbar-light">
             <div class="container-fluid">
-                <a class="navbar-brand mx-auto" id="title">Elias' Puyo Puyo Project</a>
+                <a class="navbar-brand mx-auto" id="title">Elias' Puyo Puyo Project V1.3.2</a>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarID">
                 </div>
@@ -72,7 +72,7 @@
         <div class="container">
            
             <!-- Button to trigger modal -->
-            <div>
+            <div class="btn-wrapper">
                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal" id="custom">
                     Customization
                 </button>
@@ -212,6 +212,7 @@
                                                 style="text-align: center">Xcita (Default)
                                             </button>
                                             <button class="btn col-6 voiceBtn" id="britMicah" href="#">British Micah</button>
+                                            <button class="btn col-6 voiceBtn" id="southMicah" href="#">Southern Micah</button>
                                         </div>
                                     </div>
                                 </div>
@@ -331,6 +332,10 @@
                 <div class="taken belowGrid"></div>
             </div>
 
+            <div class="over-grid">
+                <h2 class="overGridText">Paused</h3>
+            </div>
+
             <div class="mini-grid">
                 <div></div>
                 <div></div>
@@ -346,7 +351,7 @@
                 <div>
                     <h3 style="text-decoration: underline;">Movement:</h3>
                 </div>
-                <div style="margin-top: 10px;">
+                <div style="margin-top: 5px;">
                     <h5 id="left">Left: Left-arrow</h5>
                     <h5 id="right">Right: Right-arrow</h5>
                     <h5 id="down">Down: Down-arrow, S</h5>
@@ -354,7 +359,7 @@
                 <div style="margin-top: 20px; text-decoration: underline;">
                     <h3>Rotation:</h3>
                 </div>
-                    <div style="margin-top: 20px;">
+                    <div style="margin-top: 5px;">
                         <h5 id="clockwise">Clockwise: Up-arrow, D</h5>
                     <h5 id="counterclockwise">Counterclockwise: Z, A</h5>
                 </div>
