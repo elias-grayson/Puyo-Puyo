@@ -95,8 +95,8 @@ html body {
 .over-grid {
     background: black;
     opacity: 0%;
-    left: 25px;
-    top: 10px;
+    margin-right: 382px;
+    margin-top: 10px;
     position: absolute;
     min-width: 288px;
     min-height: 576px;
