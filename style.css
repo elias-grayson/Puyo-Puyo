@@ -232,6 +232,7 @@ html body {
 
 /* Applies to customization button */
 #custom {
+    box-sizing: border-box;
     border: none;
     color: white;
     position: relative;
@@ -240,6 +241,8 @@ html body {
     right: 160px; 
     margin-bottom: 20px;
     white-space: nowrap;
+    overflow: visible;
+    z-index: 5;
 }
 
 #custom:hover {
