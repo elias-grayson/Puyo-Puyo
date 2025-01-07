@@ -1,3 +1,4 @@
+/* This document controls sounds and voice lines when chaining */
 document.addEventListener('DOMContentLoaded', async () => {
 
     // Josh's voice clips
@@ -76,7 +77,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         let pitch = 0.6 + Math.min(chainLength - 1, 6) * (1/9)
 
         // Pauses the current voice line if another one is already being played
-        console.log("current all clear voice: ", currentAllClearVoice)
         if (currentSpell) {
             currentSpell.stop(); // Stop the current audio
             currentSpell = null; // Reset the reference

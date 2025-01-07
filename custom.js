@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const cwControl = document.querySelector('#clockwise');
     const hardDropControl = document.querySelector('#hardDrop');
     const modalHeader = document.querySelector('.modal-header');
-    const custom = document.querySelector('#custom'); // customization buttton
     const backgroundBtns = document.querySelectorAll('.backgroundBtn');
     const controlBtns = document.querySelectorAll('.controlBtn');
     const fontBtns = document.querySelectorAll('.fontButton');
@@ -26,11 +25,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const buttonContainer = document.getElementById("boardWidthContainer");
     const altButton = document.querySelector('#altControls');
     const defaultButton = document.querySelector('#defaultControls');
-    const speedUpToggle = document.querySelector('#speedUpToggle');
+    const formCheck = document.querySelectorAll('.form-check-input');
+    const speedUpToggle = document.querySelector('#speedUpToggle')
+    const ghostPuyoToggle = document.querySelector('#ghostPuyoToggle')
     const rangeSliders = document.querySelectorAll('.form-range');
     const voiceBtns = document.querySelectorAll('.voiceBtn');
+    window.secondaryGrid = document.querySelector('.secondary-grid');
+    let secondarySquares = Array.from(document.querySelectorAll('.secondary-grid div'));
+    let ghostGrid = document.querySelector('.tertiary-grid');
 
     let activeColor = "#0d6efd"; // Current color theme choice
+
+    // Tracks whether the respective font is active
+    window.isEmojiFont = true;
+    window.isFriendFont = false;
+    window.isDukeFont = false;
 
     // Allows only one background button to be highlighted at once
     backgroundBtns.forEach(button => {
@@ -135,24 +144,41 @@ document.addEventListener('DOMContentLoaded', () => {
         randomSecondary = Math.floor(Math.random()*amountOfColors);
     })
 
-    let height = 14; // Height of the grid
+    let height = 14; // Height of the playable grid
+    let secondaryHeight = 12; // Height of the secondary grid
+    window.isGhostEnabled = true;
+    
     // Changes the grid width to the chosen value
     function widthChange(chosen, thisChosen) {
         chosenWidth = chosen; // Get the width from the button's data attribute
-        newChosenWidth = chosenWidth;
         let widthDif = width - chosenWidth; // Difference between old and new width
 
         upNext.style.marginLeft = chosenWidth * 48 + 200 + "px"; // Adjusts position of upnext text based on grid width
         startBtn.style.width = chosenWidth * 96 / 2 + 'px'; // Adjusts width of the start button based on grid width
+        miniGridOverlay.forEach(overlay => {
+            const computedOverlay = window.getComputedStyle(overlay)
+            let newMarginLeft = parseFloat(computedOverlay.marginLeft);
+            newMarginLeft += chosenWidth * 48 - 288;
+            overlay.style.marginLeft = newMarginLeft + "px"
+            console.log("new margin left: ", newMarginLeft)
+        })
 
-        // Updates the width display
+        // Updates the widths for all grids affected
         grid.style.width = `${chosenWidth * 48 + 20}px`; 
         grid.style.minWidth = `${chosenWidth * 48 + 20}px`;
+        pauseOverlay.style.width = `${chosenWidth * 48}px`;
+        pauseOverlay.style.minWidth = `${chosenWidth * 48}px`;
+        secondaryGrid.style.width = `${chosenWidth * 48}px`;
+        secondaryGrid.style.minWidth = `${chosenWidth * 48}px`;
+        ghostGrid.style.width = `${chosenWidth * 48}px`;
+        ghostGrid.style.minWidth = `${chosenWidth * 48}px`;
 
         // Adjust taken squares and grid differences as needed
         let amtOftaken = [];
         let amtOfAbove = [];
-        let gridDifference = squares.length - (chosenWidth * height);
+        let gridDif = squares.length - (chosenWidth * height); // Difference in grid spaces for the grid
+        let secondaryGridDif = secondarySquares.length - (chosenWidth * secondaryHeight);
+        let ghostGridDif = ghostSquares.length - (chosenWidth * secondaryHeight);
 
         // Adds the # of taken grid spaces to the array
         squares.forEach(index => {
@@ -168,45 +194,40 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        let newWidthDif = widthDif; // For iterating through taken
+        let oldWidthDif = widthDif; // For iterating through taken
 
-        // Continue if the chosen grid size is less than the default
+        // Continue if the chosen grid size is less than the previous grid size
         if (chosenWidth < width) {
 
             // Remove elements from the above array until they equal the width
             squares.slice().reverse().forEach(index => {
                 const $newDiv = $("<div></div>");
-                if (index.classList.contains("aboveGrid")) {
-                    if (amtOfAbove.length > chosenWidth) {
-                        const firstIndex = amtOfAbove.shift();
-                        amtOfAbove.push(firstIndex);
-                        $newDiv.attr('id', 'gridDiv');
-                        index.parentNode.appendChild($newDiv[0], index);
-                        index.setAttribute('id', 'gridDiv')
-                        index.classList.remove('aboveGrid');
-                        amtOfAbove.length--;
-                        widthDif--;
-                    }
+                if (index.classList.contains("aboveGrid") && (amtOfAbove.length > chosenWidth)) {
+                    const firstIndex = amtOfAbove.shift();
+                    amtOfAbove.push(firstIndex);
+                    index.parentNode.appendChild($newDiv[0], index);
+                    index.classList.remove('aboveGrid');
+                    amtOfAbove.length--;
+                    widthDif--;
                 }
             });
 
             // Remove elements from the taken array until they equal the width
             amtOftaken.forEach((index) => {
-                if (newWidthDif > 0) {
+                if (oldWidthDif > 0) {
                     index.remove();
-                    newWidthDif--;
+                    oldWidthDif--;
                     widthDif++;
                 }
             });
 
             // Remove grid divs until the proper amount has been reached
             squares.slice().reverse().forEach(index => {
-                if (index.classList.contains("taken")) return;
-                if (index.classList.contains("aboveGrid")) return
-                if (gridDifference > (widthDif)) {
+                if (index.classList.contains("taken") || 
+                index.classList.contains("aboveGrid") || 
+                !(gridDif > (widthDif))) return;
                     index.remove();
-                    widthDif++;
-                }
+                    widthDif++; 
             });
 
             // If there are any more grid divs left over, remove them
@@ -216,134 +237,106 @@ document.addEventListener('DOMContentLoaded', () => {
                     square.remove();
                 }
             });
-        }
 
+            // Update the secondary grid accordingly
+            while (secondaryGridDif !== 0) {
+                secondarySquares[secondaryGridDif].remove();
+                secondaryGridDif--;
+            }
+
+            secondarySquares = Array.from(document.querySelectorAll('.secondary-grid div')); // Update secondary grid
+
+            // Remove grid spaces from ghost grid
+            ghostSquares.forEach(div => div.remove());
+
+            ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div')); // Update ghost grid
+
+            // Add appropriate amount of spaces back to ghost grid
+            while (ghostSquares.length < secondarySquares.length) {
+                const $newDiv = $("<div>");
+
+                ghostGrid.appendChild($newDiv[0]);
+                ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div'));
+            }
+            ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div'));
+        }
 
         // If the chosen grid size is greater than the default, continue
         if (chosenWidth > width) {
-            i = 0
-            if (width < 4 && chosenWidth > 4) chosenWidth = 4;
-            while (i < 2) {
-                let amtOfDivs = [];
-                let newGridDif = chosenWidth*2
-                squares.forEach((square, index) => {
-                    if (square.classList.contains('aboveGrid') || square.classList.contains('taken')) {
-                        square.remove();
-                    }
-                })
+            let amtOfDivs = [];
+            squares.forEach(index => {
+                if (index.classList.contains('aboveGrid') || index.classList.contains('taken')) {
+                    index.remove();
+                }
+            })
 
-                squares = Array.from(document.querySelectorAll('.grid div'));
-                // Adds aboveGrid divs to the squares array until it has reached the desired width
-                amtOfDivs = [];
-                let oldSquares = [];
-                squares.forEach((index) => {
-                    const $newDiv = $("<div>")
-                    if (amtOfDivs.length < ((chosenWidth*height - (squares.length + newGridDif)))) {
-                        $newDiv.attr('id', 'gridDiv')
-                        index.parentNode.appendChild($newDiv[0])
-                    }
-                    amtOfDivs.push($newDiv[0])
-                    oldSquares.push($newDiv[0])
-                });
+            squares = Array.from(document.querySelectorAll('.grid div')); // Update squares
 
-                squares = Array.from(document.querySelectorAll('.grid div'));
-                let nextOldSquares = [];
-                squares.forEach((index) => {
-                    const $newDiv = $("<div>")
-                    nextOldSquares.push($newDiv[0]);
-                    if (amtOfDivs.length < (chosenWidth*height - (oldSquares.length + newGridDif))) {
-                        $newDiv.attr('id', 'gridDiv')
-                        index.parentNode.appendChild($newDiv[0])
-                    }
-                    amtOfDivs.push($newDiv[0])
-                });
+            amtOfDivs = [];
+            let oldSquares = [];
+            while (amtOfDivs.length < (chosenWidth*height - (chosenWidth*2 + squares.length))) {
+                const $newDiv = $("<div>")
+                squares[0].parentNode.appendChild($newDiv[0], squares[0])
+                amtOfDivs.push($newDiv[0])
+                oldSquares.push($newDiv[0])
+                }
 
-                squares = Array.from(document.querySelectorAll('.grid div'));
-                let secondNextOldSquares = [];
-                squares.forEach(index => {
-                    const $newDiv = $("<div>")
-                    $newDiv.attr('id', 'gridDiv')
-                    nextOldSquares.push($newDiv[0]);
-                })
-                squares.forEach((index) => {
-                    const $newDiv = $("<div>")
-                    if (amtOfDivs.length < (chosenWidth*height - (nextOldSquares.length + newGridDif))) {
-                        $newDiv.attr('id', 'gridDiv')
-                        index.parentNode.appendChild($newDiv[0])
-                        amtOfDivs.push($newDiv[0])
-                    }
-                });
+            // Adds above grid divs to the squares array
+            squares = Array.from(document.querySelectorAll('.grid div'));
+            let amtOfAboves = []
+            squares.slice().forEach((index) => {
+                if (amtOfAboves.length < chosenWidth) {
+                    const $newAboveDiv = $("<div>")
+                    $newAboveDiv.attr('class', 'aboveGrid');
+                    index.parentNode.prepend($newAboveDiv[0]);
+                    amtOfAboves.push($newAboveDiv[0])
+                }
+            });
 
-                squares = Array.from(document.querySelectorAll('.grid div'));
-                let thirdNextOldSquares = [];
-                squares.forEach(index => {
-                    if (secondNextOldSquares.length >= (chosenWidth*height + newGridDif)) return;
-                    const $newDiv = $("<div>")
-                    $newDiv.attr('id', 'gridDiv')
-                    secondNextOldSquares.push($newDiv[0]);
-                })
-                squares.forEach(index => {
-                    if (secondNextOldSquares.length >= (chosenWidth*height - newGridDif)) return;
-                    const $newDiv = $("<div>")
-                    $newDiv.attr('id', 'gridDiv')
-                    secondNextOldSquares.push($newDiv[0]);
-                })
-                squares.forEach((index) => {
-                    const $newDiv = $("<div>")
-                    if (amtOfDivs.length < (secondNextOldSquares.length - width*height)) {
-                        $newDiv.attr('id', 'gridDiv')
-                        index.parentNode.appendChild($newDiv[0])
-                        amtOfDivs.push($newDiv[0])
-                    }
-                    thirdNextOldSquares.push($newDiv[0]);
-                });
+            squares = Array.from(document.querySelectorAll('.grid div'));
+            // Adds taken divs to the squares array until it has reached the desired width
+            let amtOfTakens = [];
+            squares.slice().reverse().forEach((index) => {
+                if (amtOfTakens.length < chosenWidth) {
+                    const $newTakenDiv = $("<div>").addClass("taken belowGrid");
+                    index.parentNode.appendChild($newTakenDiv[0]);
+                    amtOfTakens.push($newTakenDiv[0]);
+                    widthDif--;
+                }
+            });
+        
+            // Update the secondary grid spaces
+            while (secondaryGridDif !== 0)  {
+                const $newDiv = $("<div>")
+                secondarySquares[0].parentNode.appendChild($newDiv[0], secondarySquares[0]);
+                secondaryGridDif++;
+            }
 
-                squares = Array.from(document.querySelectorAll('.grid div'));
-                // Adds divs to the squares array until the grid has reached the proper length
-                let amtOfAboves = []
-                squares.slice().forEach((index) => {
-                    if (amtOfAboves.length < chosenWidth) {
-                        const $newAboveDiv = $("<div>")
-                        $newAboveDiv.attr('class', 'aboveGrid');
-                        index.parentNode.prepend($newAboveDiv[0]);
-                        amtOfAboves.push($newAboveDiv[0])
-                    }
-                });
+            secondarySquares = Array.from(document.querySelectorAll('.secondary-grid div'));
 
-                squares = Array.from(document.querySelectorAll('.grid div'));
-                // Adds taken divs to the squares array until it has reached the desired width
-                let amtOfTakens = [];
-                squares.slice().reverse().forEach((index) => {
-                    if (amtOfTakens.length < chosenWidth) {
-                        const $newTakenDiv = $("<div>").addClass("taken belowGrid");
-                        index.parentNode.appendChild($newTakenDiv[0]);
-                        amtOfTakens.push($newTakenDiv[0]);
-                        widthDif--;
-                    }
-                });
-                squares = Array.from(document.querySelectorAll('.grid div'));
-                chosenWidth = newChosenWidth;
-                i++;
+            ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div'));
+
+            // Update the ghost grid spaces
+            while (ghostSquares.length < secondarySquares.length)  {
+                const $newDiv = $("<div>")
+                ghostGrid.appendChild($newDiv[0]);
+                ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div'));
             }
         }
-        if (showImageClicked) {
+        if (isFriendFont) {
             document.querySelectorAll('.grid div').forEach((puyo) => {
-                puyo.classList.add('fontState');
-                document.querySelectorAll('.puyoBlob').forEach((puyo) => {
-                    puyo.style.border = "1px solid rgba(0, 0, 0, 0.3)";
-                    puyo.style.borderRadius = '0%';
-                    puyo.style.backgroundColor = '';
-                    puyo.classList.add('fontState');
-                });
+                puyo.classList.add('showFriends');
+                puyo.classList.remove('showDuke');
+            });
+        } else if (isDukeFont){
+            document.querySelectorAll('.grid div').forEach((puyo) => {
+                puyo.classList.remove('showFriends'); 
+                puyo.classList.add('showDuke');
             });
         } else {
             document.querySelectorAll('.grid div').forEach((puyo) => {
-                puyo.classList.remove('fontState'); 
-                puyo.style.backgroundColor = '';
-            });
-            document.querySelectorAll('.puyoBlob').forEach((puyo) => {
-                puyo.style.border = "1px solid rgba(0, 0, 0, 0.3)";
-                puyo.classList.remove('fontState');
+                puyo.classList.remove('showFriends'); 
+                puyo.classList.remove('showDuke');
             });
         }
         width = chosenWidth
@@ -355,12 +348,15 @@ document.addEventListener('DOMContentLoaded', () => {
             [Number(width), Number(width) - 1],
         ];
         squares = Array.from(document.querySelectorAll('.grid div'));
+        secondarySquares = Array.from(document.querySelectorAll('.secondary-grid div'));
+        ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div'));
+        ghostGrid = document.querySelector('.tertiary-grid');
         current = puyo[currentRotation].map(Number); // Assure all elements are numbers
         squares.length = width * height;
         width = +width;
         currentPosition = Math.ceil(width / 2 - 1);
         if (width == 1)
-            currentPosition = Math.floor(1);
+            currentPosition = 0;
 
         $(".widthButton").removeClass("active");  // Removes 'active' from all buttons
         thisChosen.addClass("active"); // Adds 'active' to the clicked button
@@ -372,33 +368,59 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Returns the puyos to their default font before the images
-    document.getElementById('showFont').addEventListener('click', () => {
+    document.getElementById('showEmoji').addEventListener('click', () => {
         displayShape();
         document.querySelectorAll('.grid div').forEach((puyo) => {
-            puyo.classList.remove('fontState'); 
-            puyo.style.backgroundColor = '';
-            puyo.style.lineHeight = '1';
+            puyo.classList.remove('showFriends'); 
+            puyo.classList.remove('showDuke');
         });
         document.querySelectorAll('.puyoBlob').forEach((puyo) => {
-            puyo.style.border = "1px solid rgba(0, 0, 0, 0.3)";
-            puyo.classList.remove('fontState');
-            puyo.style.lineHeight = '1';
+            puyo.classList.remove('showFriends');
+            puyo.classList.remove('showDuke');
         });
-        showImageClicked = false;
+        isEmojiFont = true;
+        isFriendFont = false;
+        isDukeFont = false;
     });
 
     // Replaces the default font with images
-    document.getElementById('showImage').addEventListener('click', () => {
+    document.getElementById('showFriends').addEventListener('click', () => {
         displayShape();
         document.querySelectorAll('.grid div').forEach((puyo) => {
-            puyo.classList.add('fontState');
+            puyo.classList.add('showFriends');
             document.querySelectorAll('.puyoBlob').forEach((puyo) => {
-                puyo.style.border = "1px solid rgba(0, 0, 0, 0.3)";
-                puyo.classList.add('fontState');
-                puyo.style.borderRadius = '50%';
+                puyo.classList.add('showFriends');
             });
         });
-        showImageClicked = true;
+        document.querySelectorAll('.grid div').forEach((puyo) => {
+            puyo.classList.remove('showDuke');
+        });
+        document.querySelectorAll('.puyoBlob').forEach((puyo) => {
+            puyo.classList.remove('showDuke');
+        });
+        isEmojiFont = false;
+        isFriendFont = true;
+        isDukeFont = false;
+    });
+
+    // Returns the puyos to their default font before the images
+    document.getElementById('showDuke').addEventListener('click', () => {
+        displayShape();
+        document.querySelectorAll('.grid div').forEach((puyo) => {
+            puyo.classList.add('showDuke');
+            document.querySelectorAll('.puyoBlob').forEach((puyo) => {
+                puyo.classList.add('showDuke');
+            });
+        });
+        document.querySelectorAll('.grid div').forEach((puyo) => {
+            puyo.classList.remove('showFriends'); 
+        });
+        document.querySelectorAll('.puyoBlob').forEach((puyo) => {
+            puyo.classList.remove('showFriends');
+        });
+        isEmojiFont = false;
+        isFriendFont = false;
+        isDukeFont = true;
     });
 
     // Changes the background to green when clicked
@@ -406,20 +428,22 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
 
         // Changes the grids an navbar backgrounds to green gradient
-        grid.style.background = "radial-gradient(#4eb760, rgb(27, 78, 41))"
+        secondaryGrid.style.background = "radial-gradient(#4eb760, rgb(27, 78, 41))"
         miniGrid.style.background = "radial-gradient(#4eb760, rgb(27, 78, 41))"
         nextMiniGrid.style.background = "radial-gradient(#4eb760, rgb(27, 78, 41))"
         navbar.style.background = "linear-gradient(to top, rgb(16, 72, 31), rgb(37, 201, 59))"
         modalHeader.style.background = "linear-gradient(to top, rgb(16, 72, 31), rgb(37, 201, 59))"
         custom.style.backgroundColor = "rgb(37, 201, 59)"
         activeColor = "rgb(37, 201, 59)"
-        if (speedUpToggle.checked) {
-            speedUpToggle.style.backgroundColor = activeColor;
-            speedUpToggle.style.borderColor = activeColor;
-        } else {
-            speedUpToggle.style.backgroundColor = "";
-            speedUpToggle.style.borderColor = "";
-        }
+        formCheck.forEach(checkBox => {
+            if (checkBox.checked) {
+                checkBox.style.backgroundColor = activeColor;
+                checkBox.style.borderColor = activeColor;
+            } else {
+                checkBox.style.backgroundColor = "";
+                checkBox.style.borderColor = "";
+            }
+        })
 
         // Changes the color of the range slider thumbs
         rangeSliders.forEach(slider => {
@@ -459,11 +483,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Changes the background detail back to default
-        // grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
-        // grid.style.setProperty('--before-font-size', '100px');
-        // grid.style.setProperty('--before-color', 'white');
-        // grid.style.setProperty('--before-opacity', '30%');
-        // grid.style.setProperty('--before-content', '"\\f005"');
+        // secondaryGrid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
+        // secondaryGrid.style.setProperty('--before-font-size', '100px');
+        // secondaryGrid.style.setProperty('--before-color', 'white');
+        // secondaryGrid.style.setProperty('--before-opacity', '30%');
+        // secondaryGrid.style.setProperty('--before-content', '"\\f005"');
     })
 
     // Changes the background to red when clicked
@@ -471,20 +495,22 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
 
         // Changes the grids an navbar backgrounds to red gradient
-        grid.style.background = "radial-gradient(#d48f8f, rgb(121, 0, 0))"
+        secondaryGrid.style.background = "radial-gradient(#d48f8f, rgb(121, 0, 0))"
         miniGrid.style.background = "radial-gradient(#d48f8f, rgb(121, 0, 0))"
         nextMiniGrid.style.background = "radial-gradient(#d48f8f, rgb(121, 0, 0))"
         navbar.style.background = "linear-gradient(to top, rgb(103, 23, 23), rgb(255, 30, 30))"
         modalHeader.style.background = "linear-gradient(to top, rgb(103, 23, 23), rgb(255, 30, 30))"
         custom.style.backgroundColor = "rgb(255, 30, 30)"
         activeColor = "rgb(255, 30, 30)"
-        if (speedUpToggle.checked) {
-            speedUpToggle.style.backgroundColor = activeColor;
-            speedUpToggle.style.borderColor = activeColor;
-        } else {
-            speedUpToggle.style.backgroundColor = "";
-            speedUpToggle.style.borderColor = "";
-        }
+        formCheck.forEach(checkBox => {
+            if (checkBox.checked) {
+                checkBox.style.backgroundColor = activeColor;
+                checkBox.style.borderColor = activeColor;
+            } else {
+                checkBox.style.backgroundColor = "";
+                checkBox.style.borderColor = "";
+            }
+        })
 
         // Changes the color of the range slider thumbs
         rangeSliders.forEach(slider => {
@@ -524,11 +550,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Changes the background detail back to default
-        // grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
-        // grid.style.setProperty('--before-font-size', '100px');
-        // grid.style.setProperty('--before-color', 'white');
-        // grid.style.setProperty('--before-opacity', '30%');
-        // grid.style.setProperty('--before-content', '"\\f005"');
+        // secondaryGrid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
+        // secondaryGrid.style.setProperty('--before-font-size', '100px');
+        // secondaryGrid.style.setProperty('--before-color', 'white');
+        // secondaryGrid.style.setProperty('--before-opacity', '30%');
+        // secondaryGrid.style.setProperty('--before-content', '"\\f005"');
     })
 
     // Changes the background to purple and changes the background icon to "Elias" in comic sans when clicked
@@ -536,20 +562,22 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault(); 
 
         // Changes the grids an navbar backgrounds to purple gradient
-        grid.style.background = "radial-gradient(#c489ff, rgb(76, 30, 98))"
+        secondaryGrid.style.background = "radial-gradient(#c489ff, rgb(76, 30, 98))"
         miniGrid.style.background = "radial-gradient(#c489ff, rgb(76, 30, 98))"
         nextMiniGrid.style.background = "radial-gradient(#c489ff, rgb(76, 30, 98))"
         navbar.style.background = "linear-gradient(to top, rgb(54, 17, 72), rgb(183, 60, 255))"
         modalHeader.style.background = "linear-gradient(to top, rgb(54, 17, 72), rgb(183, 60, 255))"
         custom.style.backgroundColor = "rgb(183, 60, 255)"
         activeColor = "rgb(183, 60, 255)"
-        if (speedUpToggle.checked) {
-            speedUpToggle.style.backgroundColor = activeColor;
-            speedUpToggle.style.borderColor = activeColor;
-        } else {
-            speedUpToggle.style.backgroundColor = "";
-            speedUpToggle.style.borderColor = "";
-        }
+        formCheck.forEach(checkBox => {
+            if (checkBox.checked) {
+                checkBox.style.backgroundColor = activeColor;
+                checkBox.style.borderColor = activeColor;
+            } else {
+                checkBox.style.backgroundColor = "";
+                checkBox.style.borderColor = "";
+            }
+        });
 
         // Changes the color of the range slider thumbs
         rangeSliders.forEach(slider => {
@@ -589,11 +617,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Changes the background detail to Elias in comic sans
-        // grid.style.setProperty('--before-content', '"Elias :)"'); 
-        // grid.style.setProperty('--before-font-size', '30px'); 
-        // grid.style.setProperty('--before-color', 'black');
-        // grid.style.setProperty('--before-opacity', '100%');
-        // grid.style.setProperty('--font-family', '"Comic Sans MS", cursive, sans-serif');
+        // secondaryGrid.style.setProperty('--before-content', '"Elias :)"'); 
+        // secondaryGrid.style.setProperty('--before-font-size', '30px'); 
+        // secondaryGrid.style.setProperty('--before-color', 'black');
+        // secondaryGrid.style.setProperty('--before-opacity', '100%');
+        // secondaryGrid.style.setProperty('--font-family', '"Comic Sans MS", cursive, sans-serif');
     })
 
     // Returns the background back to blue when clicked
@@ -601,20 +629,22 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
 
         // Changes the grids an navbar backgrounds to blue gradient
-        grid.style.background = "radial-gradient(#64a2ff, rgb(54, 54, 148))"
+        secondaryGrid.style.background = "radial-gradient(#64a2ff, rgb(54, 54, 148))"
         miniGrid.style.background = "radial-gradient(#64a2ff, rgb(54, 54, 148))"
         nextMiniGrid.style.background = "radial-gradient(#64a2ff, rgb(54, 54, 148))"
         navbar.style.background = "linear-gradient(to top, midnightblue, dodgerblue)"
         modalHeader.style.background = "linear-gradient(to top, midnightblue, dodgerblue)"
         custom.style.backgroundColor = "#0d6efd"
         activeColor = "#0d6efd"
-        if (speedUpToggle.checked) {
-            speedUpToggle.style.backgroundColor = activeColor;
-            speedUpToggle.style.borderColor = activeColor;
-        } else {
-            speedUpToggle.style.backgroundColor = "";
-            speedUpToggle.style.borderColor = "";
-        }
+        formCheck.forEach(checkBox => {
+            if (checkBox.checked) {
+                checkBox.style.backgroundColor = activeColor;
+                checkBox.style.borderColor = activeColor;
+            } else {
+                checkBox.style.backgroundColor = "";
+                checkBox.style.borderColor = "";
+            }
+        });
 
         // Changes the color of the range slider thumbs
         rangeSliders.forEach(slider => {
@@ -655,11 +685,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Changes the background back to default
-        // grid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
-        // grid.style.setProperty('--before-font-size', '100px');
-        // grid.style.setProperty('--before-color', 'white');
-        // grid.style.setProperty('--before-opacity', '30%');
-        // grid.style.setProperty('--before-content', '"\\f005"');
+        // secondaryGrid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
+        // secondaryGrid.style.setProperty('--before-font-size', '100px');
+        // secondaryGrid.style.setProperty('--before-color', 'white');
+        // secondaryGrid.style.setProperty('--before-opacity', '30%');
+        // secondaryGrid.style.setProperty('--before-content', '"\\f005"');
     })
 
     // Easy difficulty
@@ -674,6 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
         randomSecondary = Math.floor(Math.random()*amountOfColors);
         timeToSpeedUp = 90000;
         remainingTime = timeToSpeedUp;
+        isHidingGridEnabled = false;
 
         // Makes sure active buttons stay the chosen color theme
         controlBtns.forEach(button => {
@@ -711,6 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
         remainingTime = timeToSpeedUp;
         random = Math.floor(Math.random()*amountOfColors);
         randomSecondary = Math.floor(Math.random()*amountOfColors);
+        isHidingGridEnabled = false;
 
         // Makes sure active buttons stay the chosen color theme
         controlBtns.forEach(button => {
@@ -748,6 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
         remainingTime = timeToSpeedUp;
         random = Math.floor(Math.random()*amountOfColors);
         randomSecondary = Math.floor(Math.random()*amountOfColors);
+        isHidingGridEnabled = true;
 
         // Makes sure active buttons stay the chosen color theme
         controlBtns.forEach(button => {
@@ -785,6 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
         remainingTime = timeToSpeedUp;
         random = Math.floor(Math.random()*amountOfColors);
         randomSecondary = Math.floor(Math.random()*amountOfColors);
+        isHidingGridEnabled = true;
 
         // Makes sure active buttons stay the chosen color theme
         controlBtns.forEach(button => {
@@ -935,7 +969,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Allows speeding up to be turned on and off
-    speedUpToggle.addEventListener('change', () => {
+    speedUpToggle.addEventListener('change', function() {
+        console.log("speed up enabled")
         if (speedUpToggle.checked) {
             isSpeedUpEnabled = true;
             speedUpToggle.style.backgroundColor = activeColor;
@@ -944,6 +979,19 @@ document.addEventListener('DOMContentLoaded', () => {
             isSpeedUpEnabled = false;
             speedUpToggle.style.backgroundColor = "";
             speedUpToggle.style.borderColor = "";
+        }
+    });
+
+    // Allows speeding up to be turned on and off
+    ghostPuyoToggle.addEventListener('change', function() {
+        if (ghostPuyoToggle.checked) {
+            isGhostEnabled = true;
+            ghostPuyoToggle.style.backgroundColor = activeColor;
+            ghostPuyoToggle.style.borderColor = activeColor;
+        } else {
+            isGhostEnabled = false;
+            ghostPuyoToggle.style.backgroundColor = "";
+            ghostPuyoToggle.style.borderColor = "";
         }
     });
 

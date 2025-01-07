@@ -112,7 +112,7 @@
                                 </div>
 
                                 <!-- Fall Speed Customization -->
-                                <div class="dropdown" style="color: white;">
+                                <div class="first-custom" style="color: white;">
                                     <a style="font-family: 'Font Awesome 6 Free'">Fall Speed</a>
                                     <input title="How long it takes for puyos to move down one grid space" 
                                     type="range" class="form-range" id="fallSpeedInput" min="100" max="3000" step="100" value="1000">
@@ -120,7 +120,7 @@
                                 </div>
                 
                                 <!-- Puyos to Clear Customization -->
-                                 <div class="nextDropdown" style="color: white;" >
+                                 <div class="next-custom" style="color: white;" >
                                     <a style="font-family: 'Font Awesome 6 Free'">Puyos to Pop</a>
                                     <input title="How many same colored puyos need to be connected to pop them"
                                     type="range" class="form-range" id="puyoPopInput" value="4" min="2" max="10" step="1">
@@ -128,7 +128,7 @@
                                 </div>
 
                                 <!-- Amount of Colors Customization -->
-                                <div class="nextDropdown" style="color: white;">
+                                <div class="next-custom" style="color: white;">
                                     <a style="font-family: 'Font Awesome 6 Free'">Amount of Colors</a>
                                     <input title="How many different colors will appear" 
                                     type="range" class="form-range" id="amtPuyoInput" value="4" min="1" max="7" step="1">
@@ -136,32 +136,32 @@
                                 </div>
                 
                                 <!-- Controls Customization -->
-                                <div class="nextDropdown" style="color: white; ">
+                                <div class="next-custom" style="color: white; ">
                                     <a style="font-family: 'Font Awesome 6 Free'">Controls</a>
                                     <div class="row" style="margin-top: 5px; justify-content: center;" id="controlContainer">
-                                        <button title="I think this is the default control scheme for Tetris games? Idk I grabbed this off of the tetris site" 
+                                        <button title="I think this is the default control scheme for Tetris games? Idk I grabbed these off of the tetris site" 
                                         class="btn col-5 active controlBtn" id="defaultControls">Default</button>
                                         <button title="My preferred control scheme" class="btn col-5 controlBtn" id="altControls">Flipped</button>
                                     </div>
                                 </div>
                 
                                 <!-- Board Width Customization -->
-                                <div class="nextDropdown" id="boardChange" style="color: white; border-bottom: 2px inset white;">
+                                <div class="next-custom" id="boardChange" style="color: white; border-bottom: 2px inset white;">
                                     <a style="font-family: 'Font Awesome 6 Free';">Board Width</a>
                                     <div id="boardWidthContainer" class="row" style="margin-top: 10px; margin-bottom: 5px;">
                                         <div class="row-6 col" style="justify-content: center;">
-                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="1">1</button>
-                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="2">2</button>
-                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="3">3</button>
-                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="4">4</button>
-                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="5">5</button>
+                                            <button title="Modifies how wide the board is" class="btn widthButton" data-width="1">1</button>
+                                            <button title="Modifies how wide the board is" class="btn widthButton" data-width="2">2</button>
+                                            <button title="Modifies how wide the board is" class="btn widthButton" data-width="3">3</button>
+                                            <button title="Modifies how wide the board is" class="btn widthButton" data-width="4">4</button>
+                                            <button title="Modifies how wide the board is" class="btn widthButton" data-width="5">5</button>
                                         </div>
                                             <div class="row-6 col" style="justify-content: center;">
-                                            <button title="Modifies how wide the grid is" class="btn widthButton active" data-width="6">6</button>
-                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="7">7</button>
-                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="8">8</button>
-                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="9">9</button>
-                                            <button title="Modifies how wide the grid is" class="btn widthButton" data-width="10">10</button>
+                                            <button title="Modifies how wide the board is" class="btn widthButton active" data-width="6">6</button>
+                                            <button title="Modifies how wide the board is" class="btn widthButton" data-width="7">7</button>
+                                            <button title="Modifies how wide the board is" class="btn widthButton" data-width="8">8</button>
+                                            <button title="Modifies how wide the board is" class="btn widthButton" data-width="9">9</button>
+                                            <button title="Modifies how wide the board is" class="btn widthButton" data-width="10">10</button>
                                         </div>
                                     </div>
                                     <!-- <span id="gridSpaces">6 grid spaces (default)</span> -->
@@ -175,22 +175,21 @@
                                 </div>
 
                                 <!--Puyo Font Customization-->
-                                <div class="dropdown" style="padding-bottom: 20px;">
+                                <div class="first-custom" style="padding-bottom: 20px;">
                                     <a style="color: white; font-family: 'Font Awesome 6 Free'">Puyo Font</a>
                                     <div id="aestheticButtonContainer" class="row" style="margin: 3px; margin-top: 10px; justify-content: center;">
-                                        <button title="Emojis from fontawesome" class="btn fontButton active" id="showFont">emojis (default)</button>
-                                        <button title="Pictures of my college friends in 0.5x zoom" class="btn fontButton" id="showImage">Friend .5s</button>
+                                        <button title="Emojis from fontawesome" style="margin-bottom: 5px;" class="btn fontButton active" id="showEmoji">emojis (default)</button>
+                                        <button title="Pictures of my college friends in 0.5x zoom" style="width: 117px; margin-right: 5px;" class="btn fontButton col-6" id="showFriends">Friend .5s</button>
+                                        <button title="Pictures of my cute beagle, Duke" style="width: 117px" class="btn fontButton col-6" id="showDuke">Duke</button>
                                     </div>
                                 </div>
             
                                 <!--Board Background Customization-->
-                                <div class="nextDropdown" id="boardBackground">
+                                <div class="next-custom" id="boardBackground">
                                     <a style="font-family: 'Font Awesome 6 Free'">Color Theme</a>
                                     <div class="row" style="justify-content: center; margin-top: 15px;">
                                         <div class="backGroundBtn row">
-                                            <button 
-                                                class="btn col-6 backgroundBtn active" 
-                                                id="blueBackground" 
+                                            <button class="btn col-6 backgroundBtn active" id="blueBackground" 
                                                 style="white-space: nowrap; text-align: left">Blue (Default)
                                             </button>
                                             <button class="btn col-6 backgroundBtn" id="redBackground" href="#">Red</button>
@@ -202,28 +201,38 @@
                                     </div>
                                 </div>
 
-                                <div class="nextDropdown" id="voiceLines">
+                                <div class="next-custom" id="voiceLines">
                                     <a style="font-family: 'Font Awesome 6 Free'">Voice Lines</a>
                                     <div class="row" style="justify-content: center; margin-top: 15px;">
                                         <div class="voiceButtons row">
-                                            <button 
-                                                class="btn col-6 voiceBtn active" 
-                                                id="joshVoice" 
-                                                style="text-align: center">Xcita (Default)
+                                            <button title="One of my best friends: Josh. He opted to go for some sort of bow wielding character"
+                                                class="btn col-6 voiceBtn active" id="joshVoice" style="text-align: center">Josh (Default)
                                             </button>
-                                            <button class="btn col-6 voiceBtn" id="britMicah" href="#">British Micah</button>
-                                            <button class="btn col-6 voiceBtn" id="southMicah" href="#">Southern Micah</button>
+                                            <button title="My younger brother Micah in a british accent. He just ended up saying a lot of sophisticated phrases"
+                                            class="btn col-6 voiceBtn" id="britMicah" href="#">British Micah</button>
+                                            <button title="My younger brother again, but with a southern accent using more over-the-top cowboy-esque lines"
+                                            class="btn col-6 voiceBtn" id="southMicah" href="#">Southern Micah</button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="form-check" style="color: white; margin-top: 15px; margin-left: 10px;">
-                                    <input title="Toggles whether the game will speed up after a certain amount of time" 
-                                    class="form-check-input" type="checkbox" value="" id="speedUpToggle" checked>
-                                    <label title="Toggles whether the game will speed up after a certain amount of time" 
-                                    class="form-check-label" for="speedUpToggle">
-                                        Speed up
-                                    </label>
+                                
+                                <div class="form-check">
+                                    <div class="col-6">
+                                        <input title="Whether the game will speed up after a certain amount of time" 
+                                        class="form-check-input" type="checkbox" value="" id="speedUpToggle" checked>
+                                        <label title="Whether the game will speed up after a certain amount of time" 
+                                        class="form-check-label" for="speedUpToggle">
+                                            Speed up
+                                        </label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input title="Whether ghost Puyos will show up" 
+                                        class="form-check-input " type="checkbox" value="" id="ghostPuyoToggle" checked>
+                                        <label title="Whether ghost Puyos will show up" 
+                                        class="form-check-label" for="ghostPuyoToggle">
+                                            Ghost puyos
+                                        </label>
+                                    </div>
                                 </div>
                                 </div>
                             </div>
@@ -245,6 +254,7 @@
                 <h3></h3>
             </div>
 
+            <!--Grid in which the game is played-->
             <div class="grid">
                 <div class="aboveGrid"></div>
                 <div class="aboveGrid"></div>
@@ -252,78 +262,78 @@
                 <div class="aboveGrid"></div>
                 <div class="aboveGrid"></div>
                 <div class="aboveGrid"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
-                <div id="gridDiv"></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
                 <div class="taken belowGrid"></div>
                 <div class="taken belowGrid"></div>
                 <div class="taken belowGrid"></div>
@@ -332,18 +342,185 @@
                 <div class="taken belowGrid"></div>
             </div>
 
-            <div class="over-grid">
-                <h2 class="overGridText">Paused</h3>
+            <!--The background of the grid-->
+            <div class="secondary-grid">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
 
+            <!--Grid for ghost puyos-->
+            <div class="tertiary-grid">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+
+            <!--Displays when the game is paused-->
+            <div class="grid-pause-overlay">
+                <h2 class="pauseOverlayText">Paused</h3>
+            </div>
+
+            <!--Displays when the game is paused-->
+            <div class="grid-overlay">
+            </div>
+
+            <!--Displays the next set of puyos-->
             <div class="mini-grid">
                 <div></div>
                 <div></div>
             </div>
 
+            <!--Pause overlay for mini grid-->
+            <div class="mini-grid-overlay" id="miniOverlay">
+            </div>
+
+            <!--Displays the second next set of puyos-->
             <div class="next-mini-grid">
                 <div></div>
                 <div></div>
+            </div>
+
+            <!--Pause overlay for second mini grid-->
+            <div class="mini-grid-overlay" id="nextMiniOverlay">
             </div>
 
             <!--Controls Display-->
@@ -355,6 +532,7 @@
                     <h5 id="left">Left: Left-arrow</h5>
                     <h5 id="right">Right: Right-arrow</h5>
                     <h5 id="down">Down: Down-arrow, S</h5>
+                    <h5 id="hardDrop">Hard drop: Space</h5>
                 </div>
                 <div style="margin-top: 20px; text-decoration: underline;">
                     <h3>Rotation:</h3>
@@ -365,7 +543,6 @@
                 </div>
                 <div style="margin-top: 20px;">
                     <h5 id="pause">Pause/Play: Escape</h5>
-                    <h5 id="hardDrop">Hard drop: Space</h5>
                 </div>
             </div>
         </div>

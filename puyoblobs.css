@@ -1,25 +1,21 @@
+/* This file styles everything regarding the puys themselves*/
+
 /* Applies to every puyo */
 .puyoBlob {
     border-radius: 50%; 
     z-index: 1;
-    display: block
+    display: block;
 }
 
-.puyoBorder {
-    content: '';
-    border-radius: 0%;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 1); 
-}
-
-/* Applies to all of the puyos */
+/* Applies to all colored puyos */
 .redPuyo, .greenPuyo, .bluePuyo, .purplePuyo, .yellowPuyo, .tealPuyo, .pinkPuyo {
     font-family: "Font Awesome 6 Free"; 
     font-weight: 100;
     font-size: 48px;
     text-align: center;
-    line-height: 1;
+    line-height: 1.05;
     z-index: 1;
-    display: block
+    display: block;
 }
 
 /* Allows the puyos to have a font */
@@ -37,95 +33,175 @@
     background-position: center top;
     width: 48px;
     height: 48px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
     background-image: none;
     background-color: '';
     filter: none;
     z-index: 1;
+    
 }
 
 /* Fonts for all 7 puyos */
 .redPuyo::before {
-    content: "\f556"; /* Unicode for 'face-rolling-eyes' icon */
+    content: "\f556"; /* Unicode for 'face-angry' icon */
+    margin-left: 2px;
 }
-
 .greenPuyo::before {
     content: "\f5a5"; /* Unicode for 'face-rolling-eyes' icon */
+    margin-left: 2px;
 }
-
 .bluePuyo::before {
-    content: "\f5c8"; /* Unicode for 'face-rolling-eyes' icon */
+    content: "\f5c8"; /* Unicode for 'face-tired' icon */
+    margin-left: 2px;
 }
-
 .yellowPuyo::before {
-    content: "\f59a"; /* Unicode for 'face-rolling-eyes' icon */
+    content: "\f59a"; /* Unicode for 'face-laugh-beam' icon */
+    margin-left: 2px;
 }
-
 .purplePuyo::before {
-    content: "\f597"; /* Unicode for 'face-rolling-eyes' icon */
+    content: "\f597"; /* Unicode for 'face-kiss-beam' icon */
+    margin-left: 2px;
 }
-
 .tealPuyo::before {
     content: "\f5b3"; /* Unicode for 'face-sad-cry' icon */
+    margin-left: 2px;
 }
-
 .pinkPuyo::before {
     content: "\f58b"; /* Unicode for 'face-grin-tongue-wink' icon */
+    margin-left: 2px;
 }
 
-/* Images of friends for all colored puyos */
-.redPuyo.fontState::before {
-    box-shadow: 0 0 0 1px red; /* Circular background */
-    border-radius: 50%; /* Makes the shadow circular */
-    background-image: url('images/elias.jpg');
+/* Images of Duke for all colored puyos */
+.redPuyo.showFriends::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('friend-images/elias.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-40deg) brightness(0.9);
     content: '';
+    margin-left: 0px;
 }
-
-.greenPuyo.fontState::before {
-    box-shadow: 0 0 0 1px forestgreen; /* Circular background */
-    border-radius: 100%; /* Makes the shadow circular */
-    background-image: url('images/sam.jpg');
+.greenPuyo.showFriends::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('friend-images/sam.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-300deg) brightness(0.9);
     content: '';
+    margin-left: 0px;
 }
-
-.bluePuyo.fontState::before {
-    box-shadow: 0 0 0 1px dodgerblue; /* Circular background */
-    border-radius: 100%; /* Makes the shadow circular */
-    background-image: url('images/jess.jpg');
+.bluePuyo.showFriends::before {
+    border-radius: 50%; 
+    border: solid 3px black;
+    background-image: url('friend-images/jess.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-170deg) brightness(0.8);
     content: '';
+    margin-left: 0px;
 }
-
-.yellowPuyo.fontState::before {
-    box-shadow: 0 0 0 1px yellow; /* Circular background */
-    border-radius: 50%; /* Makes the shadow circular */
-    background-image: url('/images/maggie.jpg');
+.yellowPuyo.showFriends::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('/friend-images/maggie.jpg');
     filter: sepia(10) saturate(10) hue-rotate(20deg) brightness(1.2);
     content: '';
+    margin-left: 0px;
 }
-
-.purplePuyo.fontState::before {
-    box-shadow: 0 0 0 1px blueviolet; /* Circular background */
-    border-radius: 50%; /* Makes the shadow circular */
-    background-image: url('images/ceci.jpg');
-    filter: sepia(10) saturate(20) hue-rotate(-140deg) brightness(0.9);
+.purplePuyo.showFriends::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('friend-images/ceci.jpg');
+    filter: sepia(10) saturate(20) hue-rotate(-120deg) brightness(0.9);
     content: '';
+    margin-left: 0px;
 }
-
-.tealPuyo.fontState::before {
-    box-shadow: 0 0 0 1px teal; /* Circular background */
-    border-radius: 50%; /* Makes the shadow circular */
-    background-image: url('/images/daniel.jpg');
+.tealPuyo.showFriends::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('/friend-images/daniel.jpg');
     filter: sepia(10) saturate(5) hue-rotate(-230deg) brightness(0.8);
     content: '';
+    margin-left: 0px;
 }
-
-.pinkPuyo.fontState::before {
-    box-shadow: 0 0 0 1px hotpink; /* Circular background */
-    border-radius: 50%; /* Makes the shadow circular */
-    background-image: url('/images/newPinkElon.jpg');
+.pinkPuyo.showFriends::before {
+    box-shadow: 0 0 0 0px hotpink;
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('/friend-images/russell.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-70deg) brightness(0.9);
     content: '';
+    margin-left: 0px;
+}
+
+
+/* Images of Duke for all colored puyos */
+.redPuyo.showDuke::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('duke-images/red.jpg');
+    filter: sepia(10) saturate(12) hue-rotate(330deg) brightness(1.0);
+    content: '';
+    margin-left: 0px;
+}
+.greenPuyo.showDuke::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('duke-images/green.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(-300deg) brightness(0.9);
+    content: '';
+    margin-left: 0px;
+}
+.bluePuyo.showDuke::before {
+    border-radius: 50%; 
+    border: solid 3px black;
+    background-image: url('duke-images/blue.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(-180deg) brightness(1);
+    content: '';
+    margin-left: 0px;
+}
+.yellowPuyo.showDuke::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('/duke-images/yellow.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(20deg) brightness(1.2);
+    content: '';
+    margin-left: 0px;
+}
+.purplePuyo.showDuke::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('duke-images/purple.jpg');
+    filter: sepia(10) saturate(20) hue-rotate(-120deg) brightness(0.9);
+    content: '';
+    margin-left: 0px;
+}
+.tealPuyo.showDuke::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('/duke-images/teal.jpg');
+    filter: sepia(10) saturate(5) hue-rotate(-230deg) brightness(0.8);
+    content: '';
+    margin-left: 0px;
+}
+.pinkPuyo.showDuke::before {
+    border-radius: 50%;
+    border: solid 3px black;
+    background-image: url('/duke-images/pink.jpg');
+    filter: sepia(10) saturate(10) hue-rotate(-70deg) brightness(1.0);
+    content: '';
+    margin-left: 0px;
+}
+
+/* Applies to the ghost puyos */
+.ghostPuyo {
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    z-index: 1;
+    display: block;
+}
+
+/* Applies to all colored ghost puyos */
+.redGhost, .greenGhost, .blueGhost, .purpleGhost, .yellowGhost, .tealGhost, .pinkGhost {
+    text-align: center;
+    height: 20px;
+    width: 20px;
+    z-index: 6;
+    display: block;
 }

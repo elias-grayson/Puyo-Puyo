@@ -30,8 +30,8 @@ html body {
     border-left: none;
 }
 
-/* Every dropdown display*/
-.dropdown {
+/* Every first customization section */
+.first-custom {
     background: radial-gradient(#b1b1b1, #6c757d);
     padding-top: 10px;
     padding-left: 10px;
@@ -45,7 +45,8 @@ html body {
     box-shadow: 2px -2px 4px rgba(0, 0, 0, 0.7);
 }
 
-.nextDropdown {
+/* Every customization section after the first*/
+.next-custom {
     padding-top: 30px;
     background: radial-gradient(#b1b1b1, #6c757d);
     padding-top: 10px;
@@ -70,11 +71,13 @@ html body {
     left: 105px;
 }
 
-/* Contains the puyo board */
+/* Contains the actual board in which puyos are displayed on */
 .grid {
     font-family: "Font Awesome 6 Free"; 
-    background: radial-gradient(#64a2ff, rgb(54, 54, 148));
-    position: relative;
+    background-color: '';
+    position: absolute;
+    margin-right: 382px;
+    margin-top: 0px;
     min-width: 308px;
     min-height: 596px;
     width: 308px;
@@ -86,13 +89,104 @@ html body {
     border-right: 10px ridge black;
     border-bottom: 10px ridge black;
     border-radius: 10px;
+    text-align: center;
+    z-index: 2;
+    overflow: hidden;
+}
+
+/* Each individual grid space */
+.grid div {
+    position: relative;
+    display: flex;
+    top: -48px;
+    height: 48px;
+    width: 48px; 
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Grid spaces below and above the board */
+.belowGrid, .aboveGrid {
+    border: none;
+    content: '';
+    font-family: unset;
+}
+
+/* Contains the puyo board visually */
+.secondary-grid {
+    font-family: "Font Awesome 6 Free"; 
+    background: radial-gradient(#64a2ff, rgb(54, 54, 148));
+    position: relative;
+    margin-top: 10px;
+    min-width: 288px;
+    min-height: 576px;
+    width: 288px;
+    height: 576px;
+    display: flex;
+    flex-wrap: wrap;
     box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.5);
     text-align: center;
+    overflow: hidden;
+}
+
+/* Allows the background icon to display on the board */
+.secondary-grid::before {
+    display: block;
+    content: var(--before-content, "\f005");
+    color: var(--before-color, white);
+    font-size: var(--before-font-size, 100px);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    opacity: var(--before-opacity, 30%);
+    font-family: var(--font-family, "Font Awesome 6 Free");
     z-index: 0;
 }
 
-/* Grid that displays over the main grid */
-.over-grid {
+/* Each individual visual grid space */
+.secondary-grid div {
+    position: relative;
+    display: flex;
+    height: 48px;
+    width: 48px; 
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+/* Contains the puyo board visually */
+.tertiary-grid {
+    font-family: "Font Awesome 6 Free";
+    background-color: '';
+    position: absolute;
+    margin-right: 382px;
+    margin-top: 10px;
+    min-width: 288px;
+    min-height: 576px;
+    width: 288px;
+    height: 576px;
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Each individual visual grid space */
+.tertiary-grid div {
+    position: relative;
+    display: flex;
+    height: 48px;
+    width: 48px; 
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Overlay over the main grid when paused */
+.grid-pause-overlay {
     background: black;
     opacity: 0%;
     margin-right: 382px;
@@ -111,64 +205,13 @@ html body {
     align-items: center;
 }
 
-.overGridText {
+/* Text inside the pause overlay */
+.pauseOverlayText {
     color: white;
     font-family: "Font Awesome 6 Free";
     opacity: 100%;
     z-index: 1;
-}
-
-/* Allows the emoji to display on the board */
-.grid::before {
-    display: block;
-    content: var(--before-content, "\f005");
-    color: var(--before-color, white);
-    font-size: var(--before-font-size, 100px);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); 
-    opacity: var(--before-opacity, 30%);
-    font-family: var(--font-family, "Font Awesome 6 Free");
-    z-index: 0;
-}
-
-/* Each individual grid space */
-.grid div {
-    position: relative;
-    display: flex;
-    top: -48px;
-    height: 48px;
-    width: 48px; 
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
-/* Each grid div visible on the board */
-#gridDiv {
-    box-sizing: border-box;
-}
-
-/* Allows the grid spaces to have a border around them */
-#gridDiv::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 1px solid black;   
-    opacity: 30%;
-    box-sizing: border-box;
-    z-index: 0;
-}
-
-/* Grid spaces below and above the board */
-.belowGrid, .aboveGrid {
-    border: none;
-    content: '';
-    font-family: unset;
+    overflow: hidden;
 }
 
 /* First up next grid display */
@@ -188,6 +231,27 @@ html body {
 .mini-grid div {
     height: 48px;
     width: 48px;
+}
+
+/* First up next grid display */
+.mini-grid-overlay {
+    position: absolute;
+    opacity: 0%;
+    width: 48px;
+    height: 96px;
+    flex-wrap: wrap;
+    background: black;
+    z-index: 5;
+}
+
+#miniOverlay {
+    margin-left: 46px;
+    margin-top: 10px;
+}
+
+#nextMiniOverlay {
+    margin-left: 182px;
+    margin-top: 80px;
 }
 
 /* Second up next grid display */
@@ -392,6 +456,13 @@ html body {
     padding-top: 10px;
 }
 
+.form-check {
+    display: flex;
+    color: white; 
+    margin-top: 15px; 
+    margin-left: 10px;
+}
+
 .voiceButtons {
     justify-content: center;
 }
@@ -544,7 +615,7 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: 10px;
     background-color: blanchedalmond;
     color: black;
-    z-index: 1;
+    z-index: 3;
 }
 
 /* Applies to hovering over start button */
