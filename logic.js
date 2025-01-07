@@ -261,10 +261,10 @@ document.addEventListener('DOMContentLoaded', () => {
         firstGhostIndex .classList.add('ghostPuyo');
         firstGhostIndex.style.backgroundColor = squares[currentPosition + current[0]].style.backgroundColor;
         secondGhostIndex.classList.add('ghostPuyo');
-        firstGhostIndex.style.transform = 'scale(0.3)';
+        firstGhostIndex.style.transform = 'scale(0.35)';
         firstGhostIndex.style.outline = "2px solid black"
         secondGhostIndex.style.backgroundColor = squares[currentPosition + current[1]].style.backgroundColor;
-        secondGhostIndex.style.transform = 'scale(0.3)';
+        secondGhostIndex.style.transform = 'scale(0.35)';
         secondGhostIndex.style.outline = "2px solid black"
     }
     
