@@ -155,13 +155,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         upNext.style.marginLeft = chosenWidth * 48 + 200 + "px"; // Adjusts position of upnext text based on grid width
         startBtn.style.width = chosenWidth * 96 / 2 + 'px'; // Adjusts width of the start button based on grid width
-        miniGridOverlay.forEach(overlay => {
-            const computedOverlay = window.getComputedStyle(overlay)
-            let newMarginLeft = parseFloat(computedOverlay.marginLeft);
-            newMarginLeft += chosenWidth * 48 - 288;
-            overlay.style.marginLeft = newMarginLeft + "px"
-            console.log("new margin left: ", newMarginLeft)
-        })
+
+        // Adjusts the mini grids' position based on the board width
+        const firstMiniOverlay = window.getComputedStyle(miniGridOverlay[0])
+        const secondMiniOverlay = window.getComputedStyle(miniGridOverlay[1])
+        let firstMarginLeft = parseFloat(firstMiniOverlay.firstMarginLeft);
+        firstMarginLeft = chosenWidth * 48 - 242;
+        let secondMarginLeft = parseFloat(secondMiniOverlay.secondMarginLeft);
+        secondMarginLeft = chosenWidth * 48 - 106;
+        miniGridOverlay[0].style.marginLeft = firstMarginLeft + "px"
+        miniGridOverlay[1].style.marginLeft = secondMarginLeft + "px"
 
         // Updates the widths for all grids affected
         grid.style.width = `${chosenWidth * 48 + 20}px`; 
@@ -970,7 +973,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Allows speeding up to be turned on and off
     speedUpToggle.addEventListener('change', function() {
-        console.log("speed up enabled")
         if (speedUpToggle.checked) {
             isSpeedUpEnabled = true;
             speedUpToggle.style.backgroundColor = activeColor;
@@ -982,7 +984,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Allows speeding up to be turned on and off
+    // Allows ghost puyos to be turned on and off
     ghostPuyoToggle.addEventListener('change', function() {
         if (ghostPuyoToggle.checked) {
             isGhostEnabled = true;

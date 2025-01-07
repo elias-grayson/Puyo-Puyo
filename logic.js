@@ -793,7 +793,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper to start and resume the speed up timer
     function startSpeedUpTimer() {
-        console.log("is speed up enabled: ", isSpeedUpEnabled)
         if (isGameOver) return;
         if (!isSpeedUpEnabled) return;
         startTime = Date.now(); // Records when the timer started
