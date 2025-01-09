@@ -90,7 +90,6 @@ html body {
     margin-top: -0.1vh;
     width: 39.4vh;
     height: 75.85vh;
-    min-width: 39.4vh;
     height: 75.85vh;
     display: flex;
     flex-wrap: wrap;
@@ -132,8 +131,6 @@ html body {
     margin-top: 1.2vh;
     width: 36.8vh;
     height: 73.2vh;
-    min-width: 36.6vh;
-    min-height: 73.2vh;
     display: flex;
     flex-wrap: wrap;
     text-align: center;
@@ -177,8 +174,6 @@ html body {
     margin-top: 1.2vh;
     width: 36.6vh;
     height: 73.2vh;
-    min-width: 36.6vh;
-    min-height: 73.2vh;
     display: flex;
     flex-wrap: wrap;
     z-index: 1;
@@ -206,8 +201,6 @@ html body {
     position: absolute;
     width: 36.6vh;
     height: 73.2vh;
-    min-width: 36.6vh;
-    min-height: 73.2vh;
     display: flex;
     flex-wrap: wrap;
     text-align: center;
@@ -270,7 +263,7 @@ html body {
 /* Up next grid display */
 .mini-grid-overlay {
     opacity: 0%;
-    width: 6vh;
+    width: 6.1vh;
     height: 12.2vh;
     flex-wrap: wrap;
     position: relative;
