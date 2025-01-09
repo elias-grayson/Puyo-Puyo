@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DOM elements
     const gameOverDisplay = document.querySelector('#gameOverText') // Game over text
+    const scoreContainer = document.querySelector('#scoreDisplay'); // Displays score
     const scoreDisplay = document.querySelector('#score'); // Displays score
     window.chainDisplay = document.querySelector('#chainLength'); // Displays chain length
     window.upNext = document.querySelector('#upNext'); // Displays the up next text
@@ -11,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.dropdownBtn = document.querySelector('.dropdown'); // All dropdown menus
     window.aestheticCustom = document.querySelector('#aesthetic-custom'); // Customize aesthetics button
     window.squares = Array.from(document.querySelectorAll('.grid div')); // Array of all grid spaces
-    window.ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div')); // Array of all ghost grid spaces
+    window.ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div')); // Array of all ghost grid spaces
     window.custom = document.querySelector('#custom'); // Customization button
     const speedDisplay = document.querySelector('#speedDisplay'); // Speed up text
     window.pauseOverlay = document.querySelector('.grid-pause-overlay');
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let startTime; // Time since the game has started
     let isPaused = false; // Tracks if the speed up timer has been paused
     const fallingAndColorTimer = 800; // How long it takes for puyos to clear
-    const resumeTimer = 200; // How long it takes for puyos to land
+    const resumeTimer = 100; // How long it takes for puyos to land
     let resumeTimerChange = false // Tracks if the landing timer has been resumed
     let isReset = true // Tracks if process clears has been called already
     let isAtMaxSpeed = false; // Tracks whether the game is at the maximum speed
@@ -181,6 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
         multiplierTimeout();
         undraw(currentPosition); // Remove puyos from the current position
         currentPosition += width;
+        score += 1;
+        scoreDisplay.innerHTML = score;
         draw(currentPosition);
     }
 
@@ -262,10 +265,10 @@ document.addEventListener('DOMContentLoaded', () => {
         firstGhostIndex.style.backgroundColor = squares[currentPosition + current[0]].style.backgroundColor;
         secondGhostIndex.classList.add('ghostPuyo');
         firstGhostIndex.style.transform = 'scale(0.35)';
-        firstGhostIndex.style.outline = "2px solid black"
+        firstGhostIndex.style.outline = "0.5vh solid black"
         secondGhostIndex.style.backgroundColor = squares[currentPosition + current[1]].style.backgroundColor;
         secondGhostIndex.style.transform = 'scale(0.35)';
-        secondGhostIndex.style.outline = "2px solid black"
+        secondGhostIndex.style.outline = "0.5vh solid black"
     }
     
     const hardDropSound = new Audio('game-sounds/thump.mp3');
@@ -487,7 +490,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Resets multiplier variables to default when the chain ends
     function multiplierTimeout() {
-        if (isFalling) return
         chainLength = 0;
         puyoCount = 0;
         chainPower = 0;
@@ -754,6 +756,8 @@ document.addEventListener('DOMContentLoaded', () => {
             movementStart = true;
             startSound.play();
 
+            scoreContainer.style.visibility = "visible";
+
             // Ensures up next puyos are randomized at start
             nextRandom = Math.floor(Math.random() * amountOfColors);
             nextRandomSecondary = Math.floor(Math.random() * amountOfColors);
@@ -872,10 +876,15 @@ document.addEventListener('DOMContentLoaded', () => {
             let neighborIndex = index + direction; // Index of neighboring puyos
             visited.add(index);
 
-            // Makes sure both current color and neighboring colors are in the same color format
+            // Makes sure both current color and neighboring colors are in the same color format and valid elements
             let neighborColor = 'rgb(128, 128, 128)';
-            if (window.getComputedStyle(squares[neighborIndex]).backgroundColor !== 'rgba(0, 0, 0, 0)') {
-                neighborColor = window.getComputedStyle(squares[neighborIndex]).backgroundColor;
+            if (!(squares[neighborIndex] instanceof Element)) {
+                return;
+            }
+            
+            const computedStyle = window.getComputedStyle(squares[neighborIndex]);
+            if (computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)') {
+                neighborColor = computedStyle.backgroundColor;
             }
 
             // Boundary checks
@@ -900,7 +909,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to process all puyo pops after collecting global connections
     function processClears() {
-        if (!isReset) return;
+        if (!isReset || isGameOver) return;
         if (globalConnectedPuyos.size > 0) {
             resetPopAnimation();
             arePuyosCleared = false; 
@@ -918,7 +927,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 200);
         }
         setTimeout (() => {
-            if (!isReset) return;
+            if (!isReset || isGameOver) return;
             isReset = false;
 
             // If there are puyos in the conneced list
@@ -950,7 +959,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 falling(squares, 50); // Handles falling puyos
                 globalConnectedPuyos.clear(); // Reset global connections and colors for the next turn
                 setTimeout(() => {
-                    if (isReset) return;
+                    if (isReset || isGameOver) return;
                     isFallingTimeout();
                     resumeTimerChange = false;
                     allClear()
@@ -1010,7 +1019,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
             // Apply the interpolated color
             currentElement.style.backgroundColor = `rgb(${currentColor.join(',')})`;
-            // currentElement.style.border = "solid 5px black"
             }
         });
 
@@ -1042,9 +1050,9 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 // Adds margin if both speed up and all clear happen at the same time
                 if (speedDisplay.innerHTML !== "") {
-                    endDisplay.style.marginRight = "20px";
+                    endDisplay.style.marginRight = "2.2vh";
                 } else {
-                    endDisplay.style.marginRight = "0px";
+                    endDisplay.style.marginRight = "0vh";
                 }
 
                 // If British Micah's voice is active, play matching all clear line
@@ -1122,9 +1130,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Prompts players to restart page to play again
             setTimeout(() => {
                 gameOverDisplay.innerHTML = "To restart, refresh the page";
-                gameOverDisplay.style.padding = '20px';
-                gameOverDisplay.style.border= "solid 3px black";
-                gameOverDisplay.style.borderRadius = '30px';
+                gameOverDisplay.style.padding = '2.2vh';
+                gameOverDisplay.style.border= "solid 0.5vh black";
+                gameOverDisplay.style.borderRadius = '4.8vh';
             }, 3000);
         }
     }

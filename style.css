@@ -5,6 +5,8 @@ html body {
     margin: 0;
     padding: 0;
     overflow: hidden;
+    text-wrap: nowrap;
+    align-items: center;
 }
 
 /* Navbar at the top */
@@ -57,8 +59,8 @@ html body {
     border-top: 2px solid white;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
-    border-bottom-right-radius: 00px;
-    border-bottom-left-radius: 00px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
@@ -68,27 +70,34 @@ html body {
     width: auto;
     display: flex;
     justify-content: center;
-    left: 105px;
+    left: 7vh;
+}
+
+/* Contains all of the grids */
+.allGrids {
+    width: auto;
+    display: flex;
+    position: relative;
+    flex-wrap: nowrap;
+    justify-content: center;
 }
 
 /* Contains the actual board in which puyos are displayed on */
 .grid {
     font-family: "Font Awesome 6 Free"; 
     background-color: '';
-    position: absolute;
-    margin-right: 382px;
-    margin-top: 0px;
-    min-width: 308px;
-    min-height: 596px;
-    width: 308px;
-    height: 596px;
+    position: relative;
+    margin-top: -0.1vh;
+    width: 39.31vh;
+    height: 75.85vh;
     display: flex;
     flex-wrap: wrap;
-    border-top: 10px groove black;
-    border-left: 10px groove black;
-    border-right: 10px ridge black;
-    border-bottom: 10px ridge black;
-    border-radius: 10px;
+    border-top: 1.4vh groove black;
+    border-left: 1.4vh groove black;
+    border-right: 1.4vh ridge black;
+    border-bottom: 1.4vh ridge black;
+    box-shadow: 0px 0px 4.8vh 1.6vh rgba(0, 0, 0, 0.5);
+    border-radius: 1.4vh;
     text-align: center;
     z-index: 2;
     overflow: hidden;
@@ -98,9 +107,9 @@ html body {
 .grid div {
     position: relative;
     display: flex;
-    top: -48px;
-    height: 48px;
-    width: 48px; 
+    transform: translateY(-6.1vh);
+    height: 6.1vh;
+    width: 6.1vh;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
@@ -117,15 +126,12 @@ html body {
 .secondary-grid {
     font-family: "Font Awesome 6 Free"; 
     background: radial-gradient(#64a2ff, rgb(54, 54, 148));
-    position: relative;
-    margin-top: 10px;
-    min-width: 288px;
-    min-height: 576px;
-    width: 288px;
-    height: 576px;
+    position: absolute;
+    margin-top: 1.2vh;
+    width: 36.6vh;
+    height: 73.2vh;
     display: flex;
     flex-wrap: wrap;
-    box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.5);
     text-align: center;
     overflow: hidden;
 }
@@ -135,7 +141,7 @@ html body {
     display: block;
     content: var(--before-content, "\f005");
     color: var(--before-color, white);
-    font-size: var(--before-font-size, 100px);
+    font-size: var(--before-font-size, 13vh);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -149,25 +155,22 @@ html body {
 .secondary-grid div {
     position: relative;
     display: flex;
-    height: 48px;
-    width: 48px; 
+    height: 6.1vh;
+    width: 6.1vh; 
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    border: 0.13vh solid rgba(0, 0, 0, 0.3);
 }
 
 /* Contains the puyo board visually */
-.tertiary-grid {
+.ghost-grid {
     font-family: "Font Awesome 6 Free";
     background-color: '';
     position: absolute;
-    margin-right: 382px;
-    margin-top: 10px;
-    min-width: 288px;
-    min-height: 576px;
-    width: 288px;
-    height: 576px;
+    margin-top: 1.2vh;
+    width: 36.6vh;
+    height: 73.2vh;
     display: flex;
     flex-wrap: wrap;
     z-index: 1;
@@ -175,11 +178,11 @@ html body {
 }
 
 /* Each individual visual grid space */
-.tertiary-grid div {
+.ghost-grid div {
     position: relative;
     display: flex;
-    height: 48px;
-    width: 48px; 
+    height: 6.1vh;
+    width: 6.1vh; 
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
@@ -189,13 +192,10 @@ html body {
 .grid-pause-overlay {
     background: black;
     opacity: 0%;
-    margin-right: 382px;
-    margin-top: 10px;
+    margin-top: 1.2vh;
     position: absolute;
-    min-width: 288px;
-    min-height: 576px;
-    width: 288px;
-    height: 576px;
+    width: 36.6vh;
+    height: 73.2vh;
     display: flex;
     flex-wrap: wrap;
     text-align: center;
@@ -214,64 +214,59 @@ html body {
     overflow: hidden;
 }
 
-/* First up next grid display */
-.mini-grid {
-    border-radius: 10px;
-    margin-left: 36px;
-    width: 68px;
-    height: 116px;
+/* Container for all mini grids and overlays */
+.all-mini-grid-container {
+    display: flex;
+    position: relative;
+    margin-left: 2vh;
+}
+
+/* Container for mini grids */
+.mini-grid-container {
+    display: flex;
+    position: relative;
+    justify-content: center;
+}
+
+/* All up next grids */
+.all-mini-grids {
+    border-radius: 1vh;
+    width: 8.6vh;
+    height: 14.7vh;
     flex-wrap: wrap;
-    background-color: blue;
-    border: 10px groove black;
-    box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.3);
+    border: 1.3vh groove black;
+    box-shadow: 0vh 0vh 4.8vh 1.6vh rgba(0, 0, 0, 0.3);
     background: radial-gradient(#64a2ff, rgb(54, 54, 148));
 }
 
-/* First up next grid spaces*/
-.mini-grid div {
-    height: 48px;
-    width: 48px;
+/* Individual grid spaces in each mini grid */
+.mini-grid-div {
+    width: 6vh;
+    height: 6vh;
 }
 
-/* First up next grid display */
-.mini-grid-overlay {
+/* Container for all mini grid overlays */
+.mini-grid-overlay-container {
     position: absolute;
+    margin-left: 1.27vh;
+    margin-top: 1.32vh;
+}
+
+/* Up next grid display */
+.mini-grid-overlay {
     opacity: 0%;
-    width: 48px;
-    height: 96px;
+    width: 6vh;
+    height: 12.2vh;
     flex-wrap: wrap;
+    position: relative;
     background: black;
     z-index: 5;
 }
 
-#miniOverlay {
-    margin-left: 46px;
-    margin-top: 10px;
-}
-
+/* Controls the overlay for the second mini grid */
 #nextMiniOverlay {
-    margin-left: 182px;
-    margin-top: 80px;
-}
-
-/* Second up next grid display */
-.next-mini-grid {
-    border-radius: 10px;
-    margin-left: 0px;
-    margin-top: 70px;
-    width: 68px;
-    height: 116px;
-    flex-wrap: wrap;
-    background-color: blue;
-    border: 10px groove black;
-    box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.3);
-    background: radial-gradient(#64a2ff, rgb(54, 54, 148));
-}
-
-/* Second up next grid spaces */
-.next-mini-grid div {
-    height: 48px;
-    width: 48px;
+    margin-left: 8.62vh;
+    margin-top: -4.25vh;
 }
 
 /* Applies only to dropfront buttons */
@@ -297,27 +292,31 @@ html body {
 /* Applies to customization button */
 #custom {
     box-sizing: border-box;
+    padding: auto;
     border: none;
     color: white;
     position: relative;
     background-color: #0d6efd;
-    margin-right: -150px;
-    right: 160px; 
-    margin-bottom: 20px;
+    margin-right: 5vh; 
+    margin-bottom: 2vh;
     white-space: nowrap;
     overflow: visible;
     z-index: 6;
+    font-size: 2vh;
+    border-radius: 1vh;;
+    width: auto;
 }
 
 #custom:hover {
     opacity: 100%;
-    box-shadow: 1px 1px 6px 1px rgba(0, 0, 0, 0.3);
+    box-shadow: 0.3vh 0.3vh 0.8vh 0.3vh rgba(0, 0, 0, 0.3);
 }
 
 #custom:active {
-    border: 1px solid white;
+    border: 0.3vh solid white;
 }
 
+/* Gameplay customization */
 #gameplay-custom {
     background-color: none;
     margin: auto;
@@ -376,11 +375,25 @@ html body {
 #controlDisplay { 
     position: relative;
     white-space: nowrap;
-    margin-top: 200px;
-    margin-left: 0px;
-    right: 150px;
+    margin-top: 24vh;
+    right: 18.5vh;
     display: flex;
     flex-direction: column;
+    background-color: black;
+    opacity: 60%;
+    border-radius: 2.6vh;
+    align-items: center;
+    color: white;
+    padding: 1.4vh;
+    height: 51.5vh;
+}
+
+/* Headers for the control display */
+.controlHeader {
+    text-decoration: underline;
+    font-weight: bold;
+    margin-top: 2vh;
+    font-size: 3.5vh;
 }
 
 /* Applies to the board width container */
@@ -533,19 +546,21 @@ input[type="range"]::-webkit-slider-thumb {
     font-family: "Font Awesome 6 Free";
     display: flex;
     margin-right: 0px;
-    margin-top: 10px;
+    font-size: 3.5vh;
+    margin-top: 2vh;
     justify-content: center;
 }
 
 /* Applies to chain display */
 #chainDisplay {
+    font-size: 4.2vh;
     white-space: nowrap;
     position: relative;
     width: 0px;
     font-family: "Font Awesome 6 Free";
     display: flex;
-    margin-top: 250px;
-    right: 75px;
+    margin-top: 30vh;
+    right: 12.5vh;
     justify-content: center;
 }
 
@@ -556,9 +571,9 @@ input[type="range"]::-webkit-slider-thumb {
     position: top;
     justify-content: center;
     color: red;
-    font-size: 28px;
-    margin-left: 20px;
-    margin-top: 5px;
+    margin-left: 2.2vh;
+    font-size: 3.5vh;
+    margin-top: 1.5vh;
 }
 
 /* Applies to the game over display */
@@ -576,14 +591,16 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Tells the player to refresh the page if they want to replay */
 #gameOverText {
-    font-size: 30px;
+    display: flex;
+    justify-content: center;
     background: linear-gradient(to top, lightgray, white);
     font-family: "Font Awesome 6 Free";
     position: absolute;
-    margin-top: 200px;
+    margin-left: 42vh;
+    margin-top: 25vh;
     z-index: 3;
     white-space: nowrap;
-    margin-right: 360px;
+    font-size: 4.3vh;
 }
 
 /* Hides elements when added to a classList*/
@@ -596,26 +613,31 @@ input[type="range"]::-webkit-slider-thumb {
     box-sizing: border-box;
     display: flex;
     justify-content: center;
-    margin-right: 248px;
+    margin-right: 20vh;
+    z-index: 1;
 }
 
 /* Applies to start button */
 #startDisplay {
+    position: relative;
     display: flex;
     justify-content: center;
-    margin-right: 170px;
+    right: 6.4vh;
+    text-wrap: nowrap;
+    margin-bottom: 0.1vh;
 }
 
 /* Applies to start button */
 #start-button {
-    border: solid 2px black;
-    width: 288px;
-    min-width: 90px;
-    max-width: 288px;
-    border-radius: 10px;
+    border: solid 0.3vh black;
+    width: 34vh;
+    min-width: 9vh;
+    max-width: 34vh;
+    border-radius: 1vh;
     background-color: blanchedalmond;
     color: black;
     z-index: 3;
+    font-size: 2vh;
 }
 
 /* Applies to hovering over start button */
@@ -625,7 +647,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Applies to clicking start button */
 #start-button:active {
-    border: solid 2px white;
+    border: solid 0.3vh white;
 }
 
 /* Applies to up next display */
@@ -633,6 +655,36 @@ input[type="range"]::-webkit-slider-thumb {
     position: absolute;
     justify-content: center;
     font-family: "Font Awesome 6 Free";
-    margin-left: 470px;
+    margin-left: 53vh;
     text-decoration: underline;
+}
+
+/* Container for background tiles */
+.tile-container {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 60px);
+    grid-template-rows: repeat(auto-fill, 60px);
+    grid-gap: 100px;
+    width: 120vw;
+    height: 120vh;
+    transform: rotate(45deg);
+    bottom: 20vh;
+    left: 0vw;
+}
+
+.tile-container::before,
+.tile-container::after {
+    content: '';
+    grid-column: auto;
+}
+
+/* Individual tiles */
+.tile-container div {
+    width: 80px;
+    height: 80px;
+    opacity: 20%;
+    border-radius: 50%;
+    font-size: 80px;
+    background-color: blue;
 }

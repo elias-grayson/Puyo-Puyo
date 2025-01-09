@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // DOM elements
+    const container = document.querySelector('.container');
     const grid = document.querySelector('.grid');
     const miniGrid = document.querySelector('.mini-grid');
     const nextMiniGrid = document.querySelector('.next-mini-grid');
@@ -11,6 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const downControl = document.querySelector('#down');
     const ccwControl = document.querySelector('#counterclockwise');
     const cwControl = document.querySelector('#clockwise');
+    const upFont = document.querySelector('.upFont')
+    const leftFont = document.querySelector('.leftFont');
+    const rightFont = document.querySelector('.rightFont');
+    const downFont = document.querySelector('.downFont');
+    const rightCwFont = document.querySelector('.rightClockwiseFont')
+    const leftCcwFont = document.querySelector('.leftCcwFont');
     const hardDropControl = document.querySelector('#hardDrop');
     const modalHeader = document.querySelector('.modal-header');
     const backgroundBtns = document.querySelectorAll('.backgroundBtn');
@@ -32,7 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const voiceBtns = document.querySelectorAll('.voiceBtn');
     window.secondaryGrid = document.querySelector('.secondary-grid');
     let secondarySquares = Array.from(document.querySelectorAll('.secondary-grid div'));
-    let ghostGrid = document.querySelector('.tertiary-grid');
+    let ghostGrid = document.querySelector('.ghost-grid');
+    window.tiles = Array.from(document.querySelectorAll('.tile-container div'))
 
     let activeColor = "#0d6efd"; // Current color theme choice
 
@@ -153,35 +161,20 @@ document.addEventListener('DOMContentLoaded', () => {
         chosenWidth = chosen; // Get the width from the button's data attribute
         let widthDif = width - chosenWidth; // Difference between old and new width
 
-        upNext.style.marginLeft = chosenWidth * 48 + 200 + "px"; // Adjusts position of upnext text based on grid width
-        startBtn.style.width = chosenWidth * 96 / 2 + 'px'; // Adjusts width of the start button based on grid width
-
-        // Adjusts the mini grids' position based on the board width
-        const firstMiniOverlay = window.getComputedStyle(miniGridOverlay[0])
-        const secondMiniOverlay = window.getComputedStyle(miniGridOverlay[1])
-        let firstMarginLeft = parseFloat(firstMiniOverlay.firstMarginLeft);
-        firstMarginLeft = chosenWidth * 48 - 242;
-        let secondMarginLeft = parseFloat(secondMiniOverlay.secondMarginLeft);
-        secondMarginLeft = chosenWidth * 48 - 106;
-        miniGridOverlay[0].style.marginLeft = firstMarginLeft + "px"
-        miniGridOverlay[1].style.marginLeft = secondMarginLeft + "px"
+        upNext.style.marginLeft = chosenWidth * 6 + 20 + "vh"; // Adjusts position of upnext text based on grid width
+        startBtn.style.width = chosenWidth * 6.1 + 'vh'; // Adjusts width of the start button based on grid width
 
         // Updates the widths for all grids affected
-        grid.style.width = `${chosenWidth * 48 + 20}px`; 
-        grid.style.minWidth = `${chosenWidth * 48 + 20}px`;
-        pauseOverlay.style.width = `${chosenWidth * 48}px`;
-        pauseOverlay.style.minWidth = `${chosenWidth * 48}px`;
-        secondaryGrid.style.width = `${chosenWidth * 48}px`;
-        secondaryGrid.style.minWidth = `${chosenWidth * 48}px`;
-        ghostGrid.style.width = `${chosenWidth * 48}px`;
-        ghostGrid.style.minWidth = `${chosenWidth * 48}px`;
+        grid.style.width = `${chosenWidth * 6.1 + 2.71}vh`; 
+        pauseOverlay.style.width = `${chosenWidth * 6.1}vh`;
+        secondaryGrid.style.width = `${chosenWidth * 6.1}vh`;
+        ghostGrid.style.width = `${chosenWidth * 6.1}vh`;
 
         // Adjust taken squares and grid differences as needed
         let amtOftaken = [];
         let amtOfAbove = [];
         let gridDif = squares.length - (chosenWidth * height); // Difference in grid spaces for the grid
         let secondaryGridDif = secondarySquares.length - (chosenWidth * secondaryHeight);
-        let ghostGridDif = ghostSquares.length - (chosenWidth * secondaryHeight);
 
         // Adds the # of taken grid spaces to the array
         squares.forEach(index => {
@@ -252,16 +245,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Remove grid spaces from ghost grid
             ghostSquares.forEach(div => div.remove());
 
-            ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div')); // Update ghost grid
+            ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div')); // Update ghost grid
 
             // Add appropriate amount of spaces back to ghost grid
             while (ghostSquares.length < secondarySquares.length) {
                 const $newDiv = $("<div>");
 
                 ghostGrid.appendChild($newDiv[0]);
-                ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div'));
+                ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div'));
             }
-            ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div'));
+            ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div'));
         }
 
         // If the chosen grid size is greater than the default, continue
@@ -317,13 +310,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             secondarySquares = Array.from(document.querySelectorAll('.secondary-grid div'));
 
-            ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div'));
+            ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div'));
 
             // Update the ghost grid spaces
             while (ghostSquares.length < secondarySquares.length)  {
+                console.log("ghost squares while loop")
                 const $newDiv = $("<div>")
                 ghostGrid.appendChild($newDiv[0]);
-                ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div'));
+                ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div'));
             }
         }
         if (isFriendFont) {
@@ -352,8 +346,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
         squares = Array.from(document.querySelectorAll('.grid div'));
         secondarySquares = Array.from(document.querySelectorAll('.secondary-grid div'));
-        ghostSquares = Array.from(document.querySelectorAll('.tertiary-grid div'));
-        ghostGrid = document.querySelector('.tertiary-grid');
+        ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div'));
+        ghostGrid = document.querySelector('.ghost-grid');
         current = puyo[currentRotation].map(Number); // Assure all elements are numbers
         squares.length = width * height;
         width = +width;
@@ -384,6 +378,21 @@ document.addEventListener('DOMContentLoaded', () => {
         isEmojiFont = true;
         isFriendFont = false;
         isDukeFont = false;
+
+        const puyoFonts = [
+            "redBack",
+            "greenBack",
+            "blueBack",
+            "yellowBack",
+            "purpleBack",
+            "tealBack",
+            "pinkBack"
+        ]
+
+        for (let i = 0; i < tiles.length; i++) {
+            tiles[i].classList.remove('showFriends');
+            tiles[i].classList.remove('showDuke');
+        }
     });
 
     // Replaces the default font with images
@@ -404,6 +413,11 @@ document.addEventListener('DOMContentLoaded', () => {
         isEmojiFont = false;
         isFriendFont = true;
         isDukeFont = false;
+
+        for (let i = 0; i < tiles.length; i++) {
+            tiles[i].classList.add('showFriends');
+            tiles[i].classList.remove('showDuke');
+        }
     });
 
     // Returns the puyos to their default font before the images
@@ -424,6 +438,11 @@ document.addEventListener('DOMContentLoaded', () => {
         isEmojiFont = false;
         isFriendFont = false;
         isDukeFont = true;
+
+        for (let i = 0; i < tiles.length; i++) {
+            tiles[i].classList.remove('showFriends');
+            tiles[i].classList.add('showDuke');
+        }
     });
 
     // Changes the background to green when clicked
@@ -889,14 +908,19 @@ document.addEventListener('DOMContentLoaded', () => {
             "ArrowUp": sharedRotateRight,
             " ": sharedHardDrop,
         }
-        leftControl.innerHTML = "Left: Left-arrow";
-        rightControl.innerHTML = "Right: Right-arrow";
-        downControl.innerHTML = "Down: Down-arrow, S";
-        ccwControl.innerHTML = "Counterclockwise: Z, A";
-        cwControl.innerHTML = "Clockwise: Up-arrow, D";
-        hardDropControl.innerHTML = "Hard drop: Space";
-        controlDisplay.style.right = "150px"
-        controlDisplay.style.marginLeft = "0px"
+        leftFont.style.display = "contents";
+        leftControl.innerHTML = "";
+        rightFont.style.display = "contents"
+        rightControl.innerHTML = "";
+        downFont.style.display = "contents"
+        downControl.innerHTML = "S";
+        leftCcwFont.style.display = "none"
+        ccwControl.innerHTML = "Z, A";
+        upFont.style.display = "contents"
+        rightCwFont.style.display = "none"
+        cwControl.innerHTML = "D";
+        hardDropControl.innerHTML = "Space";
+        container.style.left = "7vh"
     }
 
     // Changes the controls to flipped scheme
@@ -961,14 +985,19 @@ document.addEventListener('DOMContentLoaded', () => {
             "W": sharedHardDrop,
         }
 
-        leftControl.innerHTML = "Left: A";
-        rightControl.innerHTML = "Right: D";
-        downControl.innerHTML = "Down: S";
-        ccwControl.innerHTML = "Counterclockwise: Left-Arrow";
-        cwControl.innerHTML = "Clockwise: Right-arrow";
-        hardDropControl.innerHTML = "Hard drop: W";
-        controlDisplay.style.marginLeft = "-58px"
-        controlDisplay.style.right = "92px"
+        leftFont.style.display = "none";
+        leftControl.innerHTML = "A";
+        rightFont.style.display = "none"
+        rightControl.innerHTML = "D";
+        downFont.style.display = "none"
+        downControl.innerHTML = "S";
+        leftCcwFont.style.display = "contents"
+        ccwControl.innerHTML = "";
+        upFont.style.display = "none"
+        rightCwFont.style.display = "contents"
+        cwControl.innerHTML = "";
+        hardDropControl.innerHTML = "W";
+        container.style.left = "5.93vh"
     }
 
     // Allows speeding up to be turned on and off

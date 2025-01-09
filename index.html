@@ -29,34 +29,265 @@
         <link rel="stylesheet" href="style.css"></link>
         <link rel="stylesheet" href="puyoblobs.css"></link>
 
-        <title>Elias' Puyo Puyo Project V1.3.3</title>
+        <title>Elias' Puyo Puyo Project V1.3.4</title>
     </head>
     <body>
         
         <!--Navigation bar for the title of the page-->
-        <nav class="navbar navbar-light">
+        <nav class="navbar navbar-light" style="z-index: 10;">
             <div class="container-fluid">
-                <a class="navbar-brand mx-auto" id="title">Elias' Puyo Puyo Project V1.3.3</a>
+                <a class="navbar-brand mx-auto" id="title">Elias' Puyo Puyo Project V1.3.4</a>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarID">
                 </div>
             </div>
         </nav>
+
+        <!--Parent container for all UI above the board-->
         <div class="parent-container" style="overflow: hidden;">
+
             <!--Score Display-->
-            <div id="scoreDisplay" style="float: left;">
-                <h3>Score: <span id="score">0</span></h3>
+            <div id="scoreDisplay" style="float: left; visibility: hidden; z-index: 1;">
+                <h3 style="font-size: 3.5vh;"><span id="scoreContainer">Score: </span><span id="score">0</span></h3>
             </div>
 
             <!--End Display that shows when the player loses-->
-            <div id="endDisplay" style="float: left;">
-                <h3 id="end"><span></span></h3>
+            <div id="endDisplay" style="float: left; z-index: 1;">
+                <h3 id="end" style="font-size: 3.5vh;"><span></span></h3>
             </div>
 
             <!--Speed Display that shows when the player loses-->
-            <div id="speedDisplay" style="float: left;">
-                <h3 id="speed"><span></span></h3>
+            <div id="speedDisplay" style="float: left; z-index: 1;">
+                <h3 id="speed" style="font-size: 3.5vh;"><span></span></h3>
             </div>
+        </div>
+
+        <!--Background tiles-->
+        <div class="tile-container">
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
+            <div class="redBack"></div>
+            <div class="greenBack"></div>
+            <div class="blueBack"></div>
+            <div class="yellowBack"></div>
+            <div class="purpleBack"></div>
+            <div class="tealBack"></div>
+            <div class="pinkBack"></div>
         </div>
 
         <!--Start/Pause button display-->
@@ -65,7 +296,12 @@
         
 
             <!--Display for the up next puyos-->
-            <h3 id="upNext"></h3>
+            <h3 id="upNext" style="font-size: 3.5vh;"></h3>
+        </div>
+
+        <!--Displays "Game Over" when game over state is reached-->
+        <div id="gameOverText">
+            <h3></h3>
         </div>
 
         <!--Contains all centered content-->
@@ -114,25 +350,25 @@
                                 <!-- Fall Speed Customization -->
                                 <div class="first-custom" style="color: white;">
                                     <a style="font-family: 'Font Awesome 6 Free'">Fall Speed</a>
-                                    <input title="How long it takes for puyos to move down one grid space" 
-                                    type="range" class="form-range" id="fallSpeedInput" min="100" max="3000" step="100" value="1000">
-                                    <span id="fallSpeedValue" style="color: white">1 second per grid space (default)</span>
+                                    <div><input title="How long it takes for puyos to move down one grid space" 
+                                    type="range" class="form-range" id="fallSpeedInput" min="100" max="3000" step="100" value="1000"></div>
+                                    <div id="fallSpeedValue" style="color: white">1 second per grid space (default)</div>
                                 </div>
                 
                                 <!-- Puyos to Clear Customization -->
                                  <div class="next-custom" style="color: white;" >
                                     <a style="font-family: 'Font Awesome 6 Free'">Puyos to Pop</a>
-                                    <input title="How many same colored puyos need to be connected to pop them"
-                                    type="range" class="form-range" id="puyoPopInput" value="4" min="2" max="10" step="1">
-                                    <span id="puyoPopValue" style="color: white;">4 puyos to pop (default)</span>
+                                    <div><input title="How many same colored puyos need to be connected to pop them"
+                                    type="range" class="form-range" id="puyoPopInput" value="4" min="2" max="10" step="1"></div>
+                                    <div id="puyoPopValue" style="color: white;">4 puyos to pop (default)</div>
                                 </div>
 
                                 <!-- Amount of Colors Customization -->
                                 <div class="next-custom" style="color: white;">
                                     <a style="font-family: 'Font Awesome 6 Free'">Amount of Colors</a>
-                                    <input title="How many different colors will appear" 
-                                    type="range" class="form-range" id="amtPuyoInput" value="4" min="1" max="7" step="1">
-                                    <span id="amtPuyoValue" style="color: white">4 different colors (default)</span>
+                                    <div><input title="How many different colors will appear" 
+                                    type="range" class="form-range" id="amtPuyoInput" value="4" min="1" max="7" step="1"></div>
+                                    <div id="amtPuyoValue" style="color: white">4 different colors (default)</div>
                                 </div>
                 
                                 <!-- Controls Customization -->
@@ -206,12 +442,12 @@
                                     <div class="row" style="justify-content: center; margin-top: 15px;">
                                         <div class="voiceButtons row">
                                             <button title="One of my best friends: Josh. He opted to go for some sort of bow wielding character"
-                                                class="btn col-6 voiceBtn active" id="joshVoice" style="text-align: center">Josh (Default)
+                                                class="btn col-6 voiceBtn active" id="joshVoice" style="text-align: center; text-wrap: wrap">Josh (Default)
                                             </button>
                                             <button title="My younger brother Micah in a british accent. He just ended up saying a lot of sophisticated phrases"
-                                            class="btn col-6 voiceBtn" id="britMicah" href="#">British Micah</button>
+                                            class="btn col-6 voiceBtn" id="britMicah" href="#" style="text-wrap: wrap">British Micah</button>
                                             <button title="My younger brother again, but with a southern accent using more over-the-top cowboy-esque lines"
-                                            class="btn col-6 voiceBtn" id="southMicah" href="#">Southern Micah</button>
+                                            class="btn col-6 voiceBtn" id="southMicah" href="#" style="text-wrap: wrap">Southern Micah</button>
                                         </div>
                                     </div>
                                 </div>
@@ -246,304 +482,324 @@
 
             <!--Chain display becomes visible once at least 1 group of puyos are cleared-->
             <div id="chainDisplay">
-                <h3 id="chainLength"></h3>
+                <span id="chainLength"></span>
             </div>
 
-            <!--Displays "Game Over" when game over state is reached-->
-            <div id="gameOverText">
-                <h3></h3>
+            <div class="allGrids">
+                <!--Grid in which the game is played-->
+                <div class="grid">
+                    <div class="aboveGrid"></div>
+                    <div class="aboveGrid"></div>
+                    <div class="aboveGrid"></div>
+                    <div class="aboveGrid"></div>
+                    <div class="aboveGrid"></div>
+                    <div class="aboveGrid"></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div class="taken belowGrid"></div>
+                    <div class="taken belowGrid"></div>
+                    <div class="taken belowGrid"></div>
+                    <div class="taken belowGrid"></div>
+                    <div class="taken belowGrid"></div>
+                    <div class="taken belowGrid"></div>
+                </div>
+
+                <!--The background of the grid-->
+                <div class="secondary-grid">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+                <!--Grid for ghost puyos-->
+                <div class="ghost-grid">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+
+                <!--Displays when the game is paused-->
+                <div class="grid-pause-overlay">
+                    <h2 class="pauseOverlayText">Paused</h3>
+                </div>
             </div>
 
-            <!--Grid in which the game is played-->
-            <div class="grid">
-                <div class="aboveGrid"></div>
-                <div class="aboveGrid"></div>
-                <div class="aboveGrid"></div>
-                <div class="aboveGrid"></div>
-                <div class="aboveGrid"></div>
-                <div class="aboveGrid"></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div class="taken belowGrid"></div>
-                <div class="taken belowGrid"></div>
-                <div class="taken belowGrid"></div>
-                <div class="taken belowGrid"></div>
-                <div class="taken belowGrid"></div>
-                <div class="taken belowGrid"></div>
-            </div>
+            <!--Container for all mini grids and their overlays-->
+            <div class="all-mini-grid-container">
 
-            <!--The background of the grid-->
-            <div class="secondary-grid">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
+                <!--Container for all mini grids-->
+                <div class="mini-grid-container">
+                    
+                    <!--Displays the next set of puyos-->
+                    <div class="mini-grid all-mini-grids">
+                        <div class="mini-grid-div"></div>
+                        <div class="mini-grid-div"></div>
+                    </div>
 
-            <!--Grid for ghost puyos-->
-            <div class="tertiary-grid">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
+                    <!--Displays the second next set of puyos-->
+                    <div class="next-mini-grid all-mini-grids" style="margin-top: 8vh;">
+                        <div class="mini-grid-div"></div>
+                        <div class="mini-grid-div"></div>
+                    </div>
+                </div>
 
-            <!--Displays when the game is paused-->
-            <div class="grid-pause-overlay">
-                <h2 class="pauseOverlayText">Paused</h3>
-            </div>
+                <!--Container for all mini grid overlays-->
+                <div class="mini-grid-overlay-container">
 
-            <!--Displays when the game is paused-->
-            <div class="grid-overlay">
-            </div>
+                    <!--Pause overlay for mini grid-->
+                    <div class="mini-grid-overlay" id="miniOverlay">
+                    </div>
 
-            <!--Displays the next set of puyos-->
-            <div class="mini-grid">
-                <div></div>
-                <div></div>
+                    <!--Pause overlay for second mini grid-->
+                    <div class="mini-grid-overlay" id="nextMiniOverlay">
+                    </div>
+                </div>
             </div>
-
-            <!--Pause overlay for mini grid-->
-            <div class="mini-grid-overlay" id="miniOverlay">
-            </div>
-
-            <!--Displays the second next set of puyos-->
-            <div class="next-mini-grid">
-                <div></div>
-                <div></div>
-            </div>
-
-            <!--Pause overlay for second mini grid-->
-            <div class="mini-grid-overlay" id="nextMiniOverlay">
-            </div>
-
             <!--Controls Display-->
             <div id="controlDisplay">
-                <div>
-                    <h3 style="text-decoration: underline;">Movement:</h3>
+                <div class="controlHeader" style="margin-top: 0vh">
+                    <div>Movement:</div>
                 </div>
-                <div style="margin-top: 5px;">
-                    <h5 id="left">Left: Left-arrow</h5>
-                    <h5 id="right">Right: Right-arrow</h5>
-                    <h5 id="down">Down: Down-arrow, S</h5>
-                    <h5 id="hardDrop">Hard drop: Space</h5>
+                <div style="margin-top: 0.8vh; font-size: 2.5vh;">
+                    <div><span style="margin-right: 0.7vh;" style="display: contents;">Left: </span>
+                        <i class="fa-solid fa-arrow-left leftFont" style="display: contents;"></i><span id="left"></span></div>
+                    <div><span style="margin-right: 0.7vh" style="display: contents;">Right: </span>
+                        <i class="fa-solid fa-arrow-right rightFont" style="display: contents"></i><span id="right"></span></div>
+                    <div><span style="margin-right: 0.7vh;">Down: </span>
+                        <i class="fa-solid fa-arrow-down downFont" style="display: contents;">,</i>
+                        <span id="down" style="margin-left: 0.7vh;">S</span></div>
+                    <div>Hard drop: <span id="hardDrop">Space</span></div>
                 </div>
-                <div style="margin-top: 20px; text-decoration: underline;">
-                    <h3>Rotation:</h3>
+                <div class="controlHeader">
+                    <div>Rotation:</div>
                 </div>
-                    <div style="margin-top: 5px;">
-                        <h5 id="clockwise">Clockwise: Up-arrow, D</h5>
-                    <h5 id="counterclockwise">Counterclockwise: Z, A</h5>
+                    <div style="margin-top: 0.8vh; font-size: 2.5vh;">
+                        <div><span style="margin-right: 0.7vh;">Clockwise: </span>
+                            <span style="margin-right: 0.7vh;">
+                                <i class="fa-solid fa-arrow-right rightClockwiseFont" style="display: none;"></i>
+                                <i class="fa-solid fa-arrow-up upFont" style="display: contents;">,</i>
+                            </span>
+                           <span id="clockwise">D</span></div>
+                    <div style="margin-right: 0.7vh;">Counterclockwise:
+                        <i class="fa-solid fa-arrow-left leftCcwFont" style="display: none;"></i>
+                        <span id="counterclockwise">Z, A</span></div>
                 </div>
-                <div style="margin-top: 20px;">
-                    <h5 id="pause">Pause/Play: Escape</h5>
+                <div class="controlHeader">
+                    <div id="pause">Pause/Play:</div> 
                 </div>
+                    <div style="margin-top: 0.8vh; font-size: 2.5vh;">
+                        <div>Escape</div>
+                    </div>
+            </div>
+            </div>
             </div>
         </div>
     </body>
