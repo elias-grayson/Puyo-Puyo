@@ -1,7 +1,7 @@
 /* Adds a gradient to the background of the page*/
 html body {
     background: linear-gradient(to top, gray, white);
-    height: 100vh;
+    height: 110vh;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -130,7 +130,7 @@ html body {
     background: radial-gradient(#64a2ff, rgb(54, 54, 148));
     position: absolute;
     margin-top: 1.2vh;
-    width: 36.6vh;
+    width: 36.8vh;
     height: 73.2vh;
     min-width: 36.6vh;
     min-height: 73.2vh;
@@ -224,6 +224,7 @@ html body {
     opacity: 100%;
     z-index: 1;
     overflow: hidden;
+    font-size: 3.5vh;
 }
 
 /* Container for all mini grids and overlays */
@@ -598,9 +599,8 @@ input[type="range"]::-webkit-slider-thumb {
     position: top;
     justify-content: center;
     color: green;
-    font-size: 28px;
-    margin-left: 0px;
-    margin-top: 5px;
+    font-size: 3.5vh;
+    margin-top: 1.5vh;
 }
 
 /* Tells the player to refresh the page if they want to replay */
