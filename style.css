@@ -130,6 +130,8 @@ html body {
     margin-top: 1.2vh;
     width: 36.6vh;
     height: 73.2vh;
+    min-width: 36.6vh;
+    min-height: 73.2vh;
     display: flex;
     flex-wrap: wrap;
     text-align: center;
@@ -157,6 +159,8 @@ html body {
     display: flex;
     height: 6.1vh;
     width: 6.1vh; 
+    min-height: 6.1vh;
+    min-width: 6.1vh;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
@@ -171,6 +175,8 @@ html body {
     margin-top: 1.2vh;
     width: 36.6vh;
     height: 73.2vh;
+    min-width: 36.6vh;
+    min-height: 73.2vh;
     display: flex;
     flex-wrap: wrap;
     z-index: 1;
@@ -183,6 +189,8 @@ html body {
     display: flex;
     height: 6.1vh;
     width: 6.1vh; 
+    min-height: 6.1vh;
+    min-width: 6.1vh; 
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
@@ -196,6 +204,8 @@ html body {
     position: absolute;
     width: 36.6vh;
     height: 73.2vh;
+    min-width: 36.6vh;
+    min-height: 73.2vh;
     display: flex;
     flex-wrap: wrap;
     text-align: center;
@@ -243,6 +253,8 @@ html body {
 .mini-grid-div {
     width: 6vh;
     height: 6vh;
+    min-width: 6vh;
+    min-height: 6vh;
 }
 
 /* Container for all mini grid overlays */
