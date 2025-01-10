@@ -50,10 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let resumeTimerChange = false // Tracks if the landing timer has been resumed
     let isReset = true // Tracks if process clears has been called already
     let isAtMaxSpeed = false; // Tracks whether the game is at the maximum speed
-    let movementStart = false; // Tracks if 
+    let movementStart = false;
     window.isHidingGridEnabled = false; // Tracks if gameplay will be obscured when pausing
-    let isAllClear = false;
-    let isGhost = false
+    let isAllClear = false; // Tracks if all clear state was reached
+    let isGhost = false; // Whether or not the puyos being used in a given function are ghosts or not
+    let isHardDrop = false; // Whether hard drop has been used
+    let gracePeriodTimer = 800; // Amount of time in which movement can occur when placed before next puyos will spawn
+    let isMoveDownEnabled = true; // Whether moving down is enabled
+    let isFreezeFinished = true;
+    let isFreezeTimeoutCleared = false;
+    let isHorizontalPressed = false;
 
     // All puyo colors
     window.colors = [
@@ -130,11 +136,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Draws puyos
     function draw(puyos) {
         if (isGameOver) return;
+
+            if (!squares[currentPosition + current[0] + width].classList.contains('taken') && 
+            !squares[currentPosition + current[1] + width].classList.contains('taken')) {
+                clearInterval(timeoutFreeze);
+                isMoveDownEnabled = true;
+            }
             current.forEach(index => {
 
             // Sets the background color and adds the puyoBlob class
-            squares[puyos + index].classList.add('puyoBlob');
-            squares[puyos + index].classList.add('currentPosition');
+            squares[puyos + index].classList.add('puyoBlob', 'currentPosition');
             squares[puyos + index].style.backgroundColor = colors[random];
             addFont(puyos, current[1], squares);
         });
@@ -151,16 +162,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 squares[puyos + index].classList.add('currentPosition');
             });
         }
+        if (!isMoveDownEnabled) return;
         freeze(current, currentPosition);
     }
 
     // Undraws puyos
     function undraw(puyos) {
+        if (isHardDrop && !isMoveDownEnabled) return;
         current.forEach(index => {
             removeFont(puyos, index, squares);
-            squares[puyos + index].classList.remove('puyoBlob')
-            squares[puyos + index].classList.remove('currentPosition')
-            squares[puyos + index].classList.remove('taken')
+            squares[puyos + index].classList.remove('puyoBlob', 'currentPosition', 'taken')
             squares[puyos + index].style.backgroundColor = '';
         })
         undrawGhost()
@@ -178,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Move down function
     window.sharedMoveDownCurrent = function moveDownCurrent() {
-        if (!isMovementResumed) return;
+        if (!isMovementResumed || !isMoveDownEnabled) return;
         multiplierTimeout();
         undraw(currentPosition); // Remove puyos from the current position
         currentPosition += width;
@@ -226,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.secondBelowGhost = 0;
     // Move down function for already placed puyos
     async function moveDownGhost() {
-        const halfWidth = Math.ceil(width / 2);
+        if (!isMovementResumed) return;
 
         // Current Horizontal positions of the inner and outer puyos
         let firstCurrentHorPosition = (currentPosition + current[0]) % width;
@@ -261,14 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
             secondGhostIndex = ghostSquares[secondCurrentHorPosition + secondBelowGhost + current[1] - width*2];
         }
         
-        firstGhostIndex .classList.add('ghostPuyo');
+        firstGhostIndex.classList.add('ghostPuyo');
         firstGhostIndex.style.backgroundColor = squares[currentPosition + current[0]].style.backgroundColor;
         secondGhostIndex.classList.add('ghostPuyo');
         firstGhostIndex.style.transform = 'scale(0.35)';
-        firstGhostIndex.style.outline = "0.5vh solid black"
+        firstGhostIndex.style.outline = "0.5vh solid black";
         secondGhostIndex.style.backgroundColor = squares[currentPosition + current[1]].style.backgroundColor;
         secondGhostIndex.style.transform = 'scale(0.35)';
-        secondGhostIndex.style.outline = "0.5vh solid black"
+        secondGhostIndex.style.outline = "0.5vh solid black";
     }
     
     const hardDropSound = new Audio('game-sounds/thump.mp3');
@@ -277,7 +288,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Allows the puyos to be snapped to the bottom instantly
     window.sharedHardDrop = function hardDrop() {
         if (!isMovementResumed) return;
+        isHardDrop = true;
+        clearInterval(gracePeriodTimer)
+        gracePeriodTimer = 0;
 
+        // If hard drop sound is already playing, interrupt
         if (currentHardDropSound) {
             currentHardDropSound.pause();
             currentHardDropSound.currentTime = 0;
@@ -286,14 +301,17 @@ document.addEventListener('DOMContentLoaded', () => {
         currentHardDropSound.play();
         
         undraw(currentPosition); // Remove puyos from the current position
-        while (!squares[currentPosition + width].classList.contains('taken')) {
-            sharedMoveDownCurrent();
-        }
-    }
+        current.some(index => {
+            const belowIndex = index + width
+            while (!squares[currentPosition + belowIndex].classList.contains('taken')) {
+                sharedMoveDownCurrent();
 
-    const rotateSound = new Audio('game-sounds/slide.mp3');
-    rotateSound.volume = 1.0;
-    let currentRotateSound = null;
+                if (current.some(i => squares[currentPosition + i + width].classList.contains('taken'))) {
+                    break;
+                }
+            }
+        })
+    }
 
     // Doesn't allow CCW rotation to cause puyos to overflow to other side
     function checkRotationLeft() {
@@ -308,14 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1);
         const isAtRightPuyoEdge = current.some(index => squares[currentPosition + index + 1].classList.contains('taken'));
         currentRotation--;
-
-        // Interrupt previous rotation sound, if any, and play new one
-        if (currentRotateSound) {
-            currentRotateSound.pause();
-            currentRotateSound.currentTime = 0;
-        }
-        currentRotateSound = rotateSound;
-        currentRotateSound.play();
 
         if (currentRotation === -1) {
             currentRotation = 3;
@@ -338,20 +348,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (currentRotation == 1 && (isAtRightEdge || isAtRightPuyoEdge)) {
             currentPosition--;
+        }
 
-            // Accounts for if in between puyos and edges
-            current.some(index => {
-                if ((squares[currentPosition + index].classList.contains('taken'))) {
-                    currentRotation++;
-                    currentPosition++;
-                    isRotationFinished = true;
-                }
-                if (((currentPosition + index) % width === width - 1) && !isRotationFinished) {
-                    currentRotation++;
-                    currentPosition++;
-                }
-                
-            });
+        // Accounts for if the puyos are at the bottom
+        if (currentRotation == 2 && (squares[current[0] + currentPosition + width].classList.contains('taken'))) {
+            currentPosition -= width;
+            isRotationFinished = true;
         }
     }
 
@@ -368,14 +370,6 @@ document.addEventListener('DOMContentLoaded', () => {
             isAtLeftPuyoEdge = current.some(index => squares[currentPosition + index - 1].classList.contains('taken'));
 
         currentRotation++;
-
-        // Interrupt previous rotation sound, if any, and play new one
-        if (currentRotateSound) {
-            currentRotateSound.pause();
-            currentRotateSound.currentTime = 0;
-        }
-        currentRotateSound = rotateSound;
-        currentRotateSound.play();
 
         if (currentRotation === 4) {
             currentRotation = 0;
@@ -398,25 +392,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (((currentRotation == 3) && (isAtLeftEdge || isAtLeftPuyoEdge) )) {
             currentPosition++;
+        }
 
-            // Accounts for if in between puyos and edges
-            current.some(index => {
-                if (squares[currentPosition + index].classList.contains('taken')) {
-                    currentRotation--;
-                    currentPosition--;
-                    isRotationFinished = true;
-                }
-                if (((currentPosition + index) % width === 0) && !isRotationFinished) {
-                    currentRotation--;
-                    currentPosition--;
-                }
-            });
+        // Accounts for if the puyos are at the bottom
+        if (currentRotation == 2 && (squares[current[0] + currentPosition + width].classList.contains('taken'))) {
+            currentPosition -= width;
+            isRotationFinished = true;
         }
     }
 
+    const rotateSound = new Audio('game-sounds/slide.mp3');
+    rotateSound.volume = 1.0;
+    let currentRotateSound = null;
+
     // Rotate the puyos to the right
     window.sharedRotateRight = function rotateRight() {
-        if (!isMovementResumed) return;
+        if (!isMovementResumed || (isHardDrop && !isMoveDownEnabled)) return;
+
+        // Interrupt previous rotation sound, if any, and play new one
+        if (currentRotateSound) {
+            currentRotateSound.pause();
+            currentRotateSound.currentTime = 0;
+        }
+        currentRotateSound = rotateSound;
+        currentRotateSound.play();
+
         undraw(currentPosition);
         checkRotationRight(currentPosition);
         current = puyo[currentRotation];
@@ -425,7 +425,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Rotate the puyos to the left
     window.sharedRotateLeft = function rotateLeft() {
-        if (!isMovementResumed) return;
+        if (!isMovementResumed || (isHardDrop && !isMoveDownEnabled)) return;
+
+        // Interrupt previous rotation sound, if any, and play new one
+        if (currentRotateSound) {
+            currentRotateSound.pause();
+            currentRotateSound.currentTime = 0;
+        }
+        currentRotateSound = rotateSound;
+        currentRotateSound.play();
+
         undraw(currentPosition);
         checkRotationLeft();
         current = puyo[currentRotation];
@@ -436,33 +445,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Freeze function 
     function freeze(puyos, puyoPosition) {
+        let nextIndex;
         if (current.some(index => {
-            const nextIndex = puyoPosition + index + width;
+            nextIndex = puyoPosition + index + width;
             return nextIndex >= squares.length - width || squares[nextIndex].classList.contains('taken');
         })) {
             if (puyos == current) {
-                isMovementResumed = false;
-                isReset = false;
-                isGhost = false;
+                gracePeriod(nextIndex);
+            } 
+        } else if (isGhostEnabled) {
+                isGhost = true;
+                falling(ghostSquares, 0);
+        }
+    }
+
+    let timeoutFreeze = null;
+    // allows puyos to be moved when already placed slightly before the next set is spawned
+    function gracePeriod(nextIndex) {
+        isFreezeFinished = false;
+        isGhost = false;
+        isMoveDownEnabled = false;
+    
+        console.log("grace period timer: ", gracePeriodTimer)
+        timeoutFreeze = setTimeout (() => {
+            if (isFreezeFinished || isMoveDownEnabled) return;
+            isMovementResumed = false;
+            isReset = false;
+            if (nextIndex >= squares.length - width || squares[nextIndex].classList.contains('taken')) {
                 current.forEach(index => squares[currentPosition + index].classList.add('taken'));
                 current.forEach(index => squares[currentPosition + index].classList.remove('currentPosition'));
-                current.forEach(index => squares[currentPosition + index].classList.remove('ghostPuyo'));
-                falling(squares, 50);
+                falling(squares, 60);
                 multiplierTimeout();
                 scoreDisplay.innerHTML = score;
                 squares.slice().forEach(index => {
                     if (index.classList.contains('aboveGrid') && index.classList.contains('taken'))
                         index.classList.remove('taken');
-                })
+                });
             }
-        } else if (isGhostEnabled) {
-            isGhost = true;
-            falling(ghostSquares, 0), 100
-        }
+        }, gracePeriodTimer);
     }
 
     // Creates new puyos to fall
     function createNewPuyo() {
+        gracePeriodTimer = 800;
+        isHardDrop = false;
+        isFreezeFinished = true;
+        isMoveDownEnabled = true;
+        isFreezeTimeoutCleared = false;
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
         speedUp();
         undrawGhost();
@@ -570,7 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Move puyos left, unless at the edge or there is a blockage
     window.sharedMoveLeft = function moveLeft() {
-        if (!isMovementResumed) return;
+        if (!isMovementResumed || (isHardDrop && !isMoveDownEnabled)) return;
         undraw(currentPosition);
         const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0);
         if (!isAtLeftEdge)
@@ -584,7 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Move puyos right, unless at the edge or there is a blockage
     window.sharedMoveRight = function moveRight() {
-        if (!isMovementResumed) return;
+        if (!isMovementResumed || (isHardDrop && !isMoveDownEnabled)) return;
         undraw(currentPosition);
         const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1);
 
@@ -772,7 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Speeds the game up
     function speedUp() {
         if (hasSpedUp && !isAtMaxSpeed) {
-            fallSpeed -= originalFallSpeed * 0.2;
+            fallSpeed -= originalFallSpeed * 0.15;
             if (fallSpeed < 100) {
                 fallSpeed = 100;
                 isAtMaxSpeed = true;
@@ -935,8 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Clear the puyo
                 globalConnectedPuyos.forEach(ind => {
                     removeFont(ind, 0, squares);
-                    squares[ind].classList.remove('taken');
-                    squares[ind].classList.remove('puyoBlob');
+                    squares[ind].classList.remove('taken', 'puyoBlob');
                     squares[ind].style.backgroundColor = '';
                     squares[ind].style.border = '';
                     puyoCount++;
@@ -956,7 +984,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 playVoiceLine();
                 displayScore();
                 groupBonus = 1;
-                falling(squares, 50); // Handles falling puyos
+                falling(squares, 60); // Handles falling puyos
                 globalConnectedPuyos.clear(); // Reset global connections and colors for the next turn
                 setTimeout(() => {
                     if (isReset || isGameOver) return;
@@ -1154,6 +1182,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
         // Handles downward key actions
         if (moveDownBindings[e.key]) {
+            if (currentRotation == 0 || currentRotation == 2) {
+                gracePeriodTimer = 400;
+            } else if (currentRotation == 1 || currentRotation == 3) {
+                gracePeriodTimer = 300;
+            }
             if (!activeDownKeys.has(e.key)) {
                 if (!isInputEnabled) return;
                 moveDownBindings[e.key]()
@@ -1162,6 +1195,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const intervalId = setInterval(() => {
                     if (!isInputEnabled) return;
                     moveDownBindings[e.key]()
+                    if (currentRotation == 0 || currentRotation == 2) {
+                        gracePeriodTimer = 400;
+                    } else if (currentRotation == 1 || currentRotation == 3) {
+                        gracePeriodTimer = 300;
+                    }
                 }, moveDownInterval);
                 activeDownKeys.set(e.key, intervalId);
             }
@@ -1170,12 +1208,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Handles horizontal key actions
         if (horizontalBindings[e.key]) {
             if (!activeHorizontalKeys.has(e.key)) {
-
                 let horizontalIntervalId = null // Interval ID for horizontal movement
 
                 // If movement is not being held, move once
                 if (!horizontalIntervalId) {
-                    if (!isInputEnabled) return;
                     horizontalBindings[e.key]();
                     activeHorizontalKeys.set(e.key);
                     isHorKeyReleased = false;
@@ -1205,11 +1241,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function releaseKey(e) {
+        if (!movementStart) return;
         if (activeDownKeys.has(e.key)) {
             clearInterval(activeDownKeys.get(e.key)); // Stop the interval for the key
             activeDownKeys.delete(e.key);
+            gracePeriodTimer = 800;
         }
         if (activeHorizontalKeys.has(e.key)) {
+            isHorizontalPressed = true;
             clearInterval(activeHorizontalKeys.get(e.key)); // Stop the interval for the key
             activeHorizontalKeys.delete(e.key);
             isHorKeyReleased = true;

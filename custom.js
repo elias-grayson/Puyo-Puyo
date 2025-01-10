@@ -314,7 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Update the ghost grid spaces
             while (ghostSquares.length < secondarySquares.length)  {
-                console.log("ghost squares while loop")
                 const $newDiv = $("<div>")
                 ghostGrid.appendChild($newDiv[0]);
                 ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div'));
@@ -332,8 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } else {
             document.querySelectorAll('.grid div').forEach((puyo) => {
-                puyo.classList.remove('showFriends'); 
-                puyo.classList.remove('showDuke');
+                puyo.classList.remove('showFriends', 'showDuke'); 
             });
         }
         width = chosenWidth
@@ -349,7 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div'));
         ghostGrid = document.querySelector('.ghost-grid');
         current = puyo[currentRotation].map(Number); // Assure all elements are numbers
-        squares.length = width * height;
         width = +width;
         currentPosition = Math.ceil(width / 2 - 1);
         if (width == 1)
