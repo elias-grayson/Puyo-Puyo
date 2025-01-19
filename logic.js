@@ -548,6 +548,12 @@ document.addEventListener('DOMContentLoaded', () => {
         isFreezeFinished = true;
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
         speedUp();
+        squares.forEach((square, index) => {
+            if (index >= squares.length - width) return;
+            if (square.classList.contains('taken') && !square.classList.contains('puyoBlob')) {
+                square.classList.remove('taken');
+            }
+        })
 
         // Makes the up next puyos the current puyo
         random = nextRandom;
@@ -862,6 +868,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return;
             }
+            score += 1;
+            scoreDisplay.innerHTML = score;
             movementStart = true;
             startSound.play();
 
