@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ghostPuyoToggle = document.querySelector('#ghostPuyoToggle')
     const rangeSliders = document.querySelectorAll('.form-range');
     const voiceBtns = document.querySelectorAll('.voiceBtn');
+    const resetBtn = document.querySelector('.reset-btn');
     window.secondaryGrid = document.querySelector('.secondary-grid');
     let secondarySquares = Array.from(document.querySelectorAll('.secondary-grid div'));
     let ghostGrid = document.querySelector('.ghost-grid');
@@ -152,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         randomSecondary = Math.floor(Math.random()*amountOfColors);
     })
 
-    let height = 14; // Height of the playable grid
+    window.height = 14; // Height of the playable grid
     let secondaryHeight = 12; // Height of the secondary grid
     window.isGhostEnabled = true;
     
@@ -185,20 +186,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Adds the # of taken grid spaces to the array
         squares.forEach(index => {
-            if (index.classList.contains("taken")) {
+            if (index.classList.contains("aboveGrid")) {
                 amtOfAbove.push(index);
             }
         });
+
+        secondarySquares.forEach(index => index.classList.remove('xMark'));
 
         let oldWidthDif = widthDif; // For iterating through taken
 
         // Continue if the chosen grid size is less than the previous grid size
         if (chosenWidth < width) {
 
+            squares = Array.from(document.querySelectorAll('.grid div')); // Update squares
             // Remove elements from the above array until they equal the width
             squares.slice().reverse().forEach(index => {
+                console.log("above grid called")
                 const $newDiv = $("<div></div>");
+                console.log("current index classlist: ", index.classList)
+                console.log("amtOfAbove length: ", amtOfAbove.length)
                 if (index.classList.contains("aboveGrid") && (amtOfAbove.length > chosenWidth)) {
+                    console.log("above grid removed")
                     const firstIndex = amtOfAbove.shift();
                     amtOfAbove.push(firstIndex);
                     index.parentNode.appendChild($newDiv[0], index);
@@ -349,8 +357,12 @@ document.addEventListener('DOMContentLoaded', () => {
         current = puyo[currentRotation].map(Number); // Assure all elements are numbers
         width = +width;
         currentPosition = Math.ceil(width / 2 - 1);
-        if (width == 1)
+        deathPoint = Math.ceil(width / 2 - 1) + width;
+        if (width == 1) {
             currentPosition = 0;
+            deathPoint = 1;
+        }
+        secondarySquares[deathPoint - width].classList.add('xMark');
 
         $(".widthButton").removeClass("active");  // Removes 'active' from all buttons
         thisChosen.addClass("active"); // Adds 'active' to the clicked button
@@ -903,8 +915,14 @@ document.addEventListener('DOMContentLoaded', () => {
             "d": sharedRotateRight,
             "D": sharedRotateRight,
             "ArrowUp": sharedRotateRight,
-            " ": sharedHardDrop,
+            " ": sharedHardDrop
         }
+
+        window.resetBindings = {
+            "r": reset,
+            "R": reset
+        }
+
         leftFont.style.display = "contents";
         leftControl.innerHTML = "";
         rightFont.style.display = "contents"
@@ -980,6 +998,11 @@ document.addEventListener('DOMContentLoaded', () => {
             "ArrowDown": sharedRotateLeft,
             "w": sharedHardDrop,
             "W": sharedHardDrop,
+        }
+
+        window.resetBindings = {
+            "r": reset,
+            "R": reset
         }
 
         leftFont.style.display = "none";
@@ -1110,4 +1133,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.style.backgroundColor = activeColor;
         });
     })
+
+    // Resets the game when clicked
+    resetBtn.addEventListener('click', () => {
+        reset();
+    });
 })

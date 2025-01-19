@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cachedSounds = {};
 
     // Preload and cache all sounds at the start
-    async function preloadSounds() {
+    window.preloadSounds = async function preloadSounds() {
         for (let i = 0; i < spells.length; i++) {
             const sound = spells[i];
             await loadAndCacheSound(sound.url);

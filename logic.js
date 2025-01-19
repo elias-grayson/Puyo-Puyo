@@ -2,21 +2,24 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // DOM elements
-    const gameOverDisplay = document.querySelector('#gameOverText') // Game over text
     const scoreContainer = document.querySelector('#scoreDisplay'); // Displays score
     const scoreDisplay = document.querySelector('#score'); // Displays score
     window.chainDisplay = document.querySelector('#chainLength'); // Displays chain length
     window.upNext = document.querySelector('#upNext'); // Displays the up next text
     window.startBtn = document.querySelector('#start-button') // Start and pause button
-    const endDisplay = document.querySelector('#endDisplay'); // Displays the end state
+    const gameOverDisplay = document.querySelector('#gameOverDisplay'); // Displays the end state
     window.dropdownBtn = document.querySelector('.dropdown'); // All dropdown menus
     window.aestheticCustom = document.querySelector('#aesthetic-custom'); // Customize aesthetics button
     window.squares = Array.from(document.querySelectorAll('.grid div')); // Array of all grid spaces
+    const miniSquares = Array.from(document.querySelectorAll('.mini-grid div'));
+    const nextMiniSquares = Array.from(document.querySelectorAll('.next-mini-grid div'));
     window.ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div')); // Array of all ghost grid spaces
     window.custom = document.querySelector('#custom'); // Customization button
     const speedDisplay = document.querySelector('#speedDisplay'); // Speed up text
     window.pauseOverlay = document.querySelector('.grid-pause-overlay');
     window.miniGridOverlay = document.querySelectorAll('.mini-grid-overlay');
+    const resetBtn = document.querySelector('.reset-div');
+    const resetToastEl = document.querySelector('#resetToast');
 
     // Variables
     window.width = 6; // Width of each grid space
@@ -46,9 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let startTime; // Time since the game has started
     let isPaused = false; // Tracks if the speed up timer has been paused
     const fallingAndColorTimer = 800; // How long it takes for puyos to clear
-    const resumeTimer = 150; // How long it takes for puyos to land
+    const resumeTimer = 120; // How long it takes for puyos to land
     let resumeTimerChange = false // Tracks if the landing timer has been resumed
-    let isReset = true // Tracks if process clears has been called already
+    let areClearsReset = true // Tracks if process clears has been called already
     let isAtMaxSpeed = false; // Tracks whether the game is at the maximum speed
     let movementStart = false;
     window.isHidingGridEnabled = false; // Tracks if gameplay will be obscured when pausing
@@ -58,8 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let gracePeriodTimer = 800; // Amount of time in which movement can occur when placed before next puyos will spawn
     let isMoveDownEnabled = true; // Whether moving down is enabled
     let isFreezeFinished = true;
-    let isFreezeTimeoutCleared = false;
-    let isHorizontalPressed = false;
+    let isGameReset = false;
 
     // All puyo colors
     window.colors = [
@@ -91,14 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
         [width, width-1]
     ];
 
-    // Identical rotations for the ghost puyo
-    window.ghostPuyo = [
-        [width, 0],
-        [width, width+1],
-        [width, width*2],
-        [width, width-1]
-    ];
-
     // Randomly selects a puyo
     window.random = Math.floor(Math.random()*amountOfColors);
     window.randomSecondary = Math.floor(Math.random()*amountOfColors);
@@ -107,14 +101,17 @@ document.addEventListener('DOMContentLoaded', () => {
     window.thirdRandom = 0;
     window.thirdRandomSecondary = 0;
     window.currentPosition = Math.ceil(width / 2 - 1);
-    window.currentGhostPosition = currentPosition;
+    window.deathPoint = Math.ceil(width / 2 - 1) + width;
     window.currentRotation = 0;
     window.current = puyo[currentRotation];
-    window.currentGhost = ghostPuyo[currentRotation];
 
     // Adds font to the puyos
     function addFont(puyos, puyoPosition, array) {
-        const computedColor = window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor;
+        let computedColor;
+        const targetElement = array[puyos + puyoPosition];
+        if (targetElement instanceof Element && window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor) {
+            computedColor = window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor;
+        }
 
             // If the computed color matches one in the map, add font
             if (colorClassMap[computedColor]) {
@@ -125,13 +122,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Removes font from puyos
     function removeFont(puyos, puyoPosition, array) {
-        let computedColor = window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor;
+        let computedColor;
+        const targetElement = array[puyos + puyoPosition];
+        if (targetElement instanceof Element && window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor) {
+            computedColor = window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor;
+        }
     
         // If the computed color matches one in the map, remove font
         if (colorClassMap[computedColor]) {
             array[puyos + puyoPosition].classList.remove(colorClassMap[computedColor]);
         }
     }
+
+    window.firstBelowGhost = 0;
+    window.secondBelowGhost = 0;
 
     // Draws puyos
     function draw(puyos) {
@@ -162,36 +166,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 squares[puyos + index].classList.add('currentPosition');
             });
         }
+        resetBtn.style.opacity = "0%";
+        resetBtn.style.zIndex = "-2";
         if (!isMoveDownEnabled) return;
-        freeze(current, currentPosition);
+        freeze(current);
     }
 
     // Undraws puyos
-    function undraw(puyos) {
-        if (isHardDrop && !isMoveDownEnabled) return;
-        current.forEach(index => {
+    function undraw(puyos, array) {
+        if ((isHardDrop && !isMoveDownEnabled) && (!isGameReset)) return;
+        array.forEach(index => {
+            if (array == current) {
             removeFont(puyos, index, squares);
             squares[puyos + index].classList.remove('puyoBlob', 'currentPosition', 'taken')
             squares[puyos + index].style.backgroundColor = '';
-        })
-        undrawGhost()
-    }
+            } else if (array == squares) {
+                removeFont(puyos, 0, squares);
+                squares[puyos].classList.remove('puyoBlob', 'taken')
+                squares[puyos].style.backgroundColor = '';
+            } else if (array == miniSquares) {
+                removeFont(puyos, 0, miniSquares);
+                miniSquares[puyos].classList.remove('puyoBlob', 'taken')
+                miniSquares[puyos].style.backgroundColor = '';
+            } else {
+                removeFont(puyos, 0, nextMiniSquares);
+                nextMiniSquares[puyos].classList.remove('puyoBlob', 'taken')
+                nextMiniSquares[puyos].style.backgroundColor = '';
+            }
+        });
 
-    // Undraws ghost puyos
-    function undrawGhost() {
-        if (!isMovementResumed) return;
+        // Undraws ghost puyos
         ghostSquares.forEach(index => {
             index.style.backgroundColor = '';
             index.style.outline = 'none';
             index.classList.remove('ghostPuyo');
-        })
+        });
     }
 
     // Move down function
     window.sharedMoveDownCurrent = function moveDownCurrent() {
         if (!isMovementResumed || !isMoveDownEnabled) return;
         multiplierTimeout();
-        undraw(currentPosition); // Remove puyos from the current position
+        undraw(currentPosition, current); // Remove puyos from the current position
         currentPosition += width;
         score += 1;
         scoreDisplay.innerHTML = score;
@@ -200,11 +216,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Move down function for already placed puyos
     async function moveDownPlaced(index, initialColor, fallingTimer) {
-
+        if (isGameReset) 
+            return;
         // Move the Puyo down one row
         const belowIndex = index + width;
         return new Promise(resolve => {
+            if (isGameReset) return;
             setTimeout(() => {
+                if (isGameReset) return;
                 isFallingTimeout();
 
                 // Remove the 'puyoBlob' class and font
@@ -233,11 +252,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.firstBelowGhost = 0;
-    window.secondBelowGhost = 0;
     // Move down function for already placed puyos
     async function moveDownGhost() {
-        if (!isMovementResumed) return;
 
         // Current Horizontal positions of the inner and outer puyos
         let firstCurrentHorPosition = (currentPosition + current[0]) % width;
@@ -246,15 +262,20 @@ document.addEventListener('DOMContentLoaded', () => {
         let firstGhostIndex = ghostSquares[firstCurrentHorPosition];
         let secondGhostIndex = ghostSquares[secondCurrentHorPosition];
 
-        window.firstBelowGhost = 0;
-        window.secondBelowGhost = 0;
+        firstBelowGhost = 0;
+        secondBelowGhost = 0;
+
+        const firstBottom = firstCurrentHorPosition + width
+        const secondBottom = secondCurrentHorPosition + width
 
         // Iterate through the grid until reached a spot that's taken
-        while (!squares[firstBelowGhost + firstCurrentHorPosition + width].classList.contains('taken')) {
+        while (!squares[firstBelowGhost + firstBottom].classList.contains('taken') && 
+        firstBelowGhost + firstBottom < width*height - width) {
             firstBelowGhost += width;
         }
 
-        while (!squares[secondBelowGhost + secondCurrentHorPosition + width].classList.contains('taken')) {
+        while (!squares[secondBelowGhost + secondBottom].classList.contains('taken') && 
+        secondBelowGhost + secondBottom < width*height - width) {
             secondBelowGhost += width;
         }
         
@@ -288,9 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Allows the puyos to be snapped to the bottom instantly
     window.sharedHardDrop = function hardDrop() {
         if (!isMovementResumed) return;
-        isHardDrop = true;
         clearInterval(gracePeriodTimer)
         gracePeriodTimer = 0;
+        isHardDrop = true;
 
         // If hard drop sound is already playing, interrupt
         if (currentHardDropSound) {
@@ -300,17 +321,27 @@ document.addEventListener('DOMContentLoaded', () => {
         currentHardDropSound = hardDropSound;
         currentHardDropSound.play();
         
-        undraw(currentPosition); // Remove puyos from the current position
-        current.some(index => {
-            const belowIndex = index + width
-            while (!squares[currentPosition + belowIndex].classList.contains('taken')) {
-                sharedMoveDownCurrent();
+        undraw(currentPosition, current); // Remove puyos from the current position
+        let firstBelowIndex = currentPosition + current[0];
+        let secondBelowIndex = currentPosition + current[1];
+        while (!squares[firstBelowIndex].classList.contains('taken') || 
+        !squares[secondBelowIndex].classList.contains('taken')) {
+            sharedMoveDownCurrent();
 
-                if (current.some(i => squares[currentPosition + i + width].classList.contains('taken'))) {
-                    break;
-                }
+            // Does the grace period calculations again
+            if (squares[currentPosition + current[0] + width].classList.contains('taken') ||
+            current.some(i => (currentPosition + i + width) > width * height - width - 1) || 
+            squares[currentPosition + current[1] + width].classList.contains('taken')) {
+                let nextIndex;
+                gracePeriodTimer = 0;
+                current.some(index => {
+
+                    nextIndex = currentPosition + index + width
+                    gracePeriodCalculations(nextIndex)
+                });
+                break;
             }
-        })
+        }
     }
 
     // Doesn't allow CCW rotation to cause puyos to overflow to other side
@@ -351,10 +382,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Accounts for if the puyos are at the bottom
-        if (currentRotation == 2 && (squares[current[0] + currentPosition + width].classList.contains('taken'))) {
+        if (currentRotation == 2 && 
+            (squares[current[0] + currentPosition + width].classList.contains('taken'))) {
             currentPosition -= width;
             isRotationFinished = true;
+        } else if (currentPosition < -1) {
+            currentPosition += width;
+            isRotationFinished = true;
         }
+
+        // if (currentPosition < -1) {
+            
+        // }
     }
 
     // Doesn't allow CW rotation to cause puyos to overflow to other side
@@ -395,8 +434,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Accounts for if the puyos are at the bottom
-        if (currentRotation == 2 && (squares[current[0] + currentPosition + width].classList.contains('taken'))) {
+        if (currentRotation == 2 && 
+            (squares[current[1] + currentPosition + width].classList.contains('taken')) &&
+            currentPosition > -1) {
             currentPosition -= width;
+            isRotationFinished = true;
+        } else if (currentPosition < -1) {
+            currentPosition += width;
             isRotationFinished = true;
         }
     }
@@ -417,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRotateSound = rotateSound;
         currentRotateSound.play();
 
-        undraw(currentPosition);
+        undraw(currentPosition, current);
         checkRotationRight(currentPosition);
         current = puyo[currentRotation];
         draw(currentPosition);
@@ -435,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentRotateSound = rotateSound;
         currentRotateSound.play();
 
-        undraw(currentPosition);
+        undraw(currentPosition, current);
         checkRotationLeft();
         current = puyo[currentRotation];
         draw(currentPosition);
@@ -444,12 +488,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const speedSound = new Audio('game-sounds/cute-level-up-2.mp3');
 
     // Freeze function 
-    function freeze(puyos, puyoPosition) {
+    function freeze(puyos) {
         let nextIndex;
         if (current.some(index => {
-            nextIndex = puyoPosition + index + width;
+            nextIndex = currentPosition + index + width;
             return nextIndex >= squares.length - width || squares[nextIndex].classList.contains('taken');
         })) {
+            preloadSounds();
             if (puyos == current) {
                 gracePeriod(nextIndex);
             } 
@@ -462,15 +507,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeoutFreeze = null;
     // allows puyos to be moved when already placed slightly before the next set is spawned
     function gracePeriod(nextIndex) {
+        if (isGameOver) return;
         isFreezeFinished = false;
-        isGhost = false;
         isMoveDownEnabled = false;
-    
-        console.log("grace period timer: ", gracePeriodTimer)
+        isGhost = false;
+        if (isHardDrop)
+            gracePeriodTimer = 0;
+        gracePeriodCalculations(nextIndex);
+    }
+
+    // Helper for the changing the timer of the grace period
+    function gracePeriodCalculations(nextIndex) {
         timeoutFreeze = setTimeout (() => {
-            if (isFreezeFinished || isMoveDownEnabled) return;
+            if (isFreezeFinished || isMoveDownEnabled || isGameOver || isGameReset) return;
             isMovementResumed = false;
-            isReset = false;
+            areClearsReset = false;
             if (nextIndex >= squares.length - width || squares[nextIndex].classList.contains('taken')) {
                 current.forEach(index => squares[currentPosition + index].classList.add('taken'));
                 current.forEach(index => squares[currentPosition + index].classList.remove('currentPosition'));
@@ -478,8 +529,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 multiplierTimeout();
                 scoreDisplay.innerHTML = score;
                 squares.slice().forEach(index => {
-                    if (index.classList.contains('aboveGrid') && index.classList.contains('taken'))
+                    if (index.classList.contains('aboveGrid') && index.classList.contains('taken')) {
                         index.classList.remove('taken');
+                    }
                 });
             }
         }, gracePeriodTimer);
@@ -487,14 +539,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Creates new puyos to fall
     function createNewPuyo() {
+        if (isGameOver) return;
+        score++;
+        scoreDisplay.innerHTML = score;
+        isMoveDownEnabled = true;
         gracePeriodTimer = 800;
         isHardDrop = false;
         isFreezeFinished = true;
-        isMoveDownEnabled = true;
-        isFreezeTimeoutCleared = false;
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
         speedUp();
-        undrawGhost();
 
         // Makes the up next puyos the current puyo
         random = nextRandom;
@@ -527,6 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Allows puyos to fall 
     async function falling(array, fallingTimer) {
+        if (isGameOver || isGameReset) return;
         if (!isGhost) {
             isFallingTimeout();
         }
@@ -556,8 +610,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Moves the Puyo down and add the promise for this move
                 if (!isGhost) {
                     movePromise = moveDownPlaced(index, array[index].style.backgroundColor, fallingTimer);
-                } else if (index % width == 0) {
-                    moveDownGhost()
                 }
                 promises.push(movePromise);  // Store the promise in an array
                 movedPuyos = true;
@@ -565,12 +617,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        if (isGhost) {
+            moveDownGhost();
+        }
+
         // Wait for all moves to finish before continuing
-        if (movedPuyos && !isGhost) {
+        if (movedPuyos && !isGhost && !isGameReset) {
             await Promise.all(promises); // Wait for all puyos to stop falling
             falling(array, fallingTimer); // Recursively call falling to check if any new Puyos need to fall
         } else {
-            if (isGhost) return;
+            if (isGhost || isGameReset) return;
             // After all Puyos have settled, check for adjacent Puyos to clear
             squares.forEach((square, index) => {
                 if (square.classList.contains('puyoBlob')) {
@@ -578,10 +634,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         checkAdjacentColor(index);
                 }
             });
-            if (isGhost) return;
+            if (isGhost || isGameReset) return;
             processClears();
         }
-        if (isGhost) return;
+        if (isGhost || isGameReset) return;
         isFalling = false;
     }
 
@@ -589,10 +645,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function isFallingTimeout() {
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
-            if (isFalling) return;
-            if (resumeTimerChange) return;
-            resumeCurrent();
+            if (isGameOver || isFalling || resumeTimerChange) return;
             gameOver();
+            if (isGameOver) return;
+            resumeCurrent();
             isMovementResumed = true
         }, resumeTimer)
     }
@@ -600,7 +656,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Move puyos left, unless at the edge or there is a blockage
     window.sharedMoveLeft = function moveLeft() {
         if (!isMovementResumed || (isHardDrop && !isMoveDownEnabled)) return;
-        undraw(currentPosition);
+        undraw(currentPosition, current);
         const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0);
         if (!isAtLeftEdge)
             currentPosition--;
@@ -614,7 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Move puyos right, unless at the edge or there is a blockage
     window.sharedMoveRight = function moveRight() {
         if (!isMovementResumed || (isHardDrop && !isMoveDownEnabled)) return;
-        undraw(currentPosition);
+        undraw(currentPosition, current);
         const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1);
 
         if (!isAtRightEdge)
@@ -634,6 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Displays the puyos in the mini-grid display
     window.displayShape = function displayShape() {
+        if (isGameOver) return;
         displaySquares.forEach(square => {
             // Remove font and puyos from the up next display
             removeFont(displayIndex, 0, displaySquares);
@@ -691,24 +748,38 @@ document.addEventListener('DOMContentLoaded', () => {
         event.target.blur();
     });
 
+    const activeEscKey = new Set();
+
     let isEscapeEnabled = false;
     // Adds pause/play functionality to the escape key
     document.addEventListener('keydown', (e) => {
-        if (e.key === "Escape" && isEscapeEnabled) {
+        if (isGameOver) return;
+        if (e.key === "Escape" && isEscapeEnabled && !activeEscKey.has(e.key)) {
+            activeEscKey.add(e.key);
             startBtn.innerHTML = '<i class="fa-solid fa-pause"></i>' + '  Pause';
             startBtnPause(); // Toggle pause/unpause when the escape key is pressed
         }
     });
 
+    // Makes sure the escape key can't be held down
+    document.addEventListener('keyup', (e) => {
+        if (activeEscKey.has(e.key)) {
+            activeEscKey.delete(e.key);
+        }
+    });
+
     // Resumes gameplay after chaining has finished
     function resumeCurrent() {
+        if (isGameReset) return;
         isInputEnabled = false;
         clearInterval(timerId);
         createNewPuyo();
         timerId = setInterval(() => {
+            if (isGameOver) return;
             sharedMoveDownCurrent();
         }, fallSpeed);
         displayShape();
+        if (isGameOver) return;
         isInputEnabled = true
     }
 
@@ -724,6 +795,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Starts, pauses, and unpauses the game
     function startBtnPause() {
+        isGameReset = false;
+        isMovementResumed = true;
+        areClearsReset = true;
+        arePuyosCleared = true;
+        resumeTimerChange = false;
         if (!isMovementResumed || isGameOver) {
             startBtn.disabled = true;
             return;
@@ -740,6 +816,8 @@ document.addEventListener('DOMContentLoaded', () => {
             timerId = null;
             isInputEnabled = false;
             pauseOverlay.style.opacity = "50%";
+            resetBtn.style.zIndex = "6";
+            resetBtn.style.opacity = "80%"
             miniGridOverlay.forEach(overlay => overlay.style.opacity = "50%")
 
             // Hides the grid
@@ -764,6 +842,8 @@ document.addEventListener('DOMContentLoaded', () => {
             isInputEnabled = true;
             startSpeedUpTimer();
             pauseOverlay.style.opacity = "0%"
+            resetBtn.style.zIndex = "-2";
+            resetBtn.style.opacity = "0%"
             miniGridOverlay.forEach(overlay => overlay.style.opacity = "0%")
 
             // Shows the grid
@@ -800,6 +880,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Speeds the game up
     function speedUp() {
+        if (isGameOver) return;
         if (hasSpedUp && !isAtMaxSpeed) {
             fallSpeed -= originalFallSpeed * 0.15;
             if (fallSpeed < 100) {
@@ -815,7 +896,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 speedDisplay.innerHTML = ""
             }, 3000)
         }
-        endDisplay.innerHTML = "";
+        gameOverDisplay.innerHTML = "";
         isAllClear = false;
         setTimeout (() => {
             if (!isGameOver) return;
@@ -855,7 +936,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Main function to check the color of adjacent puyos
     function checkAdjacentColor(puyoIndex) {
-        if (isGameOver) return;
+        if (isGameOver || isGameReset) return;
 
         let localConnected = new Set(); // Collects connected puyos for this call
 
@@ -867,7 +948,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // If the puyos to pop value or more connected puyos are found, add them to both sets
             if (connected.length >= puyosToPop) {
                 resumeTimerChange = true;
-                isReset = true
+                areClearsReset = true
                 connected.forEach(ind => {
                     globalConnectedPuyos.add(ind);
                     localConnected.add(ind);
@@ -887,6 +968,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper for checkAdjacentColor to recursively find all connected Puyos of the same color
     function getConnectedPuyos(index, color, visited = new Set()) {
+        if (isGameReset) return;
         // Base case: Makes sure puyos don't get counted more than once
         if (visited.has(index)) return [];
 
@@ -938,7 +1020,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to process all puyo pops after collecting global connections
     function processClears() {
-        if (!isReset || isGameOver) return;
+        if (!areClearsReset || isGameOver || isGameReset) return;
         if (globalConnectedPuyos.size > 0) {
             resetPopAnimation();
             arePuyosCleared = false; 
@@ -947,8 +1029,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 startColor[ind] = parseRGB(squares[ind].style.backgroundColor);
             })
             setTimeout (() => {
-                if (!isReset) return;
-                if (isFalling) return
+                if (!areClearsReset || isFalling || isGameReset) return;
                 globalConnectedPuyos.forEach(ind => {  
                     removeFont(ind, 0, squares);
                 })
@@ -956,8 +1037,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 200);
         }
         setTimeout (() => {
-            if (!isReset || isGameOver) return;
-            isReset = false;
+            if (!areClearsReset || isGameOver || isGameReset) return;
+            areClearsReset = false;
 
             // If there are puyos in the conneced list
             if (globalConnectedPuyos.size > 0) {
@@ -987,12 +1068,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 falling(squares, 60); // Handles falling puyos
                 globalConnectedPuyos.clear(); // Reset global connections and colors for the next turn
                 setTimeout(() => {
-                    if (isReset || isGameOver) return;
+                    if (areClearsReset || isGameOver || isGameReset) return;
                     isFallingTimeout();
                     resumeTimerChange = false;
                     allClear()
                 }, 100)
-                isReset = true;
+                areClearsReset = true;
                 arePuyosCleared = true;
             }
         }, fallingAndColorTimer)
@@ -1023,6 +1104,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fades puyos to white before being popped
     async function animatePop(timestamp) {
+        if (isGameReset) {
+            colorVisited.clear();
+            globalConnectedPuyos.clear();
+            resetPopAnimation();
+            return;
+        }
         if (!animationStartTime) animationStartTime = timestamp;
         const elapsedTime = timestamp - animationStartTime;
         const progress = Math.min(elapsedTime / animationDuration, 1); // Animation progress
@@ -1078,9 +1165,9 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 // Adds margin if both speed up and all clear happen at the same time
                 if (speedDisplay.innerHTML !== "") {
-                    endDisplay.style.marginRight = "2.2vh";
+                    gameOverDisplay.style.marginRight = "2.2vh";
                 } else {
-                    endDisplay.style.marginRight = "0vh";
+                    gameOverDisplay.style.marginRight = "0vh";
                 }
 
                 // If British Micah's voice is active, play matching all clear line
@@ -1099,8 +1186,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentSpell = null
                 }
 
-                endDisplay.innerHTML = 'All Clear!';
-                endDisplay.style.color = "#0d6efd"
+                gameOverDisplay.innerHTML = 'All Clear!';
+                gameOverDisplay.style.color = "#0d6efd"
                 isAllClear = true;
                 score += 5000;
                 scoreDisplay.innerHTML = score
@@ -1144,25 +1231,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* Game over if reached the top */
     function gameOver() {
-        if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+        if (isGameReset) return;
+        if (squares.some((square, index) => square.classList.contains('taken', 'puyoBlob') && (index == deathPoint))) {
             isMovementResumed = false;
             isGameOver = true;
             isPaused = true;
             clearInterval(timerId);
-            isInputEnabled = false
-            endDisplay.innerHTML = 'game over';
-            endDisplay.style.color = "red";
-            endDisplay.style.fontStyle = "";
+            isInputEnabled = false;
+            gameOverDisplay.innerHTML = 'game over';
+            gameOverDisplay.style.color = "red";
+            gameOverDisplay.style.fontStyle = "";
+            chainDisplay.innerHTML = "";
             gameOverSound.play();
 
             // Prompts players to restart page to play again
+            if (isGameReset) return;
             setTimeout(() => {
-                gameOverDisplay.innerHTML = "To restart, refresh the page";
-                gameOverDisplay.style.padding = '2.2vh';
-                gameOverDisplay.style.border= "solid 0.5vh black";
-                gameOverDisplay.style.borderRadius = '4.8vh';
+                if (isGameReset) return;
+                resetBtn.style.zIndex = "6";
+                resetBtn.style.opacity = "100%"
             }, 3000);
         }
+    }
+
+    const resetSound = new Audio('game-sounds/arcade-ui-17.mp3');
+    resetSound.volume = 0.35;
+
+    // Reset success toaster
+    const resetToast = new bootstrap.Toast(resetToastEl);
+
+    // Resets the game while retaining current customization options
+    window.reset = function reset() {
+        isGameOver = false;
+        isGameReset = true;
+        clearInterval(timerId);
+        clearTimeout(speedInterval);
+        fallSpeed = originalFallSpeed;
+        random = Math.floor(Math.random()*amountOfColors);
+        randomSecondary = Math.floor(Math.random()*amountOfColors);
+        nextRandom = 0;
+        nextRandomSecondary = 0;
+        thirdRandom = 0;
+        thirdRandomSecondary = 0;
+        currentPosition = Math.ceil(width / 2 - 1);
+        currentRotation = 0;
+        current = puyo[currentRotation];
+        score = 0;
+        scoreDisplay.innerHTML = "0"
+        startBtn.innerHTML = "Start"
+        isClickedOnce = false;
+        timerId = null;
+        isInputEnabled = false;
+        custom.disabled = false;
+        firstBelowGhost = 0;
+        secondBelowGhost = 0;
+        remainingTime = 90000;
+        chainDisplay.innerHTML = "";
+        pauseOverlay.style.opacity = "0%"
+        resetBtn.style.zIndex = "-2";
+        miniGridOverlay.forEach(overlay => overlay.style.opacity = "0%")
+        scoreContainer.style.visibility = "hidden";
+        upNext.innerHTML ='';
+        resetToast.show();
+        gameOverDisplay.innerHTML = "";
+        resetBtn.style.opacity = "0%"
+        resetSound.play();
+
+        if (isHidingGridEnabled)
+            secondaryGrid.style.zIndex = "0";
+        squares.forEach((square, index) => {
+            undraw(index, squares);
+            square.classList.remove('currentPosition')
+        });
+        miniSquares.forEach((square, index) => {
+            undraw(index, miniSquares);
+        });
+        nextMiniSquares.forEach((square, index) => {
+            undraw(index, nextMiniSquares);
+        });
     }
 
     document.addEventListener('keydown', control); // Attaches the control function to the 'keydown' event
@@ -1171,6 +1317,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeHorizontalKeys = new Map(); // Map to track Horizontal keys
     const activeDownKeys = new Map(); // Map to track holdable keys currently held down
     const activeNonHoldKeys = new Set(); // Set to track non-holdable keys currently held down
+    const resetKeys = new Set(); // Tracks the reset key
     const moveInterval = 50; // How long before horizontal movement is repeated
     window.moveDownInterval = fallSpeed * 0.06; // How long before downward movement is repeated
     window.horizontalHoldInterval = 100; // How long it takes for the horizontal movement to start repeating
@@ -1238,6 +1385,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 activeNonHoldKeys.add(e.key);
             }
         }
+
+        // Handles reset key
+        if (resetBindings[e.key]) {
+            if (!resetKeys.has(e.key)) {
+                resetBindings[e.key]()
+                resetKeys.add(e.key);
+            }
+        }
     }
 
     function releaseKey(e) {
@@ -1255,6 +1410,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (activeNonHoldKeys.has(e.key)) {
             activeNonHoldKeys.delete(e.key);
+        }
+        if (resetKeys.has(e.key)) {
+            resetKeys.delete(e.key);
         }
     }
     
@@ -1281,5 +1439,10 @@ document.addEventListener('DOMContentLoaded', () => {
         "D": sharedRotateRight,
         "ArrowUp": sharedRotateRight,
         " ": sharedHardDrop,
+    }
+
+    window.resetBindings = {
+        "r": reset,
+        "R": reset
     }
 })

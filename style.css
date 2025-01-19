@@ -166,6 +166,20 @@ html body {
     border: 0.13vh solid rgba(0, 0, 0, 0.3);
 }
 
+/* X on the grid */
+.xMark {
+    font-family: "Font Awesome 6 Free";
+}
+
+/* Allows font to exist on the x mark */
+.xMark::before {
+    color: rgb(255, 29, 29);
+    display: block;
+    font-family: "Font Awesome 6 Free";
+    font-size: 6.6vh;
+    content: "\58";
+}
+
 /* Contains the puyo board visually */
 .ghost-grid {
     font-family: "Font Awesome 6 Free";
@@ -173,6 +187,7 @@ html body {
     position: absolute;
     margin-top: 1.2vh;
     width: 36.6vh;
+    margin-right: 0.2vh;
     height: 73.2vh;
     display: flex;
     flex-wrap: wrap;
@@ -195,6 +210,7 @@ html body {
 
 /* Overlay over the main grid when paused */
 .grid-pause-overlay {
+    flex-direction: column;
     background: black;
     opacity: 0%;
     margin-top: 1.2vh;
@@ -212,12 +228,32 @@ html body {
 
 /* Text inside the pause overlay */
 .pauseOverlayText {
+    position: relative;
     color: white;
     font-family: "Font Awesome 6 Free";
     opacity: 100%;
     z-index: 1;
     overflow: hidden;
     font-size: 3.5vh;
+    margin-bottom: 5vh;
+}
+
+.reset-div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    font-family: "Font Awesome 6 Free";
+    opacity: 0%;
+    z-index: -2;
+    margin-top: 3vh;
+}
+
+.reset-btn {
+    width: 20vh;
+    min-width: 9vh;
+    border: 0.5vh solid rgba(255, 255, 255, 0.5);
 }
 
 /* Container for all mini grids and overlays */
@@ -257,14 +293,14 @@ html body {
 .mini-grid-overlay-container {
     position: absolute;
     margin-left: 1.27vh;
-    margin-top: 1.32vh;
+    margin-top: 1.3vh;
 }
 
 /* Up next grid display */
 .mini-grid-overlay {
     opacity: 0%;
     width: 6.1vh;
-    height: 12.2vh;
+    height: 12.3vh;
     flex-wrap: wrap;
     position: relative;
     background: black;
@@ -274,7 +310,7 @@ html body {
 /* Controls the overlay for the second mini grid */
 #nextMiniOverlay {
     margin-left: 8.62vh;
-    margin-top: -4.25vh;
+    margin-top: -4.3vh;
 }
 
 /* Applies only to dropfront buttons */
@@ -394,6 +430,7 @@ html body {
     color: white;
     padding: 1.4vh;
     height: 51.5vh;
+    z-index: 2;
 }
 
 /* Headers for the control display */
@@ -573,7 +610,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* Applies to the game over display */
-#endDisplay {
+#gameOverDisplay {
     font-family: "Font Awesome 6 Free";
     display: flex;
     position: top;
@@ -694,4 +731,15 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: 50%;
     font-size: 80px;
     background-color: blue;
+}
+
+/* The board reset toast */
+#resetToast {
+    background-color: #23c135;
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+    width: auto;
+    border: 2px solid white;
 }

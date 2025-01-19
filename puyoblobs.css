@@ -267,45 +267,45 @@
 /* Images of Duke for all colored puyos */
 .redBack.showFriends::before {
     font-family: ''; 
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('friend-images/elias.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-40deg) brightness(0.9);
     content: ''
 }
 .greenBack.showFriends::before {
     font-family: ''; 
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('friend-images/sam.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-300deg) brightness(0.9);
     content: ''
 }
 .blueBack.showFriends::before {
     font-family: ''; 
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('friend-images/jess.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-170deg) brightness(0.8);
     content: ''
 }
 .yellowBack.showFriends::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('/friend-images/maggie.jpg');
     filter: sepia(10) saturate(10) hue-rotate(20deg) brightness(1.2);
     content: ''
 }
 .purpleBack.showFriends::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('friend-images/ceci.jpg');
     filter: sepia(10) saturate(20) hue-rotate(-120deg) brightness(0.9);
     content: ''
 }
 .tealBack.showFriends::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('/friend-images/daniel.jpg');
     filter: sepia(10) saturate(5) hue-rotate(-230deg) brightness(0.8);
     content: ''
 }
 .pinkBack.showFriends::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('/friend-images/russell.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-70deg) brightness(0.9);
     content: ''
@@ -314,43 +314,43 @@
 
 /* Images of Duke for all colored puyos */
 .redBack.showDuke::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('duke-images/red.jpg');
     filter: sepia(10) saturate(12) hue-rotate(330deg) brightness(1.0);
     content: '';
 }
 .greenBack.showDuke::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('duke-images/green.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-300deg) brightness(0.9);
     content: '';
 }
 .blueBack.showDuke::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('duke-images/blue.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-180deg) brightness(1);
     content: '';
 }
 .yellowBack.showDuke::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('/duke-images/yellow.jpg');
     filter: sepia(10) saturate(10) hue-rotate(20deg) brightness(1.2);
     content: '';
 }
 .purpleBack.showDuke::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('duke-images/purple.jpg');
     filter: sepia(10) saturate(20) hue-rotate(-120deg) brightness(0.9);
     content: '';
 }
 .tealBack.showDuke::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('/duke-images/teal.jpg');
     filter: sepia(10) saturate(5) hue-rotate(-230deg) brightness(0.8);
     content: '';
 }
 .pinkBack.showDuke::before {
-    border: solid 6px black;
+    border: solid 4px black;
     background-image: url('/duke-images/pink.jpg');
     filter: sepia(10) saturate(10) hue-rotate(-70deg) brightness(1.0);
     content: '';
