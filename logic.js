@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', () => {
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
         speedUp();
         squares.forEach((square, index) => {
-            if (index >= squares.length - width) return;
+            if (index >= squares.length - (squares.length - width*2)) return;
             if (square.classList.contains('taken') && !square.classList.contains('puyoBlob')) {
                 square.classList.remove('taken');
             }
