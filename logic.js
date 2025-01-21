@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
             (squares[current[0] + currentPosition + width].classList.contains('taken'))) {
             currentPosition -= width;
             isRotationFinished = true;
-        } else if (currentPosition < -1) {
+        } else if ((currentPosition < -1) && (currentRotation == 0)) {
             currentPosition += width;
             isRotationFinished = true;
         }
@@ -435,11 +435,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Accounts for if the puyos are at the bottom
         if (currentRotation == 2 && 
-            (squares[current[1] + currentPosition + width].classList.contains('taken')) &&
+            (squares[current[0] + currentPosition + width].classList.contains('taken')) &&
             currentPosition > -1) {
             currentPosition -= width;
             isRotationFinished = true;
-        } else if (currentPosition < -1) {
+        } else if (currentPosition < -1 && currentRotation == 0) {
             currentPosition += width;
             isRotationFinished = true;
         }
