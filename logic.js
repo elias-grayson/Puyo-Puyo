@@ -108,23 +108,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Adds font to the puyos
     function addFont(puyos, puyoPosition, array) {
         let computedColor;
-        const targetElement = array[puyos + puyoPosition];
-        if (targetElement instanceof Element && window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor) {
+        if (window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor) {
             computedColor = window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor;
         }
 
-            // If the computed color matches one in the map, add font
-            if (colorClassMap[computedColor]) {
-                array[puyos + puyoPosition].removeAttribute('id');
-                array[puyos + puyoPosition].classList.add(colorClassMap[computedColor]);
-            }
+        // If the computed color matches one in the map, add font
+        if (colorClassMap[computedColor]) {
+            array[puyos + puyoPosition].removeAttribute('id');
+            array[puyos + puyoPosition].classList.add(colorClassMap[computedColor]);
+        }
     }
 
     // Removes font from puyos
     function removeFont(puyos, puyoPosition, array) {
         let computedColor;
-        const targetElement = array[puyos + puyoPosition];
-        if (targetElement instanceof Element && window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor) {
+        if (window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor) {
             computedColor = window.getComputedStyle(array[puyos + puyoPosition]).backgroundColor;
         }
     
@@ -177,21 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if ((isHardDrop && !isMoveDownEnabled) && (!isGameReset)) return;
         array.forEach(index => {
             if (array == current) {
-            removeFont(puyos, index, squares);
-            squares[puyos + index].classList.remove('puyoBlob', 'currentPosition', 'taken')
-            squares[puyos + index].style.backgroundColor = '';
-            } else if (array == squares) {
-                removeFont(puyos, 0, squares);
-                squares[puyos].classList.remove('puyoBlob', 'taken')
-                squares[puyos].style.backgroundColor = '';
-            } else if (array == miniSquares) {
-                removeFont(puyos, 0, miniSquares);
-                miniSquares[puyos].classList.remove('puyoBlob', 'taken')
-                miniSquares[puyos].style.backgroundColor = '';
+                removeFont(puyos, index, squares);
+                squares[puyos + index].classList.remove('puyoBlob', 'currentPosition', 'taken')
+                squares[puyos + index].style.backgroundColor = '';
             } else {
-                removeFont(puyos, 0, nextMiniSquares);
-                nextMiniSquares[puyos].classList.remove('puyoBlob', 'taken')
-                nextMiniSquares[puyos].style.backgroundColor = '';
+                removeFont(puyos, 0, array);
+                array[puyos].classList.remove('puyoBlob', 'taken')
+                array[puyos].style.backgroundColor = '';
             }
         });
 
@@ -216,10 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Move down function for already placed puyos
     async function moveDownPlaced(index, initialColor, fallingTimer) {
-        if (isGameReset) 
-            return;
-        // Move the Puyo down one row
+        if (isGameReset) return;
         const belowIndex = index + width;
+
         return new Promise(resolve => {
             if (isGameReset) return;
             setTimeout(() => {
@@ -228,25 +217,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Remove the 'puyoBlob' class and font
                 removeFont(index, 0, squares);
-                squares[index].classList.remove('puyoBlob');
-                squares[index].classList.remove('taken');
-                squares[index].style.backgroundColor = '';
+                undraw(index, squares)
 
-                // Preserves the color
+                // Preserves the color and adds relevant classes
                 squares[belowIndex].style.backgroundColor = initialColor;
                 addFont(belowIndex, 0, squares);
+                squares[belowIndex].classList.add('taken', 'puyoBlob');
 
                 // Reset the original position (after moving down)
-                squares[index].classList.remove('taken');
-                squares[index].classList.add('puyoBlob');
-                squares[belowIndex].classList.remove('taken');
-                squares[belowIndex].classList.remove('puyoBlob');
-                squares[belowIndex].classList.add('taken');
-                squares[belowIndex].classList.add('puyoBlob');
-                squares[index].classList.remove('puyoBlob');
-                squares[index].classList.remove('taken');
+                squares[index].classList.remove('puyoBlob', 'taken');
                 squares[index].style.backgroundColor = '';
                 removeFont(index, 0, squares);
+
                 resolve(); // Resolves the promise once the move is completed
             }, fallingTimer); // Delay for each puyo move
         });
@@ -308,10 +290,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Allows the puyos to be snapped to the bottom instantly
     window.sharedHardDrop = function hardDrop() {
+        isHardDrop = true;
         if (!isMovementResumed) return;
         clearInterval(gracePeriodTimer)
         gracePeriodTimer = 0;
-        isHardDrop = true;
 
         // If hard drop sound is already playing, interrupt
         if (currentHardDropSound) {
@@ -327,21 +309,13 @@ document.addEventListener('DOMContentLoaded', () => {
         while (!squares[firstBelowIndex].classList.contains('taken') || 
         !squares[secondBelowIndex].classList.contains('taken')) {
             sharedMoveDownCurrent();
-
-            // Does the grace period calculations again
-            if (squares[currentPosition + current[0] + width].classList.contains('taken') ||
-            current.some(i => (currentPosition + i + width) > width * height - width - 1) || 
-            squares[currentPosition + current[1] + width].classList.contains('taken')) {
-                let nextIndex;
-                gracePeriodTimer = 0;
-                current.some(index => {
-
-                    nextIndex = currentPosition + index + width
-                    gracePeriodCalculations(nextIndex)
-                });
+            firstBelowIndex += width;
+            secondBelowIndex += width;
+            if ((firstBelowIndex || secondBelowIndex) >= squares.length - width) {
                 break;
             }
         }
+        gracePeriod();
     }
 
     // Doesn't allow CCW rotation to cause puyos to overflow to other side
@@ -390,10 +364,6 @@ document.addEventListener('DOMContentLoaded', () => {
             currentPosition += width;
             isRotationFinished = true;
         }
-
-        // if (currentPosition < -1) {
-            
-        // }
     }
 
     // Doesn't allow CW rotation to cause puyos to overflow to other side
@@ -496,44 +466,44 @@ document.addEventListener('DOMContentLoaded', () => {
         })) {
             preloadSounds();
             if (puyos == current) {
-                gracePeriod(nextIndex);
+                gracePeriod();
             } 
         } else if (isGhostEnabled) {
-                isGhost = true;
-                falling(ghostSquares, 0);
+            isGhost = true;
+            falling(ghostSquares, 0);
         }
     }
 
     let timeoutFreeze = null;
     // allows puyos to be moved when already placed slightly before the next set is spawned
-    function gracePeriod(nextIndex) {
+    function gracePeriod() {
         if (isGameOver) return;
         isFreezeFinished = false;
         isMoveDownEnabled = false;
         isGhost = false;
-        if (isHardDrop)
+        if (isHardDrop) {
+            clearInterval(timeoutFreeze);
             gracePeriodTimer = 0;
-        gracePeriodCalculations(nextIndex);
+        }
+        gracePeriodCalculations();
     }
 
     // Helper for the changing the timer of the grace period
-    function gracePeriodCalculations(nextIndex) {
+    function gracePeriodCalculations() {
         timeoutFreeze = setTimeout (() => {
             if (isFreezeFinished || isMoveDownEnabled || isGameOver || isGameReset) return;
             isMovementResumed = false;
             areClearsReset = false;
-            if (nextIndex >= squares.length - width || squares[nextIndex].classList.contains('taken')) {
-                current.forEach(index => squares[currentPosition + index].classList.add('taken'));
-                current.forEach(index => squares[currentPosition + index].classList.remove('currentPosition'));
-                falling(squares, 60);
-                multiplierTimeout();
-                scoreDisplay.innerHTML = score;
-                squares.slice().forEach(index => {
-                    if (index.classList.contains('aboveGrid') && index.classList.contains('taken')) {
-                        index.classList.remove('taken');
-                    }
-                });
-            }
+            current.forEach(index => squares[currentPosition + index].classList.remove('currentPosition'));
+            current.forEach(index => squares[currentPosition + index].classList.add('taken'));
+            falling(squares, 60);
+            multiplierTimeout();
+            scoreDisplay.innerHTML = score;
+            squares.slice().forEach(index => {
+                if (index.classList.contains('aboveGrid') && index.classList.contains('taken')) {
+                    index.classList.remove('taken');
+                }
+            });
         }, gracePeriodTimer);
     }
 
@@ -548,12 +518,6 @@ document.addEventListener('DOMContentLoaded', () => {
         isFreezeFinished = true;
         current.forEach(index=> squares[currentPosition + index].classList.remove('currentPosition'));
         speedUp();
-        squares.forEach((square, index) => {
-            if (index >= squares.length - (squares.length - width*2)) return;
-            if (square.classList.contains('taken') && !square.classList.contains('puyoBlob')) {
-                square.classList.remove('taken');
-            }
-        })
 
         // Makes the up next puyos the current puyo
         random = nextRandom;

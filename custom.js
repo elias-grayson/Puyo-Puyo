@@ -307,6 +307,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     amtOfTakens.push($newTakenDiv[0]);
                     widthDif--;
                 }
+                if ((index < squares.length - width - 1) && squares[index].classList.contains('belowGrid')) {
+                    squares[index].classList.remove('belowGrid');
+                }
             });
         
             // Update the secondary grid spaces
