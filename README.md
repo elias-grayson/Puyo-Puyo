@@ -7,6 +7,8 @@ Link to play: https://effulgent-paletas-4e97c8.netlify.app/
 Image Credits:
 Myself
 
+Thanks to Puyo Nexus for being a great resource for all calculations regarding chains
+
 Puyo Puyo is a video game owned by SEGA. This is a fan remake
 
 Optimized for chrome
