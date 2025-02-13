@@ -6,15 +6,15 @@ This is an almost fully functional single player puyo puyo simulator coded in ja
 This is a final project for a college class turned passion project of mine that I have been working on since November 2024
 
 ## Features
-- Every game mechanic from Puyo Puyo Tsu, from basic chaining to all clears
+- Every game mechanic from Puyo Puyo Tsu, from basic chaining to all clears, with faster and more responsive controls
 - 4 difficulty options
 - 3 voice options
+- 2 control schemes
+- Up to 7 unique Puyo colors
 - Customizable color theme
-- Up to 7 unique Puyo colors 
 - Adjustable fall speed
-- Adjustable board width, from 1 to 10 spaces wide
+- Adjustable board width
 - 180 degree spins
-- Fast and responsive controls
 
 ## Credits
 ### Image Credits:
