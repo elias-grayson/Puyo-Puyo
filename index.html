@@ -29,14 +29,14 @@
         <link rel="stylesheet" href="style.css"></link>
         <link rel="stylesheet" href="puyoblobs.css"></link>
 
-        <title>Elias' Puyo Puyo Project v1.3.6</title>
+        <title>Elias' Puyo Puyo Project v1.4</title>
     </head>
     <body>
         
         <!--Navigation bar for the title of the page-->
         <nav class="navbar navbar-light" style="z-index: 10;">
             <div class="container-fluid">
-                <a class="navbar-brand mx-auto" id="title">Elias' Puyo Puyo Project v1.3.6</a>
+                <a class="navbar-brand mx-auto" id="title">Elias' Puyo Puyo Project v1.4</a>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarID">
                 </div>
@@ -618,12 +618,13 @@
                                     <div class="row" style="justify-content: center; margin-top: 15px;">
                                         <div class="voiceButtons row">
                                             <button title="One of my best friends: Josh. He opted to go for some sort of bow wielding character"
-                                                class="btn col-6 voiceBtn active" id="joshVoice" style="text-align: center; text-wrap: wrap">Josh (Default)
-                                            </button>
+                                            class="btn col-6 voiceBtn active" id="joshVoice" style="text-wrap: wrap">Josh (Default)</button>
                                             <button title="My younger brother Micah in a british accent. He just ended up saying a lot of sophisticated phrases"
                                             class="btn col-6 voiceBtn" id="britMicah" href="#" style="text-wrap: wrap">British Micah</button>
                                             <button title="My younger brother again, but with a southern accent using more over-the-top cowboy-esque lines"
                                             class="btn col-6 voiceBtn" id="southMicah" href="#" style="text-wrap: wrap">Southern Micah</button>
+                                            <button title="No voice lines. This also significantly speeds up chains"
+                                            class="btn col-6 voiceBtn" id="noVoice" href="#" style="text-wrap: wrap">No Voice</button>
                                         </div>
                                     </div>
                                 </div>
@@ -656,9 +657,59 @@
                 </div>
             </div>        
 
-            <!--Chain display becomes visible once at least 1 group of puyos are cleared-->
-            <div id="chainDisplay">
-                <span id="chainLength"></span>
+            <!--Controls Display-->
+            <div id="controlDisplay">
+
+                <!--Movement-->
+                <div class="controlHeader" style="margin-top: 0vh">
+                    <div>Movement:</div>
+                </div>
+                <div style="margin-top: 0.6vh; font-size: 2.5vh;">
+                    <div><span style="margin-right: 0.7vh;" style="display: contents;">Left: </span>
+                        <i class="fa-solid fa-arrow-left leftFont" style="display: contents; color: #0d6efd"></i>
+                        <span id="left" style="color: #0d6efd"></span>
+                    </div>
+                    <div><span style="margin-right: 0.7vh;" style="display: contents; color: #0d6efd">Right: </span>
+                        <i class="fa-solid fa-arrow-right rightFont" style="display: contents; color: #0d6efd"></i>
+                        <span id="right" style="color: #0d6efd"></span>
+                    </div>
+                    <div><span style="margin-right: 0.7vh;">Down: </span>
+                        <i class="fa-solid fa-arrow-down downFont" style="display: contents; color: #0d6efd">,</i>
+                        <span id="down" style="margin-left: 0.7vh; color: #0d6efd">S</span>
+                    </div>
+                    <div>Hard drop: <span id="hardDrop" style="color: #0d6efd">Space</span>
+                    </div>
+                </div>
+
+                <!--Rotation-->
+                <div class="controlHeader">
+                    <div>Rotation:</div>
+                </div>
+                    <div style="margin-top: 0.6vh; font-size: 2.5vh;">
+                        <div><span style="margin-right: 0.7vh;">Clockwise: </span>
+                            <span style="margin-right: 0.7vh;">
+                                <i class="fa-solid fa-arrow-right rightClockwiseFont" style="display: none; color: #0d6efd"></i>
+                                <i class="fa-solid fa-arrow-up upFont" style="display: contents; color: #0d6efd">,</i>
+                            </span>
+                           <span id="clockwise" style="color: #0d6efd">D</span>
+                        </div>
+                        <div style="margin-right: 0.7vh;">Counterclockwise:
+                            <i class="fa-solid fa-arrow-left leftCcwFont" style="display: none; color: #0d6efd"></i>
+                            <span id="counterclockwise" style="color: #0d6efd">Z</span>
+                        </div>
+                        <div style="margin-right: 0.7vh;">180° spin:
+                            <i class="fa-solid fa-arrow-up upFullFont" style="display: none; color: #0d6efd"></i>
+                            <span id="fullSpin" style="margin-left: 0.7vh; color: #0d6efd">A</span>
+                        </div>
+                    </div>
+
+                <!--Pause/Play-->
+                <div class="controlHeader">
+                    <div id="pause">Pause/Play:</div> 
+                </div>
+                    <div style="margin-top: 0.6vh; font-size: 2.5vh;">
+                        <div id="pauseControl" style="color: #0d6efd">Escape</div>
+                    </div>
             </div>
 
             <div class="allGrids">
@@ -904,10 +955,12 @@
 
                 <!--Displays when the game is paused-->
                 <div class="grid-pause-overlay">
-                    <div><h2 class="pauseOverlayText">Paused</h2></div>
+                    <div>
+                        <h2 class="pauseOverlayText"></h2>
+                    </div>
                 </div>
                 <div class="reset-div">
-                    <button class="btn reset-btn">Restart</button>
+                    <button class="btn reset-btn" style="font-size: 2vh;">Reset</button>
                 </div>
             </div>
 
@@ -943,53 +996,21 @@
                 </div>
             </div>
 
-            <!--Controls Display-->
-            <div id="controlDisplay">
-
-                <!--Movement-->
-                <div class="controlHeader" style="margin-top: 0vh">
-                    <div>Movement:</div>
+            <!--Chain display becomes visible once at least 1 group of puyos are cleared-->
+            <div id="chainDisplay">
+                <div id="chainText">Chain</div>
+                <div id="chainLength"></div>
+                <div id="chainLengthTextContainer">
+                    <div id="chainLengthText"></div>
                 </div>
-                <div style="margin-top: 0.6vh; font-size: 2.5vh;">
-                    <div><span style="margin-right: 0.7vh;" style="display: contents;">Left: </span>
-                        <i class="fa-solid fa-arrow-left leftFont" style="display: contents;"></i><span id="left"></span></div>
-                    <div><span style="margin-right: 0.7vh" style="display: contents;">Right: </span>
-                        <i class="fa-solid fa-arrow-right rightFont" style="display: contents"></i><span id="right"></span></div>
-                    <div><span style="margin-right: 0.7vh;">Down: </span>
-                        <i class="fa-solid fa-arrow-down downFont" style="display: contents;">,</i>
-                        <span id="down" style="margin-left: 0.7vh;">S</span></div>
-                    <div>Hard drop: <span id="hardDrop">Space</span></div>
-                </div>
-
-                <!--Rotation-->
-                <div class="controlHeader">
-                    <div>Rotation:</div>
-                </div>
-                    <div style="margin-top: 0.6vh; font-size: 2.5vh;">
-                        <div><span style="margin-right: 0.7vh;">Clockwise: </span>
-                            <span style="margin-right: 0.7vh;">
-                                <i class="fa-solid fa-arrow-right rightClockwiseFont" style="display: none;"></i>
-                                <i class="fa-solid fa-arrow-up upFont" style="display: contents;">,</i>
-                            </span>
-                           <span id="clockwise">D</span></div>
-                    <div style="margin-right: 0.7vh;">Counterclockwise:
-                        <i class="fa-solid fa-arrow-left leftCcwFont" style="display: none;"></i>
-                        <span id="counterclockwise">Z, A</span></div>
-                </div>
-
-                <!--Pause/Play-->
-                <div class="controlHeader">
-                    <div id="pause">Pause/Play:</div> 
-                </div>
-                    <div style="margin-top: 0.6vh; font-size: 2.5vh;">
-                        <div>Escape</div>
-                    </div>
+                
             </div>
+
             </div>
             </div>
         </div>
 
-        <div class="toast-container position-fixed bottom-0 start-0 p-3">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
             <div id="resetToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <span class="toast-body">
                     Board reset successfully!

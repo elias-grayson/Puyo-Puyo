@@ -12,13 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const downControl = document.querySelector('#down');
     const ccwControl = document.querySelector('#counterclockwise');
     const cwControl = document.querySelector('#clockwise');
+    const fullRotateControl = document.querySelector('#fullSpin');
     const upFont = document.querySelector('.upFont')
     const leftFont = document.querySelector('.leftFont');
     const rightFont = document.querySelector('.rightFont');
     const downFont = document.querySelector('.downFont');
     const rightCwFont = document.querySelector('.rightClockwiseFont')
     const leftCcwFont = document.querySelector('.leftCcwFont');
+    const fullRotateFont = document.querySelector('.upFullFont');
     const hardDropControl = document.querySelector('#hardDrop');
+    const pauseControl = document.querySelector('#pauseControl');
     const modalHeader = document.querySelector('.modal-header');
     const backgroundBtns = document.querySelectorAll('.backgroundBtn');
     const controlBtns = document.querySelectorAll('.controlBtn');
@@ -467,61 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextMiniGrid.style.background = "radial-gradient(#4eb760, rgb(27, 78, 41))"
         navbar.style.background = "linear-gradient(to top, rgb(16, 72, 31), rgb(37, 201, 59))"
         modalHeader.style.background = "linear-gradient(to top, rgb(16, 72, 31), rgb(37, 201, 59))"
-        custom.style.backgroundColor = "rgb(37, 201, 59)"
-        activeColor = "rgb(37, 201, 59)"
-        formCheck.forEach(checkBox => {
-            if (checkBox.checked) {
-                checkBox.style.backgroundColor = activeColor;
-                checkBox.style.borderColor = activeColor;
-            } else {
-                checkBox.style.backgroundColor = "";
-                checkBox.style.borderColor = "";
-            }
-        })
-
-        // Changes the color of the range slider thumbs
-        rangeSliders.forEach(slider => {
-            slider.style.setProperty('--thumb-color', activeColor);
-        })
-
-        // Ensures the control buttons retain the color theme when the hotkey is pressed
-        if (areControlsFlipped)
-            altButton.style.backgroundColor = activeColor;
-        else 
-            defaultButton.style.backgroundColor = activeColor;
-
-        // Makes sure all the active buttons update accordingly
-        presetBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(37, 201, 59)";
-        });
-        backgroundBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(37, 201, 59)";
-        });
-        controlBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(37, 201, 59)";
-        });
-        fontBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(37, 201, 59)";
-        });
-        widthBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(37, 201, 59)";
-        });
-        voiceBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(37, 201, 59)";
-        });
-
-        // Changes the background detail back to default
-        // secondaryGrid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
-        // secondaryGrid.style.setProperty('--before-font-size', '100px');
-        // secondaryGrid.style.setProperty('--before-color', 'white');
-        // secondaryGrid.style.setProperty('--before-opacity', '30%');
-        // secondaryGrid.style.setProperty('--before-content', '"\\f005"');
+        colorChange("rgb(37, 201, 59)");
     })
 
     // Changes the background to red when clicked
@@ -534,61 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextMiniGrid.style.background = "radial-gradient(#d48f8f, rgb(121, 0, 0))"
         navbar.style.background = "linear-gradient(to top, rgb(103, 23, 23), rgb(255, 30, 30))"
         modalHeader.style.background = "linear-gradient(to top, rgb(103, 23, 23), rgb(255, 30, 30))"
-        custom.style.backgroundColor = "rgb(255, 30, 30)"
-        activeColor = "rgb(255, 30, 30)"
-        formCheck.forEach(checkBox => {
-            if (checkBox.checked) {
-                checkBox.style.backgroundColor = activeColor;
-                checkBox.style.borderColor = activeColor;
-            } else {
-                checkBox.style.backgroundColor = "";
-                checkBox.style.borderColor = "";
-            }
-        })
-
-        // Changes the color of the range slider thumbs
-        rangeSliders.forEach(slider => {
-            slider.style.setProperty('--thumb-color', activeColor);
-        })
-
-        // Ensures the control buttons retain the color theme when the hotkey is pressed
-        if (areControlsFlipped)
-            altButton.style.backgroundColor = activeColor;
-        else 
-            defaultButton.style.backgroundColor = activeColor;
-
-        // Makes sure all the active buttons update accordingly
-        presetBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(255, 30, 30)";
-        });
-        backgroundBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(255, 30, 30)";
-        });
-        controlBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(255, 30, 30)";
-        });
-        fontBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(255, 30, 30)";
-        });
-        widthBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(255, 30, 30)";
-        });
-        voiceBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(255, 30, 30)";
-        });
-
-        // Changes the background detail back to default
-        // secondaryGrid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
-        // secondaryGrid.style.setProperty('--before-font-size', '100px');
-        // secondaryGrid.style.setProperty('--before-color', 'white');
-        // secondaryGrid.style.setProperty('--before-opacity', '30%');
-        // secondaryGrid.style.setProperty('--before-content', '"\\f005"');
+        colorChange("rgb(255, 30, 30)")
     })
 
     // Changes the background to purple and changes the background icon to "Elias" in comic sans when clicked
@@ -601,54 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextMiniGrid.style.background = "radial-gradient(#c489ff, rgb(76, 30, 98))"
         navbar.style.background = "linear-gradient(to top, rgb(54, 17, 72), rgb(183, 60, 255))"
         modalHeader.style.background = "linear-gradient(to top, rgb(54, 17, 72), rgb(183, 60, 255))"
-        custom.style.backgroundColor = "rgb(183, 60, 255)"
-        activeColor = "rgb(183, 60, 255)"
-        formCheck.forEach(checkBox => {
-            if (checkBox.checked) {
-                checkBox.style.backgroundColor = activeColor;
-                checkBox.style.borderColor = activeColor;
-            } else {
-                checkBox.style.backgroundColor = "";
-                checkBox.style.borderColor = "";
-            }
-        });
-
-        // Changes the color of the range slider thumbs
-        rangeSliders.forEach(slider => {
-            slider.style.setProperty('--thumb-color', activeColor);
-        })
-
-        // Ensures the control buttons retain the color theme when the hotkey is pressed
-        if (areControlsFlipped)
-            altButton.style.backgroundColor = activeColor;
-        else 
-            defaultButton.style.backgroundColor = activeColor;
-
-        // Makes sure all the active buttons update accordingly
-        presetBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(183, 60, 255)";
-        });
-        backgroundBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(183, 60, 255)";
-        });
-        controlBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(183, 60, 255)";
-        });
-        fontBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(183, 60, 255)";
-        });
-        widthBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(183, 60, 255)";
-        });
-        voiceBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "rgb(183, 60, 255)";
-        });
+        colorChange("rgb(183, 60, 255)")
 
         // Changes the background detail to Elias in comic sans
         // secondaryGrid.style.setProperty('--before-content', '"Elias :)"'); 
@@ -668,55 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nextMiniGrid.style.background = "radial-gradient(#64a2ff, rgb(54, 54, 148))"
         navbar.style.background = "linear-gradient(to top, midnightblue, dodgerblue)"
         modalHeader.style.background = "linear-gradient(to top, midnightblue, dodgerblue)"
-        custom.style.backgroundColor = "#0d6efd"
-        activeColor = "#0d6efd"
-        formCheck.forEach(checkBox => {
-            if (checkBox.checked) {
-                checkBox.style.backgroundColor = activeColor;
-                checkBox.style.borderColor = activeColor;
-            } else {
-                checkBox.style.backgroundColor = "";
-                checkBox.style.borderColor = "";
-            }
-        });
-
-        // Changes the color of the range slider thumbs
-        rangeSliders.forEach(slider => {
-            slider.style.setProperty('--thumb-color', activeColor);
-        })
-
-        // Ensures the control buttons retain the color theme when the hotkey is pressed
-        if (areControlsFlipped)
-            altButton.style.backgroundColor = activeColor;
-        else 
-            defaultButton.style.backgroundColor = activeColor;
-
-
-        // Makes sure all the active buttons update accordingly
-        presetBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "#0d6efd";
-        });
-        backgroundBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "#0d6efd";
-        });
-        controlBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "#0d6efd";
-        });
-        fontBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "#0d6efd";
-        });
-        widthBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "#0d6efd";
-        });
-        voiceBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = "#0d6efd";
-        });
+        colorChange("#0d6efd")
 
         // Changes the background back to default
         // secondaryGrid.style.setProperty('--font-family', '"Font Awesome 6 Free"');
@@ -725,6 +525,76 @@ document.addEventListener('DOMContentLoaded', () => {
         // secondaryGrid.style.setProperty('--before-opacity', '30%');
         // secondaryGrid.style.setProperty('--before-content', '"\\f005"');
     })
+
+    // Changes the color theme to the player's choice
+    function colorChange(chosenColor) {
+        custom.style.backgroundColor = chosenColor
+        activeColor = chosenColor;
+
+        formCheck.forEach(checkBox => {
+            if (checkBox.checked) {
+                checkBox.style.backgroundColor = chosenColor;
+                checkBox.style.borderColor = chosenColor;
+            } else {
+                checkBox.style.backgroundColor = "";
+                checkBox.style.borderColor = "";
+            }
+        });
+
+        // Changes the color of the range slider thumbs
+        rangeSliders.forEach(slider => {
+            slider.style.setProperty('--thumb-color', chosenColor);
+        })
+
+        // Ensures the control buttons retain the color theme when the hotkey is pressed
+        if (areControlsFlipped)
+            altButton.style.backgroundColor = chosenColor;
+        else 
+            defaultButton.style.backgroundColor = chosenColor;
+
+        // Makes sure all the active buttons update accordingly
+        presetBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = chosenColor;
+        });
+        backgroundBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = chosenColor;
+        });
+        controlBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = chosenColor;
+        });
+        fontBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = chosenColor;
+        });
+        widthBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = chosenColor;
+        });
+        voiceBtns.forEach(button => {
+            if (button.classList.contains('active'))
+                button.style.backgroundColor = chosenColor;
+        });
+
+        leftFont.style.color = chosenColor;
+        leftControl.style.color = chosenColor
+        rightFont.style.color = chosenColor
+        rightControl.style.color = chosenColor;
+        downFont.style.color = chosenColor
+        downControl.style.color = chosenColor;
+        leftCcwFont.style.color = chosenColor
+        ccwControl.style.color = chosenColor;
+        upFont.style.color = chosenColor
+        rightCwFont.style.color = chosenColor
+        cwControl.style.color = chosenColor;
+        hardDropControl.style.color = chosenColor;
+        fullRotateControl.style.color = chosenColor;
+        fullRotateFont.style.color = chosenColor
+        pauseControl.style.color = chosenColor;
+        chainDisplayText.style.color = chosenColor;
+    }
 
     // Easy difficulty
     $("#presetContainer").on("click", "#easyBtn", function (event) {
@@ -911,8 +781,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Key bindings that are not able to be held
         nonHoldBindings = {
-            "a": sharedRotateLeft,
-            "A": sharedRotateLeft,
+            "a": rotateFull,
+            "A": rotateFull,
             "z": sharedRotateLeft,
             "Z": sharedRotateLeft,
             "d": sharedRotateRight,
@@ -933,12 +803,11 @@ document.addEventListener('DOMContentLoaded', () => {
         downFont.style.display = "contents"
         downControl.innerHTML = "S";
         leftCcwFont.style.display = "none"
-        ccwControl.innerHTML = "Z, A";
+        ccwControl.innerHTML = "Z";
         upFont.style.display = "contents"
         rightCwFont.style.display = "none"
         cwControl.innerHTML = "D";
         hardDropControl.innerHTML = "Space";
-        container.style.left = "7vh"
     }
 
     // Changes the controls to flipped scheme
@@ -997,7 +866,7 @@ document.addEventListener('DOMContentLoaded', () => {
         nonHoldBindings = {
             "ArrowRight": sharedRotateRight,
             "ArrowLeft": sharedRotateLeft,
-            "ArrowUp": sharedRotateRight,
+            "ArrowUp": rotateFull,
             "ArrowDown": sharedRotateLeft,
             "w": sharedHardDrop,
             "W": sharedHardDrop,
@@ -1020,7 +889,6 @@ document.addEventListener('DOMContentLoaded', () => {
         rightCwFont.style.display = "contents"
         cwControl.innerHTML = "";
         hardDropControl.innerHTML = "W";
-        container.style.left = "5.93vh"
     }
 
     // Allows speeding up to be turned on and off
@@ -1057,6 +925,10 @@ document.addEventListener('DOMContentLoaded', () => {
     $(".voiceButtons").on("click", "#joshVoice", async function (event) {
         event.preventDefault();
         event.stopPropagation();
+        popAnimateDuration = 600;
+        fallingAndColorTimer = 800;
+        connectedFontTimer = 200;
+        voiceEnabled = true;
         isJosh = true;
         isBritMicah = false
         isSouthMicah = false
@@ -1085,6 +957,10 @@ document.addEventListener('DOMContentLoaded', () => {
     $(".voiceButtons").on("click", "#britMicah", async function (event) {
         event.preventDefault();
         event.stopPropagation();
+        popAnimateDuration = 600;
+        fallingAndColorTimer = 800;
+        connectedFontTimer = 200;
+        voiceEnabled = true;
         isJosh = false;
         isBritMicah = true
         isSouthMicah = false
@@ -1113,6 +989,10 @@ document.addEventListener('DOMContentLoaded', () => {
     $(".voiceButtons").on("click", "#southMicah", async function (event) {
         event.preventDefault();
         event.stopPropagation();
+        popAnimateDuration = 600;
+        fallingAndColorTimer = 800;
+        connectedFontTimer = 200;
+        voiceEnabled = true;
         isJosh = false;
         isBritMicah = false;
         isSouthMicah = true
@@ -1135,6 +1015,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (button.classList.contains('active'))
                 button.style.backgroundColor = activeColor;
         });
+    })
+
+    $(".voiceButtons").on("click", "#noVoice", async function (event) {
+        voiceEnabled = false;
+        isJosh = false;
+        isBritMicah = false;
+        isSouthMicah = false;
+
+        // Speeds up puyo clears
+        fallingAndColorTimer = 400;
+        popAnimateDuration = 300;
+        connectedFontTimer = 100;
     })
 
     // Resets the game when clicked

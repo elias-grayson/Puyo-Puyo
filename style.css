@@ -70,7 +70,7 @@ html body {
     width: auto;
     display: flex;
     justify-content: center;
-    left: 7vh;
+    right: 12.5vh;
 }
 
 /* Contains all of the grids */
@@ -235,14 +235,12 @@ html body {
     z-index: 1;
     overflow: hidden;
     font-size: 3.5vh;
-    margin-bottom: 5vh;
+    margin-bottom: 0vh;
 }
 
 .reset-div {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 47%;
     display: flex;
     font-family: "Font Awesome 6 Free";
     opacity: 0%;
@@ -341,7 +339,7 @@ html body {
     color: white;
     position: relative;
     background-color: #0d6efd;
-    margin-right: 5vh; 
+    right: -25vh;
     margin-bottom: 2vh;
     white-space: nowrap;
     overflow: visible;
@@ -416,11 +414,13 @@ html body {
 }
 
 /* Controls */
-#controlDisplay { 
+#controlDisplay {
+    justify-content: center; 
     position: relative;
     white-space: nowrap;
-    margin-top: 24vh;
-    right: 18.5vh;
+    justify-content: center;
+    right: 0.5vh;
+    top: 20vh;
     display: flex;
     flex-direction: column;
     background-color: black;
@@ -428,8 +428,9 @@ html body {
     border-radius: 2.6vh;
     align-items: center;
     color: white;
-    padding: 1.4vh;
-    height: 51.5vh;
+    padding: 2.4vh;
+    height: 56vh;
+    width: 28vh;
     z-index: 2;
 }
 
@@ -537,6 +538,12 @@ html body {
 #southMicah {
     margin-top: 5px;
     width: 110px;
+    margin-right: 5px;
+}
+
+#noVoice {
+    margin-top: 5px;
+    width: 110px;
 }
 
 /* Styling for the range slider thumb */
@@ -590,7 +597,7 @@ input[type="range"]::-webkit-slider-thumb {
 #scoreDisplay {
     font-family: "Font Awesome 6 Free";
     display: flex;
-    margin-right: 0px;
+    margin-left: 3vh;
     font-size: 3.5vh;
     margin-top: 2vh;
     justify-content: center;
@@ -598,15 +605,68 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Applies to chain display */
 #chainDisplay {
-    font-size: 4.2vh;
-    white-space: nowrap;
+    justify-content: center;
+    align-items: center;
     position: relative;
+    display: flex;
+    flex-direction: column;
     width: 0px;
     font-family: "Font Awesome 6 Free";
+    margin-top: 0vh;
+    right: 8.5vh;
+}
+
+/* Header for the chain length */
+#chainText {
+    white-space: nowrap;
     display: flex;
-    margin-top: 30vh;
-    right: 12.5vh;
+    font-size: 4.5vh;
+    text-align: center;
+    border-bottom: 0.4vh solid black;
+    line-height: 1;
+    opacity: 0%;
+}
+
+/* Background for chain length */
+#chainLength {
+    font-size: 6.2vh;
+    text-align: center;
+    border-radius: 2vh;
+    margin-top: 0.2vh;
+    background: radial-gradient(#373737 10%, black 90%);
+    min-width: 15vh;
+    height: 11vh;
+    opacity: 0%;
+}
+
+/* Container for the chain length text */
+#chainLengthTextContainer {
+    position: relative;
+    box-sizing: border-box;
+    border: 0.5vh solid black;
+    top: -11vh;
+    width: 15vh;
+    height: 11vh;
+    border-radius: 2vh;
     justify-content: center;
+    align-items: center;
+    z-index: 7;
+    opacity: 0%;
+}
+
+/* Text that displays the length of the current chain */
+#chainLengthText {
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    position: absolute;
+    font-size: 2.2vh;
+    text-align: center;
+    padding-left: 2vh;
+    padding-right: 2vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    color: #0d6efd;
 }
 
 /* Applies to the game over display */
@@ -666,7 +726,7 @@ input[type="range"]::-webkit-slider-thumb {
     position: relative;
     display: flex;
     justify-content: center;
-    right: 6.4vh;
+    right: 0.4vh;
     text-wrap: nowrap;
     margin-bottom: 0.1vh;
 }

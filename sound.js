@@ -1,5 +1,6 @@
 /* This document controls sounds and voice lines when chaining */
 document.addEventListener('DOMContentLoaded', async () => {
+    window.voiceEnabled = true;
 
     // Josh's voice clips
     window.spells = [
@@ -13,17 +14,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     ];
 
      // Initializes AudioContext
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-    // Creates a gain node for volume control
-    const gainNode = audioContext.createGain();
-    gainNode.connect(audioContext.destination);
-
-    // Cache for preloaded audio buffers
+    let audioContext;
     const cachedSounds = {};
+    let isAudioInitialized = false;
+
+    // Function to initialize audio context and preload sounds
+    async function initializeAudio() {
+        if (!isAudioInitialized) {
+            // Initialize AudioContext
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+            isAudioInitialized = true;
+            // Preload sounds
+            preloadSpellSounds();
+        }
+    }
 
     // Preload and cache all sounds at the start
-    window.preloadSounds = async function preloadSounds() {
+    window.preloadSpellSounds = async function preloadSpellSounds() {
+        if (!isAudioInitialized) return;
         for (let i = 0; i < spells.length; i++) {
             const sound = spells[i];
             await loadAndCacheSound(sound.url);
@@ -34,6 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Load and cache audio file
     window.loadAndCacheSound = async function loadAndCacheSound(url) {
+        if (!isAudioInitialized) return;
         if (cachedSounds[url]) {
             return cachedSounds[url]; // Return the cached sound if already loaded
         }
@@ -70,16 +80,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentPopSound = 'game-sounds/coin-pickup.mp3'
 
     // Preloads all sounds as soon as the page loads
-    await preloadSounds();
+    await preloadSpellSounds();
 
     // Plays the appropriate spell and popping sound based on the chain length
     window.playVoiceLine = function playVoiceLine() {
         let pitch = 0.6 + Math.min(chainLength - 1, 6) * (1/9)
 
         // Pauses the current voice line if another one is already being played
-        if (currentSpell) {
-            currentSpell.stop(); // Stop the current audio
-            currentSpell = null; // Reset the reference
+        if (voiceEnabled) {
+            if (currentSpell) {
+                currentSpell.stop(); // Stop the current audio
+                currentSpell = null; // Reset the reference
+            }
         }
 
         // Sets the appropriate sound based on chain length
@@ -105,7 +117,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         spellGainNode.connect(audioContext.destination);
 
         // Start the voice line
-        currentSpell.start();
+        if (voiceEnabled)
+            currentSpell.start();
         playSound(currentPopSound, pitch); 
     }
+
+    // Wait for user gesture before initializing audio
+    document.addEventListener('click', initializeAudio, { once: true });
+    document.addEventListener('keydown', initializeAudio, { once: true });
 })
