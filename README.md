@@ -1,8 +1,9 @@
 # Link to play: https://effulgent-paletas-4e97c8.netlify.app/
 
-This is an almost fully functional single player puyo puyo game coded in javascript with some customization options to cater the experience to whatever you'd like!
+## Overview
+This is an almost fully functional single player puyo puyo simulator coded in javascript with some customization options to cater the experience to whatever you'd like!
 
-This is a final project for a college class turned passion project of mine that I have working on since November 2024
+This is a final project for a college class turned passion project of mine that I have been working on since November 2024
 
 ## Features
 - Every game mechanic from Puyo Puyo Tsu, from basic chaining to all clears
@@ -12,6 +13,8 @@ This is a final project for a college class turned passion project of mine that 
 - Up to 7 unique Puyo colors 
 - Adjustable fall speed
 - Adjustable board width, from 1 to 10 spaces wide
+- 180 degree spins
+- Fast and responsive controls
 
 ## Credits
 ### Image Credits:
