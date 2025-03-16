@@ -6,15 +6,15 @@ This is an almost fully functional single player puyo puyo simulator coded in ja
 This is a final project for a college class turned passion project of mine that I have been working on since November 2024
 
 ## Features
-- Every game mechanic from Puyo Puyo Tsu, from basic chaining to all clears, with faster and more responsive controls
+- Every game mechanic from Puyo Puyo Tsu, from basic chaining to all clears
 - 4 difficulty options
-- 3 voice options
-- 2 control schemes
-- Up to 7 unique Puyo colors
+- 4 voice options
 - Customizable color theme
+- Up to 7 unique Puyo colors 
 - Adjustable fall speed
 - Adjustable board width
 - 180 degree spins
+- Faster and more responsive controls than the official game
 
 ## Credits
 ### Image Credits:
@@ -25,6 +25,7 @@ This is a final project for a college class turned passion project of mine that 
 - Josh: Joshua Hayden
 - British Micah: Micah Grayson
 - Southern Micah: Micah Grayson
+- Michael: Michael Shelton
 
 ### Scoring calculations
 - Thanks to Puyo Nexus for being an invaluable resource when it came to scoring: https://puyonexus.com/wiki/Main_Page

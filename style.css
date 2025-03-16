@@ -1,6 +1,8 @@
+/* Stylings for everything else */
+
 /* Adds a gradient to the background of the page*/
 html body {
-    background: linear-gradient(to top, gray, white);
+    background: linear-gradient(to top, #52595f, rgb(205, 205, 205));
     height: 110vh;
     margin: 0;
     padding: 0;
@@ -15,6 +17,13 @@ html body {
     background: linear-gradient(to top, midnightblue, dodgerblue);
     border-bottom: 5px solid lightgray;
     box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Styling for navbar disabled text */
+#navDisabledText {
+    color: white;
+    visibility: hidden;
+    margin-left: 10px;
 }
 
 /* Title text */
@@ -33,7 +42,7 @@ html body {
 }
 
 /* Every first customization section */
-.first-custom {
+.top-custom {
     background: radial-gradient(#b1b1b1, #6c757d);
     padding-top: 10px;
     padding-left: 10px;
@@ -47,8 +56,16 @@ html body {
     box-shadow: 2px -2px 4px rgba(0, 0, 0, 0.7);
 }
 
+/* Action that is being mapped in the control settings menu */
+.control-text {
+    font-family: 'Font Awesome 6 Free';
+    font-size: 20px;
+    margin-left: 10px; 
+    margin-top: 24px;
+}
+
 /* Every customization section after the first*/
-.next-custom {
+.mid-even-custom {
     padding-top: 30px;
     background: radial-gradient(#b1b1b1, #6c757d);
     padding-top: 10px;
@@ -64,251 +81,83 @@ html body {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
+.mid-odd-custom {
+    padding-top: 30px;
+    background: radial-gradient(#b1b1b1, #52595f);
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 15px;
+    z-index: 2;
+    border-top: 2px solid white;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.bottom-odd-custom {
+    padding-top: 30px;
+    background: radial-gradient(#b1b1b1, #6c757d);
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 15px;
+    z-index: 2;
+    border-top: 2px solid white;
+    border-radius: 10px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom: 2px inset white;
+    color: white;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.bottom-even-custom {
+    padding-top: 30px;
+    background: radial-gradient(#b1b1b1, #52595f);
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 15px;
+    z-index: 2;
+    border-top: 2px solid white;
+    border-radius: 10px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom: 2px inset white;
+    color: white;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.full-custom {
+    padding-top: 30px;
+    background: radial-gradient(#b1b1b1, #6c757d);
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 15px;
+    z-index: 2;
+    border-top: 2px solid white;
+    border-radius: 10px;
+    border-top: 2px outset white;
+    border-bottom: 2px inset white;
+    color: white;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
 /* Contains all the dropdowns, the grid, upnext displays, and the controls*/
 .container {
     position: relative;
     width: auto;
     display: flex;
     justify-content: center;
-    right: 12.5vh;
-}
-
-/* Contains all of the grids */
-.allGrids {
-    width: auto;
-    display: flex;
-    position: relative;
-    flex-wrap: nowrap;
-    justify-content: center;
-}
-
-/* Contains the actual board in which puyos are displayed on */
-.grid {
-    font-family: "Font Awesome 6 Free"; 
-    background-color: '';
-    position: relative;
-    margin-top: -0.1vh;
-    width: 39.8vh;
-    height: 75.85vh;
-    height: 75.85vh;
-    display: flex;
-    flex-wrap: wrap;
-    border-top: 1.4vh groove black;
-    border-left: 1.4vh groove black;
-    border-right: 1.4vh ridge black;
-    border-bottom: 1.4vh ridge black;
-    box-shadow: 0px 0px 4.8vh 1.6vh rgba(0, 0, 0, 0.5);
-    border-radius: 1.4vh;
-    text-align: center;
-    z-index: 2;
-    overflow: hidden;
-}
-
-/* Each individual grid space */
-.grid div {
-    position: relative;
-    display: flex;
-    transform: translateY(-6.1vh);
-    height: 6.1vh;
-    width: 6.1vh;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
-/* Grid spaces below and above the board */
-.belowGrid, .aboveGrid {
-    border: none;
-    content: '';
-    font-family: unset;
-}
-
-/* Contains the puyo board visually */
-.secondary-grid {
-    font-family: "Font Awesome 6 Free"; 
-    background: radial-gradient(#64a2ff, rgb(54, 54, 148));
-    position: absolute;
-    margin-top: 1.2vh;
-    width: 37.2vh;
-    height: 73.2vh;
-    display: flex;
-    flex-wrap: wrap;
-    text-align: center;
-    overflow: hidden;
-}
-
-/* Allows the background icon to display on the board */
-.secondary-grid::before {
-    display: block;
-    content: var(--before-content, "\f005");
-    color: var(--before-color, white);
-    font-size: var(--before-font-size, 13vh);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); 
-    opacity: var(--before-opacity, 30%);
-    font-family: var(--font-family, "Font Awesome 6 Free");
-    z-index: 0;
-}
-
-/* Each individual visual grid space */
-.secondary-grid div {
-    position: relative;
-    display: flex;
-    height: 6.1vh;
-    width: 6.1vh; 
-    min-height: 6.1vh;
-    min-width: 6.1vh;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    border: 0.13vh solid rgba(0, 0, 0, 0.3);
-}
-
-/* X on the grid */
-.xMark {
-    font-family: "Font Awesome 6 Free";
-}
-
-/* Allows font to exist on the x mark */
-.xMark::before {
-    color: rgb(255, 29, 29);
-    display: block;
-    font-family: "Font Awesome 6 Free";
-    font-size: 6.6vh;
-    content: "\58";
-}
-
-/* Contains the puyo board visually */
-.ghost-grid {
-    font-family: "Font Awesome 6 Free";
-    background-color: '';
-    position: absolute;
-    margin-top: 1.2vh;
-    width: 36.6vh;
-    margin-right: 0.2vh;
-    height: 73.2vh;
-    display: flex;
-    flex-wrap: wrap;
-    z-index: 1;
-    overflow: hidden;
-}
-
-/* Each individual visual grid space */
-.ghost-grid div {
-    position: relative;
-    display: flex;
-    height: 6.1vh;
-    width: 6.1vh; 
-    min-height: 6.1vh;
-    min-width: 6.1vh; 
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
-/* Overlay over the main grid when paused */
-.grid-pause-overlay {
-    flex-direction: column;
-    background: black;
-    opacity: 0%;
-    margin-top: 1.2vh;
-    position: absolute;
-    width: 37.2vh;
-    height: 73.2vh;
-    display: flex;
-    flex-wrap: wrap;
-    text-align: center;
-    justify-content: center;
-    border: none;
-    z-index: 5;
-    align-items: center;
-}
-
-/* Text inside the pause overlay */
-.pauseOverlayText {
-    position: relative;
-    color: white;
-    font-family: "Font Awesome 6 Free";
-    opacity: 100%;
-    z-index: 1;
-    overflow: hidden;
-    font-size: 3.5vh;
-    margin-bottom: 0vh;
-}
-
-.reset-div {
-    position: absolute;
-    top: 47%;
-    display: flex;
-    font-family: "Font Awesome 6 Free";
-    opacity: 0%;
-    z-index: -2;
-    margin-top: 3vh;
-}
-
-.reset-btn {
-    width: 20vh;
-    min-width: 9vh;
-    border: 0.5vh solid rgba(255, 255, 255, 0.5);
-}
-
-/* Container for all mini grids and overlays */
-.all-mini-grid-container {
-    display: flex;
-    position: relative;
-    margin-left: 2vh;
-}
-
-/* Container for mini grids */
-.mini-grid-container {
-    display: flex;
-    position: relative;
-    justify-content: center;
-}
-
-/* All up next grids */
-.all-mini-grids {
-    border-radius: 1vh;
-    width: 8.6vh;
-    height: 14.7vh;
-    flex-wrap: wrap;
-    border: 1.3vh groove black;
-    box-shadow: 0vh 0vh 4.8vh 1.6vh rgba(0, 0, 0, 0.3);
-    background: radial-gradient(#64a2ff, rgb(54, 54, 148));
-}
-
-/* Individual grid spaces in each mini grid */
-.mini-grid-div {
-    width: 6vh;
-    height: 6vh;
-    min-width: 6vh;
-    min-height: 6vh;
-}
-
-/* Container for all mini grid overlays */
-.mini-grid-overlay-container {
-    position: absolute;
-    margin-left: 1.27vh;
-    margin-top: 1.3vh;
-}
-
-/* Up next grid display */
-.mini-grid-overlay {
-    opacity: 0%;
-    width: 6.1vh;
-    height: 12.3vh;
-    flex-wrap: wrap;
-    position: relative;
-    background: black;
-    z-index: 5;
-}
-
-/* Controls the overlay for the second mini grid */
-#nextMiniOverlay {
-    margin-left: 8.62vh;
-    margin-top: -4.3vh;
+    right: 5vh;
 }
 
 /* Applies only to dropfront buttons */
@@ -329,7 +178,7 @@ html body {
 /* Applies to all text in all drop menus */
 #dropdownText {
     color: white;
-  }
+}
 
 /* Applies to customization button */
 #custom {
@@ -381,8 +230,8 @@ html body {
 /* Gameplay customization */
 #gameplay-custom {
     background-color: none;
-    margin: auto;
     align-items: start;
+    justify-content: start;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
@@ -394,12 +243,36 @@ html body {
     border-width: 6px;
 }
 
-/* Applies to entire modal */
+/* Entire modal */
+#stModal {
+    justify-content: start;
+    background: radial-gradient(#b1b1b1, #52595f);
+    border: 5px solid black;
+    border-width: 6px;
+}
+
+/* Applies to entire customization modal */
 .custom-modal-width {
     top: 20px; 
     justify-content: start;
-    max-width: 600px; /* Adjust width here */
-    margin: auto;    /* Keeps the modal centered */
+    max-width: 700px;
+    margin: auto;
+  }
+
+  /* Applies to entire control modal */
+.control-modal-width {
+    top: 20px; 
+    justify-content: start;
+    max-width: 1000px;
+    margin: auto;
+  }
+
+  /* Applies to sound test modal */
+  .st-modal-width {
+    top: 20px; 
+    justify-content: start;
+    max-width: 800px;
+    margin: auto;
   }
 
 /* Customization overlay */
@@ -423,12 +296,23 @@ html body {
     z-index: 2;
 }
 
+/* Styling for keybind buttons */
+.keybind-button {
+    min-width: 100px;
+    min-height: 34px;
+}
+
+/* Styling for keybind title text */
+.keybind-title {
+    justify-content: center;
+    text-decoration: underline;
+    font-size: 20px;
+    margin-bottom: 2px;
+}
+
 /* Applies to aesthetic customization button */
 #aesthetic-custom {
     background-color: none;
-    margin: auto;
-    padding: auto;
-    margin-top: 0px; 
     align-items: start;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
@@ -444,14 +328,17 @@ html body {
     display: flex;
     flex-direction: column;
     background-color: black;
-    opacity: 60%;
     border-radius: 2.6vh;
     align-items: center;
     color: white;
     padding: 2.4vh;
     height: 56vh;
     width: 28vh;
-    z-index: 2;
+    z-index: 3;
+    background: radial-gradient(#4e4e4e 10%, rgb(45, 45, 45) 90%);
+    border: solid white 0.3vh;
+    color: white;
+    opacity: 90%;
 }
 
 /* Headers for the control display */
@@ -462,12 +349,6 @@ html body {
     font-size: 3.5vh;
 }
 
-/* Applies to the board width container */
-#boardChange {
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-
 /* Applies to the board width buttons container */
 #boardWidthContainer {
     white-space: nowrap;
@@ -476,6 +357,7 @@ html body {
 
 /* Applies to buttons that control grid width */ 
 .widthButton {
+    width: 50px;
     background-color: rgb(46, 46, 46);
     height: auto;
 }
@@ -498,8 +380,18 @@ html body {
 
 /* Applies to all menu buttons when hovered over */
 .btn:focus {
+    background-color: rgb(46, 46, 46);
+    opacity: 100%;
+    border: 3px solid white;
+    color: white;
     outline: 2px solid white;
     outline-offset: 2px;
+}
+
+.btn:active:focus {
+    background-color: rgb(101, 100, 100);
+    border-color: white;
+    color: white;
 }
 
 .btn:disabled {
@@ -512,7 +404,6 @@ html body {
     border: 3px solid white;
     color: white;
     background-color: rgba(68, 68, 68, 1);
-    height: auto;
 }
 
 /* Applies to all buttons that have been clicked */
@@ -521,18 +412,15 @@ html body {
     color: white;
 }
 
+.presetBtn {
+    height: 50px;
+}
+
 /* Applies to the color theme container */
 #boardBackground {
     color: white;
     padding-top: 10px;
-}
-
-#voiceLines {
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    color: white;
-    border-bottom: 2px inset white;
-    padding-top: 10px;
+    justify-content: center;
 }
 
 .form-check {
@@ -546,24 +434,25 @@ html body {
     justify-content: center;
 }
 
+.voiceBtn {
+    width: 130px;
+}
+
 #joshVoice {
-    width: 110px;
     margin-right: 5px;
 }
 
 #britMicah {
-    width: 110px;
+    margin-top: 5px;
+    margin-right: 5px;
 }
 
 #southMicah {
     margin-top: 5px;
-    width: 110px;
-    margin-right: 5px;
 }
 
 #noVoice {
     margin-top: 5px;
-    width: 110px;
 }
 
 /* Styling for the range slider thumb */
@@ -581,25 +470,25 @@ input[type="range"]::-webkit-slider-thumb {
 #blueBackground {
     padding-left: 10px;
     padding-right: 10px;
-    width: 120px;
+    width: 140px;
     margin-right: 5px;
 }
 
 /* Applies to red color theme option */
 #redBackground {  
-    width: 120px; 
+    width: 140px;
 }
 
 /* Applies to green color theme option */
 #greenBackground {  
-    width: 120px;
+    width: 140px;
     margin-right: 5px;
     margin-top: 5px;
 }
 
 /* Applies to purple color theme option */
 #purpleBackground { 
-    width: 120px;
+    width: 140px;
     margin-top: 5px;
 }
 
@@ -822,4 +711,56 @@ input[type="range"]::-webkit-slider-thumb {
     padding-right: 15px;
     width: auto;
     border: 2px solid white;
+}
+
+/* Sound test button container */
+.st-btn-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+/* For the gear icon */
+#settingsIcon {
+    font-size: 25px;
+}
+
+#settingsBtn {
+    border-width: 4px;
+    box-shadow: none;
+    background-color: rgb(19, 19, 19);
+    color: white;
+    border: 3px solid white;
+}
+
+#settingsBtn:hover {
+    background-color: rgb(46, 46, 46);
+    color: white;
+}
+
+#settingsBtn:active {
+    box-shadow: none;
+    color: white;
+}
+
+#settingsBtn:active:focus {
+    color: white;
+    background-color: rgb(99, 99, 99);
+}
+
+#customBtn {
+    margin-top: 5px;
+    color: white;
+}
+
+#leftSoundTest {
+    padding-left: 10px;
+}
+
+.sound-title {
+    height: 35px;
+    vertical-align: sub;
+    margin-bottom: 10px;
+    border-bottom: solid 2px rgba(255, 255, 255, 0.8);
 }

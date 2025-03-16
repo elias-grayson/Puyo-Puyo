@@ -45,8 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let secondarySquares = Array.from(document.querySelectorAll('.secondary-grid div'));
     let ghostGrid = document.querySelector('.ghost-grid');
     window.tiles = Array.from(document.querySelectorAll('.tile-container div'))
+    const navbarBtn = document.querySelector("#settingsBtn");
 
-    let activeColor = "#0d6efd"; // Current color theme choice
+    window.activeColor = "#0d6efd"; // Current color theme choice
 
     // Tracks whether the respective font is active
     window.isEmojiFont = true;
@@ -166,13 +167,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let widthDif = width - chosenWidth; // Difference between old and new width
 
         upNext.style.marginLeft = chosenWidth * 6 + 20 + "vh"; // Adjusts position of upnext text based on grid width
-        startBtn.style.width = chosenWidth * 6.1 + 'vh'; // Adjusts width of the start button based on grid width
+        startBtn.style.width = chosenWidth * 6.18 + 'vh'; // Adjusts width of the start button based on grid width
 
         // Updates the widths for all grids affected
-        grid.style.width = `${chosenWidth * 6.1 + 2.71}vh`; 
-        pauseOverlay.style.width = `${chosenWidth * 6.1}vh`;
-        secondaryGrid.style.width = `${chosenWidth * 6.1}vh`;
-        ghostGrid.style.width = `${chosenWidth * 6.1}vh`;
+        grid.style.width = `${chosenWidth * 6.18 + 2.71}vh`; 
+        pauseOverlay.style.width = `${chosenWidth * 6.18}vh`;
+        secondaryGrid.style.width = `${chosenWidth * 6.18}vh`;
+        ghostGrid.style.width = `${chosenWidth * 6.18}vh`;
 
         // Adjust taken squares and grid differences as needed
         let amtOftaken = [];
@@ -461,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Changes the background to green when clicked
-    $(".backGroundBtn").on("click", "#greenBackground", function (event) {
+    $("#colorThemeContainer").on("click", "#greenBackground", function (event) {
         event.preventDefault();
 
         // Changes the grids an navbar backgrounds to green gradient
@@ -474,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Changes the background to red when clicked
-    $(".backGroundBtn").on("click", "#redBackground", function (event) {
+    $("#colorThemeContainer").on("click", "#redBackground", function (event) {
         event.preventDefault();
 
         // Changes the grids an navbar backgrounds to red gradient
@@ -487,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Changes the background to purple and changes the background icon to "Elias" in comic sans when clicked
-    $(".backGroundBtn").on("click", "#purpleBackground", function (event) {
+    $("#colorThemeContainer").on("click", "#purpleBackground", function (event) {
         event.preventDefault(); 
 
         // Changes the grids an navbar backgrounds to purple gradient
@@ -507,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Returns the background back to blue when clicked
-    $(".backGroundBtn").on("click", "#blueBackground", function (event) {
+    $("#colorThemeContainer").on("click", "#blueBackground", function (event) {
         event.preventDefault();
 
         // Changes the grids an navbar backgrounds to blue gradient
@@ -528,7 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Changes the color theme to the player's choice
     function colorChange(chosenColor) {
-        custom.style.backgroundColor = chosenColor
+        // custom.style.backgroundColor = chosenColor
         activeColor = chosenColor;
 
         formCheck.forEach(checkBox => {
@@ -763,53 +764,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     })
 
-    // Changes the controls to the default
-    function defaultControls() {
-
-        // Key bindings to move down
-        moveDownBindings = {
-            "s": sharedMoveDownCurrent,
-            "S": sharedMoveDownCurrent,
-            "ArrowDown": sharedMoveDownCurrent,
-        };
-
-        // Key bindings to move left/right
-        horizontalBindings = {
-            "ArrowRight": sharedMoveRight,
-            "ArrowLeft": sharedMoveLeft,
-        }
-
-        // Key bindings that are not able to be held
-        nonHoldBindings = {
-            "a": rotateFull,
-            "A": rotateFull,
-            "z": sharedRotateLeft,
-            "Z": sharedRotateLeft,
-            "d": sharedRotateRight,
-            "D": sharedRotateRight,
-            "ArrowUp": sharedRotateRight,
-            " ": sharedHardDrop
-        }
-
-        window.resetBindings = {
-            "r": reset,
-            "R": reset
-        }
-
-        leftFont.style.display = "contents";
-        leftControl.innerHTML = "";
-        rightFont.style.display = "contents"
-        rightControl.innerHTML = "";
-        downFont.style.display = "contents"
-        downControl.innerHTML = "S";
-        leftCcwFont.style.display = "none"
-        ccwControl.innerHTML = "Z";
-        upFont.style.display = "contents"
-        rightCwFont.style.display = "none"
-        cwControl.innerHTML = "D";
-        hardDropControl.innerHTML = "Space";
-    }
-
     // Changes the controls to flipped scheme
     $("#controlContainer").on("click", "#altControls", function (event) {
         event.preventDefault();
@@ -845,52 +799,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Switches to the flipped control scheme
-    function flippedControls() {
-
-        // Key bindings to move down
-        moveDownBindings = {
-            "s": sharedMoveDownCurrent,
-            "S": sharedMoveDownCurrent,
-        };
-
-        // Key bindings to move left/right
-        horizontalBindings = {
-            "a": sharedMoveLeft,
-            "A": sharedMoveLeft,
-            "d": sharedMoveRight,
-            "D": sharedMoveRight,
-        }
-
-        // Key bindings that are not able to be held
-        nonHoldBindings = {
-            "ArrowRight": sharedRotateRight,
-            "ArrowLeft": sharedRotateLeft,
-            "ArrowUp": rotateFull,
-            "ArrowDown": sharedRotateLeft,
-            "w": sharedHardDrop,
-            "W": sharedHardDrop,
-        }
-
-        window.resetBindings = {
-            "r": reset,
-            "R": reset
-        }
-
-        leftFont.style.display = "none";
-        leftControl.innerHTML = "A";
-        rightFont.style.display = "none"
-        rightControl.innerHTML = "D";
-        downFont.style.display = "none"
-        downControl.innerHTML = "S";
-        leftCcwFont.style.display = "contents"
-        ccwControl.innerHTML = "";
-        upFont.style.display = "none"
-        rightCwFont.style.display = "contents"
-        cwControl.innerHTML = "";
-        hardDropControl.innerHTML = "W";
-    }
-
     // Allows speeding up to be turned on and off
     speedUpToggle.addEventListener('change', function() {
         if (speedUpToggle.checked) {
@@ -916,118 +824,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ghostPuyoToggle.style.borderColor = "";
         }
     });
-
-    window.isJosh = true; // Tracks whether Josh's lines are active
-    window.isBritMicah = false; // Tracks whether micah's lines are active
-    window.isSouthMicah = false;
-
-    // Changes the voice lines to Josh's
-    $(".voiceButtons").on("click", "#joshVoice", async function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        popAnimateDuration = 600;
-        fallingAndColorTimer = 800;
-        connectedFontTimer = 200;
-        voiceEnabled = true;
-        isJosh = true;
-        isBritMicah = false
-        isSouthMicah = false
-        window.spells.splice(0, spells.length,
-            { url: 'josh-spells/1.mp3', volume: 1.0 },
-            { url: 'josh-spells/2.mp3', volume: 1.0 },
-            { url: 'josh-spells/3.mp3', volume: 1.0 }, 
-            { url: 'josh-spells/4.mp3', volume: 1.0 },
-            { url: 'josh-spells/5.mp3', volume: 1.0 },
-            { url: 'josh-spells/6.mp3', volume: 1.0 },
-            { url: 'josh-spells/7.mp3', volume: 1.0 }
-        );
-
-        // Cache the new sound
-        for (const spell of spells) {
-            await loadAndCacheSound(spell.url);
-        }
-
-        voiceBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = activeColor;
-        });
-    })
-
-    // Changes the voice lines to British Micah's
-    $(".voiceButtons").on("click", "#britMicah", async function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        popAnimateDuration = 600;
-        fallingAndColorTimer = 800;
-        connectedFontTimer = 200;
-        voiceEnabled = true;
-        isJosh = false;
-        isBritMicah = true
-        isSouthMicah = false
-        window.spells.splice(0, spells.length,
-            { url: 'british-micah-spells/1.mp3', volume: 3.0 },
-            { url: 'british-micah-spells/2.mp3', volume: 3.0 },
-            { url: 'british-micah-spells/3.mp3', volume: 3.0 }, 
-            { url: 'british-micah-spells/4.mp3', volume: 3.0 },
-            { url: 'british-micah-spells/5.mp3', volume: 3.0 },
-            { url: 'british-micah-spells/6.mp3', volume: 3.0 },
-            { url: 'british-micah-spells/7.mp3', volume: 3.0 },
-        );
-
-        // Cache the new sound
-        for (const spell of spells) {
-            await loadAndCacheSound(spell.url);
-        }
-
-        voiceBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = activeColor;
-        });
-    })
-
-    // Changes the voice lines to Southern Micah's
-    $(".voiceButtons").on("click", "#southMicah", async function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        popAnimateDuration = 600;
-        fallingAndColorTimer = 800;
-        connectedFontTimer = 200;
-        voiceEnabled = true;
-        isJosh = false;
-        isBritMicah = false;
-        isSouthMicah = true
-        window.spells.splice(0, spells.length,
-            { url: 'southern-micah-spells/1.mp3', volume: 1.0 },
-            { url: 'southern-micah-spells/2.mp3', volume: 1.0 },
-            { url: 'southern-micah-spells/3.mp3', volume: 1.0 }, 
-            { url: 'southern-micah-spells/4.mp3', volume: 1.0 },
-            { url: 'southern-micah-spells/5.mp3', volume: 1.0 },
-            { url: 'southern-micah-spells/6.mp3', volume: 1.0 },
-            { url: 'southern-micah-spells/7.mp3', volume: 1.0 },
-        );
-
-        // Cache the new sound
-        for (const spell of spells) {
-            await loadAndCacheSound(spell.url);
-        }
-
-        voiceBtns.forEach(button => {
-            if (button.classList.contains('active'))
-                button.style.backgroundColor = activeColor;
-        });
-    })
-
-    $(".voiceButtons").on("click", "#noVoice", async function (event) {
-        voiceEnabled = false;
-        isJosh = false;
-        isBritMicah = false;
-        isSouthMicah = false;
-
-        // Speeds up puyo clears
-        fallingAndColorTimer = 400;
-        popAnimateDuration = 300;
-        connectedFontTimer = 100;
-    })
 
     // Resets the game when clicked
     resetBtn.addEventListener('click', () => {

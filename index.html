@@ -7,6 +7,9 @@
         <script src="logic.js" charset="utf-8"></script>
         <script src="custom.js" charset="utf-8"></script>
         <script src="sound.js" charset="utf8"></script>
+        <script src="animation.js" charset="utf8"></script>
+        <script src="control.js" charset="utf8"></script>
+        <script src="voices.js" charset="utf8"></script>
 
         <!--Favicon-->
         <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
@@ -28,18 +31,57 @@
         <!--CSS files-->
         <link rel="stylesheet" href="style.css"></link>
         <link rel="stylesheet" href="puyoblobs.css"></link>
+        <link rel="stylesheet" href="grids.css"></link>
 
-        <title>Elias' Puyo Puyo Project v1.4</title>
+        <title>Elias' Puyo Puyo Project v1.4.1</title>
     </head>
     <body>
         
         <!--Navigation bar for the title of the page-->
         <nav class="navbar navbar-light" style="z-index: 10;">
             <div class="container-fluid">
-                <a class="navbar-brand mx-auto" id="title">Elias' Puyo Puyo Project v1.4</a>
+                <button 
+                    class="navbar-toggler btn" type="button" 
+                    data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    style="margin-right: -170px; align-items: center;"
+                    id="settingsBtn">
+                    <div style="display: flex;">
+                        <span id="settingsIcon"><i class="fa-solid fa-gear"></i></span>
+                        <span style="margin-left: 10px; margin-bottom: -5px; color: white;">
+                            <h5>Settings</h5>
+                        </span>
+                    </div>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarID">
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <div style="border-top: solid 2px white; margin-top: 5px; width: 220px;">
+                        <ul class="navbar-nav" style="font-family: 'Font Awesome 6 Free';">
+                            <!-- <li class="nav-item" style="margin-left: 10px;">
+                                <a class="nav-link" style="color: white;" href="#">Home</a>
+                            </li> -->
+                            <li class="nav-item" style="display: flex; align-items: center;">
+                                <div style="color: white; margin-right: 5px; margin-top: 5px;"><h3>></h3></div>
+                                <button data-bs-toggle="modal" id="customBtn" data-bs-target="#customizationModal" class="btn">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                    Customization
+                                </button>
+                                <span id="navDisabledText">Disabled during play</span>
+                            </li>
+                            <!-- <li class="nav-item" style="margin-top: 5px;">
+                                <button data-bs-toggle="modal" data-bs-target="#controlsModal" class="btn" style="color: white;">Controls</button>
+                            </li> -->
+                            <li class="nav-item" style="margin-top: 5px; display: flex;" id="soundTestOpener">
+                                <div style="color: white; margin-right: 5px; margin-top: 5px;"><h3>></h3></div>
+                                <button data-bs-toggle="modal" data-bs-target="#soundTestModal" class="btn" style="color: white;">
+                                    <i class="fa-solid fa-headphones"></i>
+                                    Sound Test
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+                <a class="navbar-brand mx-auto" id="title" href="#">Elias' Puyo Puyo Project v1.4.1</a>
+                <div class="collapse navbar-collapse" id="navbarID"></div>
             </div>
         </nav>
 
@@ -485,17 +527,17 @@
            
             <!-- Button to trigger modal -->
             <div>
-                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal" id="custom">
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#customizationModal" id="custom" style="display: none;">
                     Customization
                 </button>
             </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!--Gameplay and Aesthetic Custmization modal-->
+            <div class="modal fade" id="customizationModal" tabindex="-1" aria-labelledby="customizationModalLabel" aria-hidden="true">
                 <div class="modal-dialog custom-modal-width">
                     <div class="modal-content">
                         <div class="modal-header" style="border: none;">
-                            <h5 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-wand-magic-sparkles"></i> Customization</h5>
+                            <h4 class="modal-title" id="customizationModalLabel"><i class="fa-solid fa-wand-magic-sparkles"></i> Customization</h4>
                             <div data-bs-theme="dark">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
@@ -504,13 +546,13 @@
 
                             <!--Difficulty Customization-->
                             <div class="difficultyPresets" style="margin-bottom: 20px; margin-right: 10px; justify-content: center;">
-                                <a style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"><h5>Difficulty</h5></a>
+                                <a style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);"><h3>Difficulty</h3></a>
                                 <div class="row" id="presetContainer">
                                     <div class="col" style="white-space: nowrap;">
-                                        <button class="btn presetBtn col-3" id="easyBtn" data-width="1">Easy</button>
-                                        <button class="btn presetBtn col-3 active" id="normalBtn" data-width="2">Normal</button>
-                                        <button class="btn presetBtn col-3" data-width="3" id="hardBtn">Hard</button>
-                                        <button class="btn presetBtn col-3" data-width="4" id="insaneBtn">Insane</button>
+                                        <button class="btn presetBtn col-3" id="easyBtn" data-width="1"><h4>Easy</h4></button>
+                                        <button class="btn presetBtn col-3 active" id="normalBtn" data-width="2"><h4>Normal</h4></button>
+                                        <button class="btn presetBtn col-3" data-width="3" id="hardBtn"><h4>Hard</h4></button>
+                                        <button class="btn presetBtn col-3" data-width="4" id="insaneBtn"><h4>Insane</h4></button>
                                     </div>
                                 </div>
                             </div>
@@ -520,36 +562,36 @@
                             <!--Gameplay Customization-->
                             <div class="col-6" id="gameplay-custom">
                                 <div>
-                                    <h5 style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Gameplay</h5>
+                                    <h3 style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Gameplay</h3>
                                 </div>
 
                                 <!-- Fall Speed Customization -->
-                                <div class="first-custom" style="color: white;">
-                                    <a style="font-family: 'Font Awesome 6 Free'">Fall Speed</a>
+                                <div class="top-custom" style="color: white;">
+                                    <a style="font-family: 'Font Awesome 6 Free'"><h5>Fall Speed</h5></a>
                                     <div><input title="How long it takes for puyos to move down one grid space" 
                                     type="range" class="form-range" id="fallSpeedInput" min="100" max="3000" step="100" value="1000"></div>
                                     <div id="fallSpeedValue" style="color: white">1 second per grid space (default)</div>
                                 </div>
                 
                                 <!-- Puyos to Clear Customization -->
-                                 <div class="next-custom" style="color: white;" >
-                                    <a style="font-family: 'Font Awesome 6 Free'">Puyos to Pop</a>
+                                 <div class="mid-odd-custom" style="color: white;" >
+                                    <a style="font-family: 'Font Awesome 6 Free'"><h5>Puyos to Pop</h5></a>
                                     <div><input title="How many same colored puyos need to be connected to pop them"
                                     type="range" class="form-range" id="puyoPopInput" value="4" min="2" max="10" step="1"></div>
                                     <div id="puyoPopValue" style="color: white;">4 puyos to pop (default)</div>
                                 </div>
 
                                 <!-- Amount of Colors Customization -->
-                                <div class="next-custom" style="color: white;">
-                                    <a style="font-family: 'Font Awesome 6 Free'">Amount of Colors</a>
+                                <div class="mid-even-custom" style="color: white;">
+                                    <a style="font-family: 'Font Awesome 6 Free'"><h5>Amount of Colors</h5></a>
                                     <div><input title="How many different colors will appear" 
                                     type="range" class="form-range" id="amtPuyoInput" value="4" min="1" max="7" step="1"></div>
                                     <div id="amtPuyoValue" style="color: white">4 different colors (default)</div>
                                 </div>
                 
                                 <!-- Controls Customization -->
-                                <div class="next-custom" style="color: white; ">
-                                    <a style="font-family: 'Font Awesome 6 Free'">Controls</a>
+                                <div class="mid-odd-custom" style="color: white; ">
+                                    <a style="font-family: 'Font Awesome 6 Free'"><h5>Controls</h5></a>
                                     <div class="row" style="margin-top: 5px; justify-content: center;" id="controlContainer">
                                         <button title="I think this is the default control scheme for Tetris games? Idk I grabbed these off of the tetris site" 
                                         class="btn col-5 active controlBtn" id="defaultControls">Default</button>
@@ -558,8 +600,8 @@
                                 </div>
                 
                                 <!-- Board Width Customization -->
-                                <div class="next-custom" id="boardChange" style="color: white; border-bottom: 2px inset white;">
-                                    <a style="font-family: 'Font Awesome 6 Free';">Board Width</a>
+                                <div class="bottom-odd-custom" id="boardChange" style="color: white; border-bottom: 2px inset white;">
+                                    <a style="font-family: 'Font Awesome 6 Free';"><h5>Board Width</h5></a>
                                     <div id="boardWidthContainer" class="row" style="margin-top: 10px; margin-bottom: 5px;">
                                         <div class="row-6 col" style="justify-content: center;">
                                             <button title="Modifies how wide the board is" class="btn widthButton" data-width="1">1</button>
@@ -583,52 +625,54 @@
                             <!--Aesthetic customization-->
                             <div class="col-6" id="aesthetic-custom">
                                 <div>
-                                    <h5 style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Aesthetic</h5>
+                                    <h3 style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Aesthetic</h3>
                                 </div>
 
                                 <!--Puyo Font Customization-->
-                                <div class="first-custom" style="padding-bottom: 20px;">
-                                    <a style="color: white; font-family: 'Font Awesome 6 Free'">Puyo Font</a>
+                                <div class="top-custom" style="padding-bottom: 20px;">
+                                    <a style="color: white; font-family: 'Font Awesome 6 Free'"><h5>Puyo Style</h5></a>
                                     <div id="aestheticButtonContainer" class="row" style="margin: 3px; margin-top: 10px; justify-content: center;">
                                         <button title="Emojis from fontawesome" style="margin-bottom: 5px;" class="btn fontButton active" id="showEmoji">emojis (default)</button>
-                                        <button title="Pictures of my college friends in 0.5x zoom" style="width: 117px; margin-right: 5px;" class="btn fontButton col-6" id="showFriends">Friend .5s</button>
-                                        <button title="Pictures of my cute beagle, Duke" style="width: 117px" class="btn fontButton col-6" id="showDuke">Duke</button>
+                                        <button title="Pictures of my college friends in 0.5x zoom" style="width: 142px; margin-right: 5px;" class="btn fontButton col-6" id="showFriends">Friend .5s</button>
+                                        <button title="Pictures of my cute beagle, Duke" style="width: 142px" class="btn fontButton col-6" id="showDuke">Duke</button>
                                     </div>
                                 </div>
             
                                 <!--Board Background Customization-->
-                                <div class="next-custom" id="boardBackground">
-                                    <a style="font-family: 'Font Awesome 6 Free'">Color Theme</a>
-                                    <div class="row" style="justify-content: center; margin-top: 15px;">
-                                        <div class="backGroundBtn row">
-                                            <button class="btn col-6 backgroundBtn active" id="blueBackground" 
-                                                style="white-space: nowrap; text-align: left">Blue (Default)
-                                            </button>
-                                            <button class="btn col-6 backgroundBtn" id="redBackground" href="#">Red</button>
-                                        </div>
-                                        <div class="backGroundBtn row">
-                                            <button class="btn col-6 backgroundBtn" id="greenBackground" href="#">Green</button>
-                                            <button class="btn col-6 backgroundBtn" id="purpleBackground" href="#">Purple</button>
+                                <div class="mid-odd-custom" id="boardBackground">
+                                    <a style="font-family: 'Font Awesome 6 Free'"><h5>Color Theme</h5></a>
+                                    <div class="row justify-content-center" style="margin-top: 15px;">
+                                        <div class="d-flex justify-content-center gap-1 flex-wrap" id="colorThemeContainer">
+                                            <button class="btn backgroundBtn active" id="blueBackground">Blue (Default)</button>
+                                            <button class="btn backgroundBtn" id="redBackground">Red</button>
+                                            <button class="btn backgroundBtn" id="greenBackground">Green</button>
+                                            <button class="btn backgroundBtn" id="purpleBackground">Purple</button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="next-custom" id="voiceLines">
-                                    <a style="font-family: 'Font Awesome 6 Free'">Voice Lines</a>
+                                
+                                <!--Voice selection-->
+                                <div class="bottom-odd-custom" id="voiceLines">
+                                    <a style="font-family: 'Font Awesome 6 Free'"><h5>Voice Lines</h5></a>
                                     <div class="row" style="justify-content: center; margin-top: 15px;">
                                         <div class="voiceButtons row">
-                                            <button title="One of my best friends: Josh. He opted to go for some sort of bow wielding character"
+                                            <button title="One of my best friends Josh. His lines depict a bow wielder with a strong sense of justice"
                                             class="btn col-6 voiceBtn active" id="joshVoice" style="text-wrap: wrap">Josh (Default)</button>
+
+                                            <button title="My good friend Michael. His lines depict a sword wielder who has mastered the wind arts"
+                                            class="btn col-6 voiceBtn" id="michaelVoice" style="text-wrap: wrap">Michael</button>
+
                                             <button title="My younger brother Micah in a british accent. He just ended up saying a lot of sophisticated phrases"
-                                            class="btn col-6 voiceBtn" id="britMicah" href="#" style="text-wrap: wrap">British Micah</button>
+                                            class="btn col-6 voiceBtn" id="britMicah" style="text-wrap: wrap">British Micah</button>
+
                                             <button title="My younger brother again, but with a southern accent using more over-the-top cowboy-esque lines"
-                                            class="btn col-6 voiceBtn" id="southMicah" href="#" style="text-wrap: wrap">Southern Micah</button>
+                                            class="btn col-6 voiceBtn" id="southMicah" style="text-wrap: wrap">Southern Micah</button>
+
                                             <button title="No voice lines. This also significantly speeds up chains"
                                             class="btn col-6 voiceBtn" id="noVoice" href="#" style="text-wrap: wrap">No Voice</button>
                                         </div>
                                     </div>
                                 </div>
-                                
                                 <div class="form-check">
                                     <div class="col-6">
                                         <input title="Whether the game will speed up after a certain amount of time" 
@@ -643,7 +687,7 @@
                                         class="form-check-input " type="checkbox" value="" id="ghostPuyoToggle" checked>
                                         <label title="Whether ghost Puyos will show up" 
                                         class="form-check-label" for="ghostPuyoToggle">
-                                            Ghost puyos
+                                            Ghost Puyos
                                         </label>
                                     </div>
                                 </div>
@@ -655,7 +699,256 @@
                         </div>
                     </div>
                 </div>
-            </div>        
+            </div>
+            
+            <!--Control mapping modal-->
+            <div class="modal fade" id="controlsModal" tabindex="0" aria-labelledby="controlLabel" aria-hidden="true">
+                <div class="modal-dialog control-modal-width">
+                    <div class="modal-content">
+                        <div class="modal-header" style="border: none;">
+                            <h5 class="modal-title" id="controlModalLabel"><i class="fa-solid fa-gear"></i> Controls</h5>
+                            <div data-bs-theme="dark">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 15px;">
+                            <div class="col-6" id="gameplay-custom">
+
+                                <div>
+                                    <h3 style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Movement</h3>
+                                </div>
+
+                                <!--Action-->
+                                <div class="top-custom" id="leftControlCustom" style="color: white; margin-top: 0px;">
+                                    <div class="row">
+                                        <div class="col-5 control-text">
+                                            <a>Move Left:</a>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="keybind-title" style="line-height: 1;" data-width="10">Primary</div>
+                                            <button 
+                                            id="moveLeftBind"
+                                            data-toast-target="#keybindToast" 
+                                            class="btn keybind-button" 
+                                            style="line-height: 1;" 
+                                            data-width="10">
+                                            LeftArrow</button>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="keybind-title" style="line-height: 1;" data-width="10">Secondary</div>
+                                            <button 
+                                            id="moveLeftBind"
+                                            data-toast-target="#keybindToast" 
+                                            class="btn keybind-button" 
+                                            style="line-height: 1;" 
+                                            data-width="10"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6" id="aesthetic-custom">
+
+                                <div>
+                                    <h3 style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Rotation</h3>
+                                </div>
+
+                                <!--Mapping-->
+                                <div class="top-custom" id="leftControlCustom" style="color: white; margin-top: 0px;">
+                                    <div class="row">
+                                        <div class="col-5 control-text">
+                                            <a style="font-family: 'Font Awesome 6 Free'">Clockwise:</a>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="keybind-title" style="line-height: 1;" data-width="10">Primary</div>
+                                            <button class="btn keybind-button" style="line-height: 1;" data-width="10">ArrowUp</button>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="keybind-title" style="line-height: 1;" data-width="10">Secondary</div>
+                                            <button class="btn keybind-button" style="line-height: 1;" data-width="10">D</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Sound test modal-->
+            <div class="modal fade" id="soundTestModal" tabindex="0" aria-labelledby="soundTestLabel" aria-hidden="true">
+                <div class="modal-dialog st-modal-width">
+                    <div class="modal-content" id="stModal">
+                        <div class="modal-header" style="border: none;">
+                            <h4 class="modal-title" id="stModalLabel"><i class="fa-solid fa-headphones"></i> Sound Test</h4>
+                            <div data-bs-theme="dark">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div class="modal-body" style=" margin-left: 10px; display: flex;">
+                            <div class="row">
+                                <div class="col-8" style="margin-top: 0px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">
+                                    <div style="text-align: center;">
+                                        <h3 style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Voice Lines</h3>
+                                    </div>
+
+                                    <!--Voices-->
+                                    <div class="row">
+                                        <div class="top-custom" id="leftSoundTest" style="color: white; margin-top: 0px;">
+                                            <div class="sound-title">
+                                                <span style="font-family: 'Font Awesome 6 Free'"><h4>Josh</h4></span>
+                                            </div>
+
+                                            <!--Josh voice line buttons-->
+                                            <div class="st-btn-container josh-test-buttons">
+                                                <button class="btn josh-test-btn" id="joshL1" data-voice="joshLines" data-line="1">Spell 1</button>
+                                                <button class="btn josh-test-btn" id="joshL2" data-voice="joshLines" data-line="2">Spell 2</button>
+                                                <button class="btn josh-test-btn" id="joshL3" data-voice="joshLines" data-line="3">Spell 3</button>
+                                                <button class="btn josh-test-btn" id="joshL4" data-voice="joshLines" data-line="4">Spell 4</button>
+                                                <button class="btn josh-test-btn" id="joshL5" data-voice="joshLines" data-line="5">Spell 5</button>
+                                                <button class="btn josh-test-btn" id="joshL6" data-voice="joshLines" data-line="6">Spell 6</button>
+                                                <button class="btn josh-test-btn" id="joshL7" data-voice="joshLines" data-line="7">Spell 7</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="mid-odd-custom" id="leftSoundTest" style="color: white; margin-top: 0px;">
+
+                                            <div class="sound-title">
+                                                <span style="font-family: 'Font Awesome 6 Free'"><h4>Michael</h4></span>
+                                            </div>
+
+                                            <!--Michael voice line buttons-->
+                                            <div class="st-btn-container michael-test-buttons">
+                                                <button class="btn michael-test-btn" id="michaelL1" data-voice="michaelLines" data-line="1">Spell 1</button>
+                                                <button class="btn michael-test-btn" id="michaelL2" data-voice="michaelLines" data-line="2">Spell 2</button>
+                                                <button class="btn michael-test-btn" id="michaelL3" data-voice="michaelLines" data-line="3">Spell 3</button>
+                                                <button class="btn michael-test-btn" id="michaelL4" data-voice="michaelLines" data-line="4">Spell 4</button>
+                                                <button class="btn michael-test-btn" id="michaelL5" data-voice="michaelLines" data-line="5">Spell 5</button>
+                                                <button class="btn michael-test-btn" id="michaelL6" data-voice="michaelLines" data-line="6">Spell 6</button>
+                                                <button class="btn michael-test-btn" id="michaelL7" data-voice="michaelLines" data-line="7">Spell 7</button>
+                                                <button class="btn michael-test-btn" id="michaelL8" data-voice="michaelLines" data-line="8">All Clear</button>
+                                                <button class="btn michael-test-btn" id="michaelL9" data-voice="michaelLines" data-line="9">Voice Select</button>
+                                                <button class="btn michael-test-btn" id="michaelL10" data-voice="michaelLines" data-line="10">Lose</button>
+                                                <!-- <button class="btn michael-test-btn" id="michaelL11" data-voice="michaelLines" data-line="11">Light Hit</button>
+                                                <button class="btn michael-test-btn" id="michaelL12" data-voice="michaelLines" data-line="12">Heavy Hit</button>
+                                                <button class="btn michael-test-btn" id="michaelL13" data-voice="michaelLines" data-line="13">General Win</button>
+                                                <button class="btn michael-test-btn" id="michaelL14" data-voice="michaelLines" data-line="14">Josh Win</button>
+                                                <button class="btn michael-test-btn" id="michaelL15" data-voice="michaelLines" data-line="15">General Lose</button>
+                                                <button class="btn michael-test-btn" id="michaelL16" data-voice="michaelLines" data-line="16">Josh Lose</button> -->
+                                            </div>
+                                        </div>
+
+                                        <div class="mid-even-custom" id="leftSoundTest" style="color: white; margin-top: 0px;">
+
+                                            <div class="sound-title">
+                                                <span style="font-family: 'Font Awesome 6 Free'"><h4>British Micah</h4></span>
+                                            </div>
+
+                                            <!--British Micah voice line buttons-->
+                                            <div class="st-btn-container britMicah-test-buttons">
+                                                <button class="btn britMicah-test-btn" id="britMicahL1" data-voice="britMicahLines" data-line="1">Spell 1</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL2" data-voice="britMicahLines" data-line="2">Spell 2</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL3" data-voice="britMicahLines" data-line="3">Spell 3</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL4" data-voice="britMicahLines" data-line="4">Spell 4</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL5" data-voice="britMicahLines" data-line="5">Spell 5</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL6" data-voice="britMicahLines" data-line="6">Spell 6</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL7" data-voice="britMicahLines" data-line="7">Spell 7</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL9" data-voice="britMicahLines" data-line="8">All Clear</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL10" data-voice="britMicahLines" data-line="9">Voice Select</button>
+                                                <!-- <button class="btn britMicah-test-btn" id="britMicahL11" data-voice="britMicahLines" data-line="10">Light Hit</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL12" data-voice="britMicahLines" data-line="11">Heavy Hit</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL13" data-voice="britMicahLines" data-line="12">General Win</button>
+                                                <button class="btn britMicah-test-btn" id="britMicahL14" data-voice="britMicahLines" data-line="13">Josh Win</button> -->
+                                                <button class="btn britMicah-test-btn" id="britMicahL15" data-voice="britMicahLines" data-line="10">Lose</button>
+                                                <!-- <button class="btn britMicah-test-btn" id="britMicahL16" data-voice="britMicahLines" data-line="15">Josh Lose</button> -->
+                                            </div>
+                                        </div>
+
+                                        <div class="bottom-even-custom" id="leftSoundTest" style="color: white; margin-top: 0px;">
+
+                                            <div class="sound-title">
+                                                <span style="font-family: 'Font Awesome 6 Free'"><h4>Southern Micah</h4></span>
+                                            </div>
+
+                                            <!--Southern Micah voice line buttons-->
+                                            <div class="st-btn-container southMicah-test-buttons">
+                                                <button class="btn southMicah-test-btn" id="southMicahL1" data-voice="southMicahLines" data-line="1">Spell 1</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL2" data-voice="southMicahLines" data-line="2">Spell 2</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL3" data-voice="southMicahLines" data-line="3">Spell 3</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL4" data-voice="southMicahLines" data-line="4">Spell 4</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL5" data-voice="southMicahLines" data-line="5">Spell 5</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL6" data-voice="southMicahLines" data-line="6">Spell 6</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL7" data-voice="southMicahLines" data-line="7">Spell 7</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL9" data-voice="southMicahLines" data-line="8">All Clear</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL10" data-voice="southMicahLines" data-line="9">Voice Select</button>
+                                                <!-- <button class="btn southMicah-test-btn" id="southMicahL11" data-voice="southMicahLines" data-line="10">Light Hit</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL12" data-voice="southMicahLines" data-line="11">Heavy Hit</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL13" data-voice="southMicahLines" data-line="12">General Win</button>
+                                                <button class="btn southMicah-test-btn" id="southMicahL14" data-voice="southMicahLines" data-line="13">Josh Win</button> -->
+                                                <button class="btn southMicah-test-btn" id="southMicahL15" data-voice="southMicahLines" data-line="10">Lose</button>
+                                                <!-- <button class="btn southMicah-test-btn" id="southMicahL16" data-voice="southMicahLines" data-line="15">Josh Lose</button> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+
+                                    <div style="text-align: center;" id="soundTestTitle">
+                                        <h3 style="color: white; text-decoration: underline; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Sound Effects</h3>
+                                    </div>
+
+                                    <!--Sound effects-->
+                                    <div class="full-custom" id="rightSoundTest" style="color: white; margin-top: 0px;">
+
+                                        <div class="st-btn-container sound-effect-test-buttons" style="justify-content: center;">
+                                            <button class="btn sound-effect-test-btn" data-voice="startSE" data-start="1">Start 1</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="startSE" data-start="2">Start 2</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="startSE" data-start="3">Start 3</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="startSE" data-start="4">Start 4</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="soundEffects" data-line="1">Pause</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="soundEffects" data-line="2">Resume</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="soundEffects" data-line="3">Reset</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="soundEffects" data-line="4">Speed up</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="soundEffects" data-line="5">All clear</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="soundEffects" data-line="6">Game over</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="soundEffects" data-line="7">Reset pop-up</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="soundEffects" data-line="8">Rotate</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="soundEffects" data-line="9">Land</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="soundEffects" data-line="10">Hard drop</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="chainSE" data-chain="1">1 Chain</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="chainSE" data-chain="2">2 Chain</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="chainSE" data-chain="3">3 Chain</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="chainSE" data-chain="4">4 Chain</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="chainSE" data-chain="5">5 Chain</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="chainSE" data-chain="6">6 Chain</button>
+                                            <button class="btn sound-effect-test-btn" data-voice="chainSE" data-chain="7">7+ Chain</button>
+                                            <!-- <button class="btn sound-effect-test-btn" id="soundEffectL14" data-voice="soundEffects" data-line="16">Win</button> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Binding prompt toast-->
+            <div class="toast-container position-fixed bottom-50 p-3">
+                <div id="keybindToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">poop</div>
+                    <span class="toast-body">
+                        Board reset successfully!
+                    </span>
+                    <span data-bs-theme="dark" class="end-0">
+                        <button type="button" class="btn-close end-0" data-bs-dismiss="toast" aria-label="Close">
+                        </button>
+                    </span>
+                </div>
+            </div>
 
             <!--Controls Display-->
             <div id="controlDisplay">

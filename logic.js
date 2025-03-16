@@ -17,13 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const miniSquares = Array.from(document.querySelectorAll('.mini-grid div'));
     const nextMiniSquares = Array.from(document.querySelectorAll('.next-mini-grid div'));
     window.ghostSquares = Array.from(document.querySelectorAll('.ghost-grid div')); // Array of all ghost grid spaces
-    window.custom = document.querySelector('#custom'); // Customization button
+    window.custom = document.querySelector('#customBtn'); // Customization button
     const speedDisplay = document.querySelector('#speedDisplay'); // Speed up text
     window.pauseOverlay = document.querySelector('.grid-pause-overlay');
     window.miniGridOverlay = document.querySelectorAll('.mini-grid-overlay');
     const resetBtn = document.querySelector('.reset-div');
     const resetToastEl = document.querySelector('#resetToast');
-    const pauseOverlayText = document.querySelector('.pauseOverlayText');
+    window.pauseOverlayText = document.querySelector('.pauseOverlayText');
+    const navDisabledText = document.querySelector('#navDisabledText');
 
     // Variables
     window.width = 6; // Width of each grid space
@@ -53,20 +54,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let startTime; // Time since the game has started
     let isPaused = false; // Tracks if the speed up timer has been paused
     window.fallingAndColorTimer = 800; // How long it takes for puyos to clear
-    const resumeTimer = 120; // How long it takes for puyos to land
+    const resumeTimer = 80; // How long it takes for puyos to land
     let resumeTimerChange = false // Tracks if the landing timer has been resumed
     let areClearsReset = true // Tracks if process clears has been called already
     let isAtMaxSpeed = false; // Tracks whether the game is at the maximum speed
-    let movementStart = false;
+    window.movementStart = false;
     window.isHidingGridEnabled = false; // Tracks if gameplay will be obscured when pausing
     let isAllClear = false; // Tracks if all clear state was reached
     let isGhost = false; // Whether or not the puyos being used in a given function are ghosts or not
     let isHardDrop = false; // Whether hard drop has been used
-    let gracePeriodTimer = 800; // Amount of time in which movement can occur when placed before next puyos will spawn
+    window.gracePeriodTimer = 1000; // Amount of time in which movement can occur when placed before next puyos will spawn
     let isMoveDownEnabled = true; // Whether moving down is enabled
     let isFreezeFinished = true;
-    let isGameReset = false;
-    let fallingTimer = 60; // How long it takes for puyos to fall down 1 grid space
+    window.isGameReset = false;
+    let fallingTimer = 70; // How long it takes for puyos to fall down 1 grid space
 
     // All puyo colors
     window.colors = [
@@ -217,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Moves puyos down when there is nothing beneath them
     async function moveDownPlaced(fallingTimer, visited) {
         if (isGameReset) return;
-        startBtn.innerHTML = '<i class="fa-solid fa-square"></i>'
+        startBtn.innerHTML = '<i class="fa-solid fa-square"></i>' + ' Disabled'
 
         return new Promise(resolve => {
             if (isGameReset) return;
@@ -310,7 +311,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const hardDropSound = new Audio('game-sounds/thump.mp3');
     hardDropSound.volume = 0.7;
-    let currentHardDropSound = null;
 
     // Allows the puyos to be snapped to the bottom instantly
     window.sharedHardDrop = function hardDrop() {
@@ -319,13 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(gracePeriodTimer)
         gracePeriodTimer = 0;
 
-        // If hard drop sound is already playing, interrupt
-        if (currentHardDropSound) {
-            currentHardDropSound.pause();
-            currentHardDropSound.currentTime = 0;
-        }
-        currentHardDropSound = hardDropSound;
-        currentHardDropSound.play();
+        playInterruptableSound(hardDropSound);
         
         undraw(currentPosition, current); // Remove puyos from the current position
         let firstBelowIndex = currentPosition + current[0];
@@ -472,19 +466,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const rotateSound = new Audio('game-sounds/slide.mp3');
     rotateSound.volume = 1.0;
-    let currentRotateSound = null;
 
     // Rotate the puyos clockwise
     window.sharedRotateRight = function rotateRight() {
         if (!isMovementResumed || (isHardDrop && !isMoveDownEnabled)) return;
 
-        // Interrupt previous rotation sound, if any, and play new one
-        if (currentRotateSound) {
-            currentRotateSound.pause();
-            currentRotateSound.currentTime = 0;
-        }
-        currentRotateSound = rotateSound;
-        currentRotateSound.play();
+        playInterruptableSound(rotateSound);
 
         undraw(currentPosition, current);
         checkRotationRight(currentPosition);
@@ -496,13 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.sharedRotateLeft = function rotateLeft() {
         if (!isMovementResumed || (isHardDrop && !isMoveDownEnabled)) return;
 
-        // Interrupt previous rotation sound, if any, and play new one
-        if (currentRotateSound) {
-            currentRotateSound.pause();
-            currentRotateSound.currentTime = 0;
-        }
-        currentRotateSound = rotateSound;
-        currentRotateSound.play();
+        playInterruptableSound(rotateSound);
 
         undraw(currentPosition, current);
         checkRotationLeft();
@@ -513,13 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Rotates puyos by 180 degrees
     window.rotateFull = function rotateFull() {
 
-        // Interrupt previous rotation sound, if any, then play new one
-        if (currentRotateSound) {
-            currentRotateSound.pause();
-            currentRotateSound.currentTime = 0;
-        }
-        currentRotateSound = rotateSound;
-        currentRotateSound.play();
+        playInterruptableSound(rotateSound);
 
         undraw(currentPosition, squares);
         checkRotationFull();
@@ -528,6 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const speedSound = new Audio('game-sounds/cute-level-up-2.mp3');
+    speedSound.volume = 0.5;
 
     // Function that checks if puyos have been placed down
     function freeze(puyos) {
@@ -548,9 +524,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const placedSound = new Audio('game-sounds/big-bubble-2.mp3')
     placedSound.volume = 0.3;
-    currentPlacedSound = null;
 
-    let timeoutFreeze = null;
+    window.timeoutFreeze = null;
     // allows puyos to be moved when already placed slightly before the next set is spawned
     function gracePeriod() {
         if (isGameOver) return;
@@ -561,12 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(timeoutFreeze);
             gracePeriodTimer = 0;
         }
-        // If placed sound is already being played, interrupt
-        if (currentPlacedSound) {
-            currentPlacedSound.currentTime = 0;
-        }
-        currentPlacedSound = placedSound;
-        currentPlacedSound.play();
+        playInterruptableSound(placedSound);
         gracePeriodCalculations();
     }
 
@@ -598,6 +568,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Creates new puyos to fall
     function createNewPuyo() {
         if (isGameOver) return;
+        startBtn.disabled = false;
+        startBtn.innerHTML = '<i class="fa-solid fa-pause"></i>' + '  Pause';
         score++;
         scoreDisplay.innerHTML = score;
         isMoveDownEnabled = true;
@@ -675,7 +647,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             newIndex = index;
 
                         const aboveIndex = newIndex + index - width;
-                        console.log("above index: ", aboveIndex)
 
                         if (aboveIndex < 0) return;
                         if (!squares[aboveIndex].classList.contains('puyoBlob')) return;
@@ -712,15 +683,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (square.classList.contains('puyoBlob')) {
                     processClears();
                     checkAdjacentColor(index);
-                    // If placed sound is already being played, interrupt
                 }
             });
             if (hasFallen) {
-                if (currentPlacedSound) {
-                    currentPlacedSound.currentTime = 0;
-                }
-                currentPlacedSound = placedSound;
-                currentPlacedSound.play();
+                playInterruptableSound(placedSound);
             }
             processClears();
         }
@@ -830,10 +796,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Adds functionality to the pause button
     startBtn.addEventListener('click', () => {
-        startBtn.innerHTML = '<i class="fa-solid fa-pause"></i>' + '  Pause';
-        upNext.innerHTML ='UpNext';
-        startBtnPause();
-        event.target.blur();
+        if (!isGameOver) {
+            startBtn.innerHTML = '<i class="fa-solid fa-pause"></i>' + '  Pause';
+            upNext.innerHTML ='UpNext';
+            startBtnPause();
+            event.target.blur();
+        } else {
+            reset();
+        }
     });
 
     const activeEscKey = new Set();
@@ -841,11 +811,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let isEscapeEnabled = false;
     // Adds pause/play functionality to the escape key
     document.addEventListener('keydown', (e) => {
-        if (isGameOver) return;
         if (e.key === "Escape" && isEscapeEnabled && !activeEscKey.has(e.key)) {
-            activeEscKey.add(e.key);
-            startBtn.innerHTML = '<i class="fa-solid fa-pause"></i>' + '  Pause';
-            startBtnPause(); // Toggle pause/unpause when the escape key is pressed
+            if (!isGameOver) {     
+                activeEscKey.add(e.key);
+                startBtn.innerHTML = '<i class="fa-solid fa-pause"></i>' + '  Pause';
+                startBtnPause(); // Toggle pause/unpause when the escape key is pressed
+            } else {
+                reset();
+            }
         }
     });
 
@@ -873,204 +846,114 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.disabled = false;
     }
 
-    // Sound for starting the game
-    async function playStartSound(pitch) {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const response = await fetch('game-sounds/new-notification-7.mp3');
-        const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-    
-        const source = audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-        
-        source.detune.value = pitch;
-        source.playbackRate.value = 1;
-
-        const gainNode = audioContext.createGain();
-        gainNode.gain.value = 0.5; // Lowers volume
-    
-        source.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-
-        source.start();
-    }
-
-    // Sounds for pausing, and resuming the game
-    const pauseSound = new Audio('game-sounds/arcade-ui-5.mp3');
-    pauseSound.volume = 0.5;
-    let currentPauseSound = null;
-    const resumeSound = new Audio('game-sounds/arcade-ui-14.mp3');
-    resumeSound.volume = 0.5;
-    let currentResumeSound = null;
-
     // Starts, pauses, and unpauses the game
     function startBtnPause() {
-
-        // When game is paused
-        if (timerId) {
-            startBtn.innerHTML = '<i class="fa-solid fa-play"></i>' + '  Play';
-            pauseSpeedUpTimer();
-            clearInterval(timerId);
-            timerId = null;
-            isInputEnabled = false;
-            pauseOverlay.style.opacity = "50%";
-            resetBtn.style.zIndex = "6";
-            resetBtn.style.opacity = "80%"
-            miniGridOverlay.forEach(overlay => overlay.style.opacity = "50%")
-
-            // Hides the grid
-            if (isHidingGridEnabled)
-                secondaryGrid.style.zIndex = "4";
-
-            // Interrupt the pause sound if currently playing
-            if (currentPauseSound) {
-                currentPauseSound.pause()
-                currentPauseSound.currentTime = 0;
-                currentPauseSound.play();
-            } else { // Play pause sound
-                currentPauseSound = pauseSound;
-                currentPauseSound.play();
-            }
-        } else {
-            if (isClickedOnce) { 
-                startBtn.disabled = false;
-                
-                draw(currentPosition);
-                timerId = setInterval(() => { // Set fall timer when unpaused
-                    sharedMoveDownCurrent()
-                }, fallSpeed);
-                isInputEnabled = true;
-                startSpeedUpTimer();
-                pauseOverlay.style.opacity = "0%"
-                resetBtn.style.zIndex = "-2";
-                resetBtn.style.opacity = "0%";
-                miniGridOverlay.forEach(overlay => overlay.style.opacity = "0%")
-                isMovementResumed = true;
-            }
-
-            // Shows the grid
-            if (isHidingGridEnabled)
-                secondaryGrid.style.zIndex = "0";
-
-            if (isClickedOnce) {
-                // Interrupt the resume sound if currently playing
-                if (currentResumeSound) {
-                    currentResumeSound.pause()
-                    currentResumeSound.currentTime = 0;
-                    currentResumeSound.play();
-                } else { // Play resume sound
-                    currentResumeSound = resumeSound;
-                    currentResumeSound.play();
-                }
-                return;
-            }
-
-            startTimerId = setTimeout(() => {
-                if (isGameReset) return;
-                isMovementResumed = true;
-                startBtn.disabled = false;
-                startBtn.innerHTML = '<i class="fa-solid fa-pause"></i>' + '  Pause';
-                createNewPuyo();
-                displayShape();
-                timerId = setInterval(() => { // Set fall timer when unpaused
-                    sharedMoveDownCurrent()
-                }, fallSpeed);
-                isInputEnabled = true;
-                startSpeedUpTimer();
-                pauseOverlay.style.opacity = "0%"
-                resetBtn.style.zIndex = "-2";
-                resetBtn.style.opacity = "0%";
-                miniGridOverlay.forEach(overlay => overlay.style.opacity = "0%")
-                score += 1;
-                playStartSound(0);
-                isInputEnabled = true;
-                resetNumAnimation();
-                pauseOverlayText.innerHTML = "Paused"
-                pauseOverlayText.style.fontSize = "3.5vh"
-                pauseOverlayText.style.marginBottom = "5vh";
-                areClearsReset = true;
-                arePuyosCleared = true;
-                resumeTimerChange = false;
-                isEscapeEnabled = true; // Enables pausing with the escape key
-            }, scaleAnimationTimer * 3)
-
-            custom.disabled = true; // Disables customization menu when game starts
-            isGameReset = false;
-            startBtn.disabled = true;
-            startBtn.innerHTML = '<i class="fa-solid fa-square"></i>'
-            chainDisplay.style.opacity = "70%";
-            chainText.style.opacity = "100%";
-            chainDisplayTextContainer.style.opacity = "100%";
-            startNumbers();
-
-            scoreDisplay.innerHTML = score;
-
-            scoreContainer.style.visibility = "visible";
-            movementStart = true;
-            isInputEnabled = false;
-            pauseOverlay.style.opacity = "50%";
-
-            // Ensures up next puyos are randomized at start
-            nextRandom = Math.floor(Math.random() * amountOfColors);
-            nextRandomSecondary = Math.floor(Math.random() * amountOfColors);
-            thirdRandom = Math.floor(Math.random() * amountOfColors);
-            thirdRandomSecondary = Math.floor(Math.random() * amountOfColors);
-
-            displayShape();
-            isClickedOnce = true;
+        if (timerId) { // If game is paused
+            pauseGame();
+        } else if (isClickedOnce) { // If game is resumed
+            resumeGame();
+        } else { // If game has not been started yet
+            startGame();
+            closeNavbar();
         }
     }
 
-    const scaleAnimationTimer = 500;
-    const scaleAnimateDuration = 300; // Duration each number will animate for
-    let scaleAnimateStartTime = null; // Determines when the start animation starts
-
-    // Displays 3 2 1 GO before starting the game
-    function startNumbers() {
-        if (isGameReset) return;
-        pauseOverlayText.style.fontSize = "10vh";
-        pauseOverlayText.innerHTML = "3";
-        playStartSound(-600)
-        resetNumAnimation();
-        requestAnimationFrame((timestamp) => animateNumbers(pauseOverlayText, 10, 5, timestamp));
-
-        setTimeout (() => {
+    // Helper which handles all functions related to starting the game
+    function startGame() {
+        startTimerId = setTimeout(() => {
             if (isGameReset) return;
-            pauseOverlayText.style.fontSize = "10vh";
-            pauseOverlayText.innerHTML = "2";
-            playStartSound(-400)
+            createNewPuyo();
+            displayShape();
+            timerId = setInterval(() => { // Set fall timer when unpaused
+                sharedMoveDownCurrent()
+            }, fallSpeed);
+            isInputEnabled = true;
+            startSpeedUpTimer();
+            pauseOverlay.style.opacity = "0%"
+            resetBtn.style.zIndex = "-2";
+            miniGridOverlay.forEach(overlay => overlay.style.opacity = "0%")
+            playStartSound(0);
+            isInputEnabled = true;
             resetNumAnimation();
-            requestAnimationFrame((timestamp) => animateNumbers(pauseOverlayText, 10, 5, timestamp));
-            setTimeout (() => {
-                if (isGameReset) return;
-                pauseOverlayText.style.fontSize = "10vh";
-                pauseOverlayText.innerHTML = "1";
-                playStartSound(-100)
-                resetNumAnimation();
-                requestAnimationFrame((timestamp) => animateNumbers(pauseOverlayText, 10, 5, timestamp));
-            }, scaleAnimationTimer);
-        }, scaleAnimationTimer);
+            pauseOverlayText.innerHTML = "Paused"
+            pauseOverlayText.style.fontSize = "3.5vh"
+            pauseOverlayText.style.marginBottom = "5vh";
+            areClearsReset = true;
+            arePuyosCleared = true;
+            resumeTimerChange = false;
+            isMovementResumed = true;
+            isEscapeEnabled = true; // Enables pausing with the escape key
+        }, scaleAnimationTimer * 3)
+
+        custom.disabled = true; // Disables customization menu when game starts
+        movementStart = true;
+        isGameReset = false;
+        startBtn.disabled = true;
+        startBtn.innerHTML = '<i class="fa-solid fa-square"></i>' + ' Disabled'
+        chainDisplay.style.opacity = "70%";
+        chainText.style.opacity = "100%";
+        chainDisplayTextContainer.style.opacity = "100%";
+        startNumbers();
+
+        scoreDisplay.innerHTML = score;
+
+        scoreContainer.style.visibility = "visible";
+        isInputEnabled = false;
+        pauseOverlay.style.opacity = "50%";
+        miniGridOverlay.forEach(overlay => overlay.style.opacity = "50%")
+
+        // Ensures up next puyos are randomized at start
+        nextRandom = Math.floor(Math.random() * amountOfColors);
+        nextRandomSecondary = Math.floor(Math.random() * amountOfColors);
+        thirdRandom = Math.floor(Math.random() * amountOfColors);
+        thirdRandomSecondary = Math.floor(Math.random() * amountOfColors);
+
+        displayShape();
+        isClickedOnce = true;
     }
 
-    // Helper to add a scaling animation to the start numbers
-    function animateNumbers(text, startScale, endScale, timestamp) {
-        if (!scaleAnimateStartTime) scaleAnimateStartTime = timestamp;
-        const elapsedTime = timestamp - scaleAnimateStartTime;
-        const progress = Math.min(elapsedTime / scaleAnimateDuration, 1); // Animation progress
+    // Sound for pausing the game
+    const pauseSound = new Audio('game-sounds/arcade-ui-5.mp3');
+    pauseSound.volume = 0.5;
 
-        const currentScale = `${Math.min((startScale - endScale) / progress, startScale)}vh`;
+    function pauseGame() {
+        startBtn.innerHTML = '<i class="fa-solid fa-play"></i>' + '  Play';
+        pauseSpeedUpTimer();
+        clearInterval(timerId);
+        timerId = null;
+        isInputEnabled = false;
+        pauseOverlay.style.opacity = "50%";
+        resetBtn.style.zIndex = "6";
+        resetBtn.style.opacity = "80%"
+        miniGridOverlay.forEach(overlay => overlay.style.opacity = "50%")
 
-        text.style.fontSize = `${currentScale}`;
+        // Hides the grid
+        if (isHidingGridEnabled)
+            secondaryGrid.style.zIndex = "4";
 
-        // Continues animation if not finished
-        if (progress < 1) {
-            requestAnimationFrame((newTimestamp) => animateNumbers(text, startScale, endScale, newTimestamp));
-        }
+        playInterruptableSound(pauseSound)
     }
 
-    // Resets the popping animation so it can be used again
-    function resetNumAnimation() {
-        scaleAnimateStartTime = null;
+    // Sound for resuming the game
+    const resumeSound = new Audio('game-sounds/arcade-ui-14.mp3');
+    resumeSound.volume = 0.5;
+
+    // Helper which houses all logic for a paused game
+    function resumeGame() {
+        startBtn.disabled = false;  
+        draw(currentPosition);
+        timerId = setInterval(() => { // Set fall timer when unpaused
+            sharedMoveDownCurrent()
+        }, fallSpeed);
+        isInputEnabled = true;
+        startSpeedUpTimer();
+        pauseOverlay.style.opacity = "0%"
+        resetBtn.style.zIndex = "-2";
+        resetBtn.style.opacity = "0%";
+        miniGridOverlay.forEach(overlay => overlay.style.opacity = "0%")
+        isMovementResumed = true;
+
+        playInterruptableSound(resumeSound);
     }
 
     // Speeds the game up
@@ -1127,7 +1010,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // A global variable to track connected puyos on each turn
-    let globalConnectedPuyos = new Set();
+    window.globalConnectedPuyos = new Set();
 
     // Main function to check the color of adjacent puyos
     function checkAdjacentColor(puyoIndex) {
@@ -1159,7 +1042,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Tracks if a color has already been visited in the connected index
-    let colorVisited = new Set();
+    window.colorVisited = new Set();
 
     // Helper for checkAdjacentColor to recursively find all connected Puyos of the same color
     function getConnectedPuyos(index, color, visited = new Set()) {
@@ -1228,10 +1111,10 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout (() => {
                 if (!areClearsReset || isFalling || isGameReset) return;
                 startBtn.disabled = true;
-                startBtn.innerHTML = '<i class="fa-solid fa-square"></i>'
+                startBtn.innerHTML = '<i class="fa-solid fa-square"></i>' + ' Disabled'
                 globalConnectedPuyos.forEach(ind => {  
                     removeFont(ind, 0, squares);
-                })
+                });
                 requestAnimationFrame(animatePop)
             }, connectedFontTimer);
         }
@@ -1262,26 +1145,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 chainLength++;
                 chainDisplay.style.opacity = "70%";
-                if (chainLength > 3 && chainLength < 7) {
-                    chainDisplayText.innerHTML = chainLength + "!"; // Displays chain length
-                    resetNumAnimation();
-                    requestAnimationFrame((timestamp) => animateNumbers(chainDisplayText, 12.4, 6.2, timestamp));
-                } else if (chainLength >= 7 && chainLength < 10) {
-                    chainDisplayText.innerHTML = chainLength + "!!"; // Displays chain length
-                    resetNumAnimation();
-                    requestAnimationFrame((timestamp) => animateNumbers(chainDisplayText, 16.4, 10.2, timestamp));
-                } else if (chainLength >= 10) {
-                    chainDisplayText.innerHTML = chainLength + "!!!"; // Displays chain length
-                    resetNumAnimation();
-                    requestAnimationFrame((timestamp) => animateNumbers(chainDisplayText, 20.4, 14.2, timestamp));
-                } else {
-                    chainDisplayText.innerHTML = chainLength; // Displays chain length
-                    resetNumAnimation();
-                    requestAnimationFrame((timestamp) => animateNumbers(chainDisplayText, 10.4, 4.2, timestamp));
-                }
+
+                animateChainIncrement();
+
                 currentPopSound = popSound;
                 startBtn.disabled = true;
-                startBtn.innerHTML = '<i class="fa-solid fa-square"></i>';
+                startBtn.innerHTML = '<i class="fa-solid fa-square"></i>' + ' Disabled';
                 playVoiceLine();
                 displayScore();
                 hasFallen = false;
@@ -1300,83 +1169,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }, fallingAndColorTimer)
     }
 
-    // Helper function to parse colors into [r, g, b] format
-    function parseRGB(color) {
-
-        // Extracts numeric RGB values if the color is in rgb format
-        if (color.startsWith("rgb")) {
-            const match = color.match(/\d+/g);
-            return match ? match.map(Number) : [0, 0, 0];
+    // Increasing amount of animation size based on chain length
+    function animateChainIncrement() {
+        if (chainLength >= 10) {
+            chainDisplayText.innerHTML = chainLength + "!!!";
+            resetNumAnimation();
+            requestAnimationFrame((timestamp) => animateNumbers(chainDisplayText, 20.4, 14.2, timestamp));
+        } else if (chainLength >= 7) {
+            chainDisplayText.innerHTML = chainLength + "!!";
+            resetNumAnimation();
+            requestAnimationFrame((timestamp) => animateNumbers(chainDisplayText, 16.4, 10.2, timestamp));
+        } else if (chainLength >= 4) {
+            chainDisplayText.innerHTML = chainLength + "!";
+            resetNumAnimation();
+            requestAnimationFrame((timestamp) => animateNumbers(chainDisplayText, 12.4, 6.2, timestamp));
+        } else {
+            chainDisplayText.innerHTML = chainLength;
+            resetNumAnimation();
+            requestAnimationFrame((timestamp) => animateNumbers(chainDisplayText, 10.4, 4.2, timestamp));
         }
-
-        // Creates a temporary DOM element to extract color if in named format
-        const dummyDiv = document.createElement("div");
-        dummyDiv.style.color = color;
-        document.body.appendChild(dummyDiv);
-        const computedColor = window.getComputedStyle(dummyDiv).color;
-        document.body.removeChild(dummyDiv);
-
-        return parseRGB(computedColor);
-    }
-
-    let startColor = {}; // Initialize the connected puyos starting color
-    let popAnimateStartTime = null; // Determines when the clearing animation starts
-    window.popAnimateDuration = 600; // How long the popping animation lasts
-
-    // Fades puyos to white before being popped
-    async function animatePop(timestamp) {
-        if (isGameReset) {
-            colorVisited.clear();
-            globalConnectedPuyos.clear();
-            resetPopAnimation();
-            return;
-        }
-        if (!popAnimateStartTime) popAnimateStartTime = timestamp;
-        const elapsedTime = timestamp - popAnimateStartTime;
-        const progress = Math.min(elapsedTime / popAnimateDuration, 1); // Animation progress
-
-        globalConnectedPuyos.forEach(ind => {
-            const currentElement = squares[ind];
-    
-            // Use the start color for this specific square
-            const color = startColor[ind];
-            if (!color || !Array.isArray(color)) {
-                return;
-            }
-
-            const endColor = [255, 255, 255]; // White
-
-            // Interpolate between startColor and endColor
-            if (color !== undefined) {
-                const currentColor = color.map((start, index) => {
-                    return Math.round(start + (endColor[index] - start) * progress);
-                });
-            
-            // Apply the interpolated color
-            currentElement.style.backgroundColor = `rgb(${currentColor.join(',')})`;
-            }
-        });
-
-        // Continues animation if not finished
-        if (progress < 1) {
-            requestAnimationFrame(animatePop);
-        } 
-    }
-
-    // Resets the popping animation so it can be used again
-    function resetPopAnimation() {
-        popAnimateStartTime = null;
-        startColor = {};  // Reset the starting color for the next animation
-        elementsAnimated = 0; // Reset the counter
-        arePuyosCleared = false;
     }
 
     const allClearSound = new Audio('game-sounds/all-clear.mp3');
-    allClearSound.volume = 0.5;
-    currentAllClearSound = null;
-    window.allClearVoice = new Audio('british-micah-spells/all-clear.mp3');
+    allClearSound.volume = 0.4;
     window.currentAllClearVoice = null;
-    allClearVoice.volume = 0.7;
 
     // Logic for a clear board
     function allClear() {
@@ -1390,20 +1206,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     gameOverDisplay.style.marginRight = "0vh";
                 }
 
-                // If British Micah's voice is active, play matching all clear line
-                if (isBritMicah) {
-                    currentAllClearVoice = new Audio('british-micah-spells/all-clear.mp3');
-                    currentAllClearVoice.play();
-                    currentSpell.stop();
-                    currentSpell = null
-                }
-
-                // If Southern Micah's voice is active, play matching all clear line
-                if (isSouthMicah) {
-                    currentAllClearVoice = new Audio('southern-micah-spells/all-clear.mp3');
-                    currentAllClearVoice.play();
-                    currentSpell.stop();
-                    currentSpell = null
+                if (!isJosh) {
+                    setTimeout(() => playAllClearLine(), 100)
                 }
 
                 gameOverDisplay.innerHTML = 'All Clear!';
@@ -1411,22 +1215,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 isAllClear = true;
                 score += 5000;
                 scoreDisplay.innerHTML = score
-                if (currentAllClearVoice) {
-                    currentAllClearVoice.pause();
-                    currentAllClearVoice.currentTime = 0;
-                    currentAllClearVoice.play();
-                }
-
-                if (currentAllClearSound) {
-                    currentAllClearSound.pause();
-                    currentAllClearSound.currentTime = 0;
-                    currentAllClearSound.play();
-                } else {
-                    currentAllClearSound = allClearSound;
-                    currentAllClearSound.play();
-                }
+                
+                playInterruptableSound(allClearSound);
             }, 400)
         }
+    }
+
+    // Plays the correct all clear line based on which character is selected
+    function playAllClearLine() {
+        playInterruptableSound(currentAllClearVoice);
+        currentSpell.stop();
+        currentSpell = null
     }
 
     let finalScoreAdd;
@@ -1454,31 +1253,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameOverSound = new Audio('game-sounds/error-10.mp3');
     gameOverSound.volume = 0.3;
 
+    const resetPopSound = new Audio('game-sounds/Pop!.mp3'); // Sound effect when the restart button appears
+
     /* Game over if reached the top */
     function gameOver() {
         if (isGameReset) return;
         if (squares.some((square, index) => square.classList.contains('taken', 'puyoBlob') && (index == deathPoint))) {
             isMovementResumed = false;
-            startBtn.disabled = true;
-            startBtn.innerHTML = '<i class="fa-solid fa-square"></i>'
             isGameOver = true;
-            isPaused = true;
             clearInterval(timerId);
             isInputEnabled = false;
+
             gameOverDisplay.innerHTML = 'game over';
             gameOverDisplay.style.color = "red";
             gameOverDisplay.style.fontStyle = "";
-            chainDisplay.style.opacity = "0%";
             gameOverSound.play();
+
+            if (!isJosh)
+                setTimeout(() => gameOverVoice.play(), 300);
+
+            startBtn.disabled = false;
+            startBtn.innerHTML = '<i class="fa-solid fa-rotate-right"></i>' + ' Reset';
+            chainDisplayText.innerHTML = "";
 
             // Prompts players to restart page to play again
             if (isGameReset) return;
             setTimeout(() => {
                 if (isGameReset) return;
                 resetBtn.style.zIndex = "6";
-                resetBtn.style.opacity = "100%"
+                resetBtn.style.opacity = "100%";
+                resetPopSound.play();
             }, 3000);
         }
+    }
+
+    // Collapses the customization navbar
+    function closeNavbar() {
+        let navbar = document.querySelector('#navbarNav');
+        let bsCollapse = new bootstrap.Collapse(navbar, { toggle: false });
+        navDisabledText.style.visibility = "visible";
+        bsCollapse.hide();
     }
 
     const resetSound = new Audio('game-sounds/arcade-ui-17.mp3');
@@ -1495,8 +1309,6 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(startTimerId);
         clearTimeout(speedInterval);
         fallSpeed = originalFallSpeed;
-        random = Math.floor(Math.random()*amountOfColors);
-        randomSecondary = Math.floor(Math.random()*amountOfColors);
         nextRandom = 0;
         nextRandomSecondary = 0;
         thirdRandom = 0;
@@ -1527,9 +1339,18 @@ document.addEventListener('DOMContentLoaded', () => {
         resetSound.play();
         pauseOverlayText.innerHTML = "";
         resetNumAnimation();
+        colorVisited.clear();
+        globalConnectedPuyos.clear();
+        resetPopAnimation();
         chainText.style.opacity = "0%";
         chainDisplayTextContainer.style.opacity = "0%";
         chainDisplayText.innerHTML = "";
+        movementStart = false;
+        isMovementResumed = false;
+        pauseOverlay.style.marginBottom = "0vh";
+        navDisabledText.style.visibility = "hidden";
+        pauseOverlayText.style.marginBottom = "0vh";
+        speedDisplay.innerHTML = "";
 
         if (isHidingGridEnabled)
             secondaryGrid.style.zIndex = "0";
@@ -1543,141 +1364,5 @@ document.addEventListener('DOMContentLoaded', () => {
         nextMiniSquares.forEach((square, index) => {
             undraw(index, nextMiniSquares);
         });
-    }
-
-    document.addEventListener('keydown', control); // Attaches the control function to the 'keydown' event
-    document.addEventListener('keyup', releaseKey); // Attaches the releaseKey function to the 'keyup' event
-
-    const activeHorizontalKeys = new Map(); // Map to track Horizontal keys
-    const activeDownKeys = new Map(); // Map to track holdable keys currently held down
-    const activeNonHoldKeys = new Set(); // Set to track non-holdable keys currently held down
-    const resetKeys = new Set(); // Tracks the reset key
-    const moveInterval = 50; // How long before horizontal movement is repeated
-    window.moveDownInterval = fallSpeed * 0.06; // How long before downward movement is repeated
-    window.horizontalHoldInterval = 100; // How long it takes for the horizontal movement to start repeating
-    let isHorKeyReleased = true; // Tracks whether horizontal movement keys have been released
-
-    // Assigns functions to keyCodes
-    function control(e) {
-        if (!movementStart) return;
-    
-        // Handles downward key actions
-        if (moveDownBindings[e.key]) {
-            if (currentRotation == 0 || currentRotation == 2) {
-                gracePeriodTimer = 400;
-            } else if (currentRotation == 1 || currentRotation == 3) {
-                gracePeriodTimer = 300;
-            }
-            if (!activeDownKeys.has(e.key)) {
-                if (!isInputEnabled) return;
-                moveDownBindings[e.key]()
-
-                // Start the movement if the key is not already active
-                const intervalId = setInterval(() => {
-                    if (!isInputEnabled) return;
-                    moveDownBindings[e.key]()
-                    if (currentRotation == 0 || currentRotation == 2) {
-                        gracePeriodTimer = 400;
-                    } else if (currentRotation == 1 || currentRotation == 3) {
-                        gracePeriodTimer = 300;
-                    }
-                }, moveDownInterval);
-                activeDownKeys.set(e.key, intervalId);
-            }
-        }
-
-        // Handles horizontal key actions
-        if (horizontalBindings[e.key]) {
-            if (!activeHorizontalKeys.has(e.key)) {
-                let horizontalIntervalId = null // Interval ID for horizontal movement
-
-                // If movement is not being held, move once
-                if (!horizontalIntervalId) {
-                    horizontalBindings[e.key]();
-                    activeHorizontalKeys.set(e.key);
-                    isHorKeyReleased = false;
-                }
-                
-                // Start the movement if the key is not already active
-                setTimeout(() => {
-                    if (isHorKeyReleased) return;
-                    horizontalIntervalId = setInterval(() => {
-                        if (!isInputEnabled || isHorKeyReleased) return;
-                        horizontalBindings[e.key]()
-                    }, moveInterval);
-                    if (isHorKeyReleased) return;
-                    activeHorizontalKeys.set(e.key, horizontalIntervalId);
-                }, horizontalHoldInterval) // Starts the movement after held for set amount of time
-            }
-        }
-
-        // Handles non-holdable key actions
-        if (nonHoldBindings[e.key]) {
-            if (!activeNonHoldKeys.has(e.key)) {
-                if (!isInputEnabled) return;
-                nonHoldBindings[e.key]()
-                activeNonHoldKeys.add(e.key);
-            }
-        }
-
-        // Handles reset key
-        if (resetBindings[e.key]) {
-            if (!resetKeys.has(e.key)) {
-                resetBindings[e.key]()
-                resetKeys.add(e.key);
-            }
-        }
-    }
-
-    // Makes sure key function are not still activated and allows keys to be pressed again after being released
-    function releaseKey(e) {
-        if (!movementStart) return;
-        if (activeDownKeys.has(e.key)) {
-            clearInterval(activeDownKeys.get(e.key));
-            activeDownKeys.delete(e.key);
-            gracePeriodTimer = 800;
-        }
-        if (activeHorizontalKeys.has(e.key)) {
-            isHorizontalPressed = true;
-            clearInterval(activeHorizontalKeys.get(e.key));
-            activeHorizontalKeys.delete(e.key);
-            isHorKeyReleased = true;
-        }
-        if (activeNonHoldKeys.has(e.key)) {
-            activeNonHoldKeys.delete(e.key);
-        }
-        if (resetKeys.has(e.key)) {
-            resetKeys.delete(e.key);
-        }
-    }
-    
-    // Key bindings to move down
-    window.moveDownBindings = {
-        "s": sharedMoveDownCurrent,
-        "S": sharedMoveDownCurrent,
-        "ArrowDown": sharedMoveDownCurrent,
-    };
-
-    // Key bindings to move left/right
-    window.horizontalBindings = {
-        "ArrowRight": sharedMoveRight,
-        "ArrowLeft": sharedMoveLeft,
-    }
-
-    // Key bindings that are not able to be held
-    window.nonHoldBindings = {
-        "a": rotateFull,
-        "A": rotateFull,
-        "z": sharedRotateLeft,
-        "Z": sharedRotateLeft,
-        "d": sharedRotateRight,
-        "D": sharedRotateRight,
-        "ArrowUp": sharedRotateRight,
-        " ": sharedHardDrop,
-    }
-
-    window.resetBindings = {
-        "r": reset,
-        "R": reset
     }
 })

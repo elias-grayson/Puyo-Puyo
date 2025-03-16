@@ -1,0 +1,238 @@
+/* Stylings for everything involving the grids */
+
+/* Contains all of the grids */
+.allGrids {
+    width: auto;
+    display: flex;
+    position: relative;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+/* Contains the actual board in which puyos are displayed on */
+.grid {
+    justify-content: center;
+    font-family: "Font Awesome 6 Free"; 
+    background-color: '';
+    position: relative;
+    margin-top: -0.1vh;
+    width: 39.8vh;
+    height: 75.82vh;
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 1.4vh groove black;
+    border-left: 1.4vh groove black;
+    border-right: 1.4vh ridge black;
+    border-bottom: 1.4vh ridge black;
+    box-shadow: 0px 0px 4.8vh 1.6vh rgba(0, 0, 0, 0.5);
+    border-radius: 1.4vh;
+    text-align: center;
+    z-index: 2;
+    overflow: hidden;
+}
+
+/* Each individual grid space */
+.grid div {
+    position: relative;
+    display: flex;
+    transform: translateY(-6.1vh);
+    height: 6.1vh;
+    width: 6.1vh;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Grid spaces below and above the board */
+.belowGrid, .aboveGrid {
+    border: none;
+    content: '';
+    font-family: unset;
+}
+
+/* Contains the puyo board visually */
+.secondary-grid {
+    justify-content: center;
+    font-family: "Font Awesome 6 Free"; 
+    background: radial-gradient(#64a2ff, rgb(54, 54, 148));
+    position: absolute;
+    margin-top: 1.22vh;
+    width: 37.2vh;
+    height: 73.2vh;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Allows the background icon to display on the board */
+.secondary-grid::before {
+    display: block;
+    content: var(--before-content, "\f005");
+    color: var(--before-color, white);
+    font-size: var(--before-font-size, 13vh);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    opacity: var(--before-opacity, 30%);
+    font-family: var(--font-family, "Font Awesome 6 Free");
+    z-index: 0;
+}
+
+/* Each individual visual grid space */
+.secondary-grid div {
+    position: relative;
+    display: flex;
+    height: 6.1vh;
+    width: 6.18vh; 
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 0.13vh solid rgba(0, 0, 0, 0.3);
+}
+
+/* X on the grid */
+.xMark {
+    font-family: "Font Awesome 6 Free";
+}
+
+/* Allows font to exist on the x mark */
+.xMark::before {
+    color: rgb(255, 29, 29);
+    display: block;
+    font-family: "Font Awesome 6 Free";
+    font-size: 6.6vh;
+    content: "\58";
+}
+
+/* Contains the puyo board visually */
+.ghost-grid {
+    font-family: "Font Awesome 6 Free";
+    background-color: '';
+    position: absolute;
+    margin-top: 1.2vh;
+    width: 37.2vh;
+    /* margin-right: 0.2vh; */
+    height: 73.2vh;
+    display: flex;
+    flex-wrap: wrap;
+    z-index: 1;
+    overflow: hidden;
+}
+
+/* Each individual visual grid space */
+.ghost-grid div {
+    position: relative;
+    display: flex;
+    height: 6.1vh;
+    width: 6.18vh; 
+    min-height: 6.1vh;
+    min-width: 6.1vh; 
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Overlay over the main grid when paused */
+.grid-pause-overlay {
+    flex-direction: column;
+    background: black;
+    opacity: 0%;
+    margin-top: 1.2vh;
+    position: absolute;
+    width: 37.2vh;
+    height: 73.2vh;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
+    border: none;
+    z-index: 5;
+    align-items: center;
+}
+
+/* Text inside the pause overlay */
+.pauseOverlayText {
+    position: relative;
+    color: white;
+    font-family: "Font Awesome 6 Free";
+    opacity: 100%;
+    z-index: 1;
+    overflow: hidden;
+    font-size: 3.5vh;
+    margin-bottom: 0vh;
+}
+
+.reset-div {
+    position: absolute;
+    top: 47%;
+    display: flex;
+    font-family: "Font Awesome 6 Free";
+    opacity: 0%;
+    z-index: -2;
+    margin-top: 3vh;
+}
+
+.reset-btn {
+    width: 20vh;
+    min-width: 9vh;
+    border: 0.5vh solid rgba(255, 255, 255, 0.5);
+}
+
+/* Container for all mini grids and overlays */
+.all-mini-grid-container {
+    display: flex;
+    position: relative;
+    margin-left: 2vh;
+}
+
+/* Container for mini grids */
+.mini-grid-container {
+    display: flex;
+    position: relative;
+    justify-content: center;
+}
+
+/* All up next grids */
+.all-mini-grids {
+    border-radius: 1vh;
+    width: 8.6vh;
+    height: 14.7vh;
+    flex-wrap: wrap;
+    border: 1.3vh groove black;
+    box-shadow: 0vh 0vh 4.8vh 1.6vh rgba(0, 0, 0, 0.3);
+    background: radial-gradient(#64a2ff, rgb(54, 54, 148));
+}
+
+/* Individual grid spaces in each mini grid */
+.mini-grid-div {
+    width: 6vh;
+    height: 6vh;
+    min-width: 6vh;
+    min-height: 6vh;
+}
+
+/* Container for all mini grid overlays */
+.mini-grid-overlay-container {
+    position: absolute;
+    margin-left: 1.27vh;
+    margin-top: 1.3vh;
+}
+
+/* Up next grid display */
+.mini-grid-overlay {
+    opacity: 0%;
+    width: 6.1vh;
+    height: 12.3vh;
+    flex-wrap: wrap;
+    position: relative;
+    background: black;
+    z-index: 5;
+}
+
+/* Controls the overlay for the second mini grid */
+#nextMiniOverlay {
+    margin-left: 8.62vh;
+    margin-top: -4.3vh;
+}
