@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // All of Michael's voice lines
     window.michaelLines = [
-        { url: 'michael-spells/1.mp3', volume: 1.0 },
+        { url: 'michael-spells/1.mp3', volume: 1.5 },
         { url: 'michael-spells/2.mp3', volume: 1.5 },
         { url: 'michael-spells/3.mp3', volume: 1.0 }, 
         { url: 'michael-spells/4.mp3', volume: 1.0 },
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         cachedSounds[url] = audioBuffer; // Cache the audio buffer for future use
     }
 
-    // Play sthe sound with a specific pitch and volume
+    // Plays the sound with a specific pitch and volume
     function playSound(url, pitch = 1.0, volume = 0.3) {
         const audioBuffer = cachedSounds[url]; // Get the cached sound
 
