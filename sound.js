@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // { url: 'british-micah-spells/win-josh.mp3', volume: 1.0 },
         { url: 'british-micah-spells/lose.mp3', volume: 0.5 },
         // { url: 'british-micah-spells/lose-josh.mp3', volume: 1.0 }
-    ]
+    ];
 
     // All of Southern Micah's voice lines
     window.southMicahLines = [
@@ -84,6 +84,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         // { url: 'southern-micah-spells/win-josh.mp3', volume: 1.0 },
         { url: 'southern-micah-spells/lose.mp3', volume: 0.5 },
         // { url: 'southern-micah-spells/lose-josh.mp3', volume: 1.0 }
+    ];
+
+    // All of Kelvin's voice lines
+    window.kelvinLines = [
+        { url: 'kelvin-lines/1s.mp3', volume: 1.4 },
+        { url: 'kelvin-lines/2.mp3', volume: 1.6 },
+        { url: 'kelvin-lines/3.mp3', volume: 1.0 }, 
+        { url: 'kelvin-lines/4s.mp3', volume: 1.0 },
+        { url: 'kelvin-lines/5s.mp3', volume: 1.6 },
+        { url: 'kelvin-lines/6.mp3', volume: 1.4 },
+        { url: 'kelvin-lines/7.mp3', volume: 1.5 },
+        // { url: 'kelvin-lines/counter.mp3', volume: 1.0 },
+        { url: 'kelvin-lines/all-clear.mp3', volume: 1.0 },
+        { url: 'kelvin-lines/char-select-1.mp3', volume: 1.0 },
+        // { url: 'kelvin-lines/light-damage.mp3', volume: 1.0 },
+        // { url: 'kelvin-lines/heavy-damage.mp3', volume: 1.0 },
+        // { url: 'kelvin-lines/win.mp3', volume: 1.0 },
+        // { url: 'kelvin-lines/win-josh.mp3', volume: 1.0 },
+        { url: 'kelvin-lines/lose.mp3', volume: 1.0 },
+        // { url: 'kelvin-lines/lose-josh.mp3', volume: 1.0 }
     ];
 
     window.soundEffects = [
@@ -280,6 +300,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         preloadSpellSounds(britMicahLines);
         preloadSpellSounds(southMicahLines);
         preloadSpellSounds(soundEffects);
+        preloadSpellSounds(kelvinLines);
         preloadSpellSounds(startSE);
         preloadSpellSounds(chainSE);
     });

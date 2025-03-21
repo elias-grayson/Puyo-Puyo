@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.isMichael = false;
     window.isBritMicah = false;
     window.isSouthMicah = false;
+    window.isKelvin = false;
 
     window.gameOverVoice;
 
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isMichael = false;
         isBritMicah = false;
         isSouthMicah = false;
+        isKelvin = false;
 
         window.spells.splice(0, spells.length,
             { url: 'josh-spells/1.mp3', volume: 1.0 },
@@ -49,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isMichael = false;
         isBritMicah = false;
         isSouthMicah = true;
+        isKelvin = false;
 
         currentAllClearVoice = new Audio('michael-spells/all-clear.mp3');
         gameOverVoice = new Audio('michael-spells/lose.mp3');
@@ -83,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isMichael = false;
         isBritMicah = true;
         isSouthMicah = false;
+        isKelvin = false;
 
         currentAllClearVoice = new Audio('british-micah-spells/all-clear.mp3');
         currentAllClearVoice.volume = 0.6;
@@ -118,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isMichael = false;
         isBritMicah = false;
         isSouthMicah = true;
+        isKelvin = false;
 
         currentAllClearVoice = new Audio('southern-micah-spells/all-clear.mp3');
         gameOverVoice = new Audio('southern-micah-spells/lose.mp3');
@@ -140,6 +145,41 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectSouthMicah = new Audio('southern-micah-spells/char-select.mp3');
         selectSouthMicah.volume = 0.7;
         playInterruptableSound(selectSouthMicah);
+    });
+
+    // Changes the voice lines to Kelvin's
+    $(".voiceButtons").on("click", "#kelvinVoice", async function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        enableVoice();
+
+        isJosh = false;
+        isMichael = false;
+        isBritMicah = false;
+        isSouthMicah = false;
+        isKelvin = true;
+
+        currentAllClearVoice = new Audio('kelvin-lines/all-clear.mp3');
+        gameOverVoice = new Audio('kelvin-lines/lose.mp3');
+        gameOverVoice.volume = 0.6;
+
+        window.spells.splice(0, spells.length,
+            { url: 'kelvin-lines/1s.mp3', volume: 1.4 },
+            { url: 'kelvin-lines/2.mp3', volume: 1.6 },
+            { url: 'kelvin-lines/3.mp3', volume: 1.0 }, 
+            { url: 'kelvin-lines/4s.mp3', volume: 1.0 },
+            { url: 'kelvin-lines/5s.mp3', volume: 1.6 },
+            { url: 'kelvin-lines/6.mp3', volume: 1.4 },
+            { url: 'kelvin-lines/7.mp3', volume: 1.5 },
+        );
+
+        // Cache the new sound
+        for (const spell of spells) {
+            await loadAndCacheSound(spell.url);
+        }
+        const selectKelvin = new Audio('kelvin-lines/char-select-1.mp3');
+        selectKelvin.volume = 0.7;
+        playInterruptableSound(selectKelvin);
     });
 
     $(".voiceButtons").on("click", "#noVoice", async function () {

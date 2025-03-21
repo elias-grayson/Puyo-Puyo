@@ -33,7 +33,7 @@
         <link rel="stylesheet" href="puyoblobs.css"></link>
         <link rel="stylesheet" href="grids.css"></link>
 
-        <title>Elias' Puyo Puyo Project v1.4.1</title>
+        <title>Elias' Puyo Puyo Project v1.4.2</title>
     </head>
     <body>
         
@@ -620,6 +620,24 @@
                                     </div>
                                     <!-- <span id="gridSpaces">6 grid spaces (default)</span> -->
                                 </div>
+                                <div class="form-check">
+                                    <div class="col-6">
+                                        <input title="Whether the game will speed up after a certain amount of time" 
+                                        class="form-check-input" type="checkbox" value="" id="speedUpToggle" checked>
+                                        <label title="Whether the game will speed up after a certain amount of time" 
+                                        class="form-check-label" for="speedUpToggle">
+                                            Speed up
+                                        </label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input title="Whether ghost Puyos will show up" 
+                                        class="form-check-input " type="checkbox" value="" id="ghostPuyoToggle" checked>
+                                        <label title="Whether ghost Puyos will show up" 
+                                        class="form-check-label" for="ghostPuyoToggle">
+                                            Ghost Puyos
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
 
                             <!--Aesthetic customization-->
@@ -668,27 +686,12 @@
                                             <button title="My younger brother again, but with a southern accent using more over-the-top cowboy-esque lines"
                                             class="btn col-6 voiceBtn" id="southMicah" style="text-wrap: wrap">Southern Micah</button>
 
+                                            <button title="My friend Kelvin. His lines depict an upclose brawler obsessed with the United States"
+                                            class="btn col-6 voiceBtn" id="kelvinVoice" style="text-wrap: wrap">Kelvin</button>
+
                                             <button title="No voice lines. This also significantly speeds up chains"
-                                            class="btn col-6 voiceBtn" id="noVoice" href="#" style="text-wrap: wrap">No Voice</button>
+                                            class="btn col-6 voiceBtn" id="noVoice" style="text-wrap: wrap">No Voice</button>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="form-check">
-                                    <div class="col-6">
-                                        <input title="Whether the game will speed up after a certain amount of time" 
-                                        class="form-check-input" type="checkbox" value="" id="speedUpToggle" checked>
-                                        <label title="Whether the game will speed up after a certain amount of time" 
-                                        class="form-check-label" for="speedUpToggle">
-                                            Speed up
-                                        </label>
-                                    </div>
-                                    <div class="col-6">
-                                        <input title="Whether ghost Puyos will show up" 
-                                        class="form-check-input " type="checkbox" value="" id="ghostPuyoToggle" checked>
-                                        <label title="Whether ghost Puyos will show up" 
-                                        class="form-check-label" for="ghostPuyoToggle">
-                                            Ghost Puyos
-                                        </label>
                                     </div>
                                 </div>
                                 </div>
@@ -864,7 +867,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="bottom-even-custom" id="leftSoundTest" style="color: white; margin-top: 0px;">
+                                        <div class="mid-odd-custom" id="leftSoundTest" style="color: white; margin-top: 0px;">
 
                                             <div class="sound-title">
                                                 <span style="font-family: 'Font Awesome 6 Free'"><h4>Southern Micah</h4></span>
@@ -887,6 +890,32 @@
                                                 <button class="btn southMicah-test-btn" id="southMicahL14" data-voice="southMicahLines" data-line="13">Josh Win</button> -->
                                                 <button class="btn southMicah-test-btn" id="southMicahL15" data-voice="southMicahLines" data-line="10">Lose</button>
                                                 <!-- <button class="btn southMicah-test-btn" id="southMicahL16" data-voice="southMicahLines" data-line="15">Josh Lose</button> -->
+                                            </div>
+                                        </div>
+
+                                        <div class="bottom-odd-custom" id="leftSoundTest" style="color: white; margin-top: 0px;">
+
+                                            <div class="sound-title">
+                                                <span style="font-family: 'Font Awesome 6 Free'"><h4>Kelvin</h4></span>
+                                            </div>
+
+                                            <!--Kelvin voice line buttons-->
+                                            <div class="st-btn-container kelvin-test-buttons">
+                                                <button class="btn kelvin-test-btn" id="kelvinL1" data-voice="kelvinLines" data-line="1">Spell 1</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL2" data-voice="kelvinLines" data-line="2">Spell 2</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL3" data-voice="kelvinLines" data-line="3">Spell 3</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL4" data-voice="kelvinLines" data-line="4">Spell 4</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL5" data-voice="kelvinLines" data-line="5">Spell 5</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL6" data-voice="kelvinLines" data-line="6">Spell 6</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL7" data-voice="kelvinLines" data-line="7">Spell 7</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL9" data-voice="kelvinLines" data-line="8">All Clear</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL10" data-voice="kelvinLines" data-line="9">Voice Select</button>
+                                                <!-- <button class="btn kelvin-test-btn" id="kelvinL11" data-voice="kelvinLines" data-line="10">Light Hit</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL12" data-voice="kelvinLines" data-line="11">Heavy Hit</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL13" data-voice="kelvinLines" data-line="12">General Win</button>
+                                                <button class="btn kelvin-test-btn" id="kelvinL14" data-voice="kelvinLines" data-line="13">Josh Win</button> -->
+                                                <button class="btn kelvin-test-btn" id="kelvinL15" data-voice="kelvinLines" data-line="10">Lose</button>
+                                                <!-- <button class="btn kelvin-test-btn" id="kelvinL16" data-voice="kelvinLines" data-line="15">Josh Lose</button> -->
                                             </div>
                                         </div>
                                     </div>

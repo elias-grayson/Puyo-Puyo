@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let startTime; // Time since the game has started
     let isPaused = false; // Tracks if the speed up timer has been paused
     window.fallingAndColorTimer = 800; // How long it takes for puyos to clear
-    const resumeTimer = 80; // How long it takes for puyos to land
+    const resumeTimer = 100; // How long it takes for puyos to land
     let resumeTimerChange = false // Tracks if the landing timer has been resumed
     let areClearsReset = true // Tracks if process clears has been called already
     let isAtMaxSpeed = false; // Tracks whether the game is at the maximum speed
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isMoveDownEnabled = true; // Whether moving down is enabled
     let isFreezeFinished = true;
     window.isGameReset = false;
-    let fallingTimer = 70; // How long it takes for puyos to fall down 1 grid space
+    let fallingTimer = 90; // How long it takes for puyos to fall down 1 grid space
 
     // All puyo colors
     window.colors = [

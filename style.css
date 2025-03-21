@@ -432,10 +432,12 @@ html body {
 
 .voiceButtons {
     justify-content: center;
+    height: auto;
 }
 
 .voiceBtn {
     width: 130px;
+    height: 66px;
 }
 
 #joshVoice {
@@ -449,6 +451,11 @@ html body {
 
 #southMicah {
     margin-top: 5px;
+}
+
+#kelvinVoice {
+    margin-top: 5px;
+    margin-right: 5px;
 }
 
 #noVoice {
