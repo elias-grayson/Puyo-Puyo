@@ -1,4 +1,4 @@
-# Link to play: https://effulgent-paletas-4e97c8.netlify.app/
+# Link to play: https://elias-puyo-project.netlify.app
 
 ## Overview
 This is an almost fully functional single player puyo puyo simulator coded in javascript with some customization options to cater the experience to whatever you'd like!
