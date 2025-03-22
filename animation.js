@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.startColor = {}; // Initialize the connected puyos starting color
     let popAnimateStartTime = null; // Determines when the clearing animation starts
+    window.popAnimateDuration = 600;
 
     // Fades puyos to white before being popped
     window.animatePop = async function animatePop(timestamp) {
